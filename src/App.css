@@ -4,7 +4,7 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-
+  min-height: 1024px;
 }
 
 .logo {
@@ -88,4 +88,33 @@
 .pagination button:active {
   background-color: #007bff;
   color: white;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  text-align: right;
+}
+
+.search-bar input {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 300px;
+}
+
+.search-bar button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+}
+
+.post-table {
+  width: 100%;
+  border-collapse: collapse;
 }

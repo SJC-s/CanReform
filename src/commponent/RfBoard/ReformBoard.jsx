@@ -17,7 +17,7 @@ export default function ReformBoard() {
     const [searchQuery, setSearchQuery] = useState('');         // 검색어 상태
     const [currentPage, setCurrentPage] = useState(1);          // 현재 페이지 상태
 
-    const postsPerPage = 5;                                   // 한 페이지에 보여줄 게시글 수
+    const postsPerPage = 10;                                   // 한 페이지에 보여줄 게시글 수
     const totalPages = Math.ceil(filteredPosts.length / postsPerPage); // 총 페이지 수
 
     // 탭이나 검색어가 변경될 때마다 필터링 처리
@@ -75,7 +75,7 @@ export default function ReformBoard() {
     return (
         <div className="container">
             {/* 검색 창 및 탭 메뉴 - 가로로 나란히 배치 */}
-            <div className="header-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <div className="header-row">
                 {/* 탭 메뉴 */}
                 <div className="tabs">
                     <button onClick={() => handleTabChange('전체')} className={activeTab === '전체' ? 'active' : ''}>
@@ -89,23 +89,22 @@ export default function ReformBoard() {
                     </button>
                 </div>
                 {/* 검색 창 - 우측 상단에 위치 */}
-                <div className="search-bar" style={{textAlign: 'right', marginBottom: '10px'}}>
+                <div className="search-bar">
                     <input
                         type="text"
                         placeholder="게시글 검색"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        style={{padding: '5px 10px', width: '300px'}}
                     />
-                    <button onClick={handleSearch} style={{marginLeft: '10px', padding: '5px 10px'}}>
+                    <button onClick={handleSearch}>
                         검색
                     </button>
                 </div>
             </div>
 
             {/* 게시판 테이블 리스트 */}
-            <table className="post-table" style={{width: '100%', borderCollapse: 'collapse' }}>
+            <table className="post-table">
                 <thead>
                 <tr>
                     <th style={{ border: '1px solid #ddd', padding: '8px' }}>제목</th>
