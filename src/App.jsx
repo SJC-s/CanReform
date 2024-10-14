@@ -2,6 +2,7 @@ import './App.css'
 import MainScroll from "./commponent/RfMain/MainScroll.jsx";
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 import ReformBoard from './commponent/RfBoard/ReformBoard.jsx'; // 게시판 컴포넌트
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function App () {
 
