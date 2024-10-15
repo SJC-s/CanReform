@@ -46,7 +46,9 @@
     background-color : lightgrey;
     color : black;
     border : none;
+    text-decoration : none;
 }
+
 
 .nav-custom>button:hover{
     background-color : dimgray;

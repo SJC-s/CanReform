@@ -8,9 +8,9 @@ import logo_sample from '../public/upload/logo_sample.svg';
 function SpreadBtn() {
     return (
         <DropdownButton className="spread-button" drop="down" title={<FontAwesomeIcon icon={faBars} />}>
-            <DropdownItem><Link to="/"><div>홈페이지</div></Link></DropdownItem>
-            <DropdownItem><Link to="/bulletin-board"><div>게시판</div></Link></DropdownItem>
-            <DropdownItem>일정관리</DropdownItem>
+            <DropdownItem><Link to="/" className=""><div>홈페이지</div></Link></DropdownItem>
+            <DropdownItem><Link to="/bulletin-board" className=""><div>게시판</div></Link></DropdownItem>
+            <DropdownItem><Link to="#" className="">일정관리</Link></DropdownItem>
         </DropdownButton>
     );
 }
@@ -26,10 +26,10 @@ export default function LayoutHeader() {
                             <img src={logo_sample} alt="LOGO" className="logo-image" />
                         </div>
                         <Nav className="justify-content-end gap-2 nav-custom">
-                            <Button>로그인</Button>
-                            <Button>회원가입</Button>
-                            <Button>내정보</Button>
-                            <Button>로그아웃</Button>
+                            <Button><Link to="#" className="text-reset">로그인</Link></Button>
+                            <Button><Link to="#" className="text-reset">회원가입</Link></Button>
+                            <Button><Link to="#" className="text-reset">내정보</Link></Button>
+                            <Button><Link to="#" className="text-reset">로그아웃</Link></Button>
                         </Nav>
                     </div>
                 </Col>
