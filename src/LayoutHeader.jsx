@@ -8,8 +8,8 @@ import logo_sample from '../public/upload/logo_sample.svg';
 function SpreadBtn() {
     return (
         <DropdownButton className="spread-button" drop="down" title={<FontAwesomeIcon icon={faBars} />}>
-            <DropdownItem><Link to="/">홈페이지</Link></DropdownItem>
-            <DropdownItem><Link to="/bulletin-board">게시판</Link></DropdownItem>
+            <DropdownItem><Link to="/"><div>홈페이지</div></Link></DropdownItem>
+            <DropdownItem><Link to="/bulletin-board"><div>게시판</div></Link></DropdownItem>
             <DropdownItem>일정관리</DropdownItem>
         </DropdownButton>
     );

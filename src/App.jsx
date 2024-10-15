@@ -3,7 +3,9 @@ import './App.css'
 import MainScroll from "./commponent/RfMain/MainScroll.jsx";
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 import ReformBoard from './commponent/RfBoard/ReformBoard.jsx';
-import Layout from "./Layout.jsx"; // 게시판 컴포넌트
+import Layout from "./Layout.jsx";
+import LayoutHeader from "./LayoutHeader.jsx";
+import LayoutFooter from "./LayoutFooter.jsx"; // 게시판 컴포넌트
 
 export default function App () {
 
@@ -25,12 +27,12 @@ export default function App () {
                 {/*</header>*/}
 
                 {/* 페이지 라우팅 설정 */}
+                <LayoutHeader/>
                 <Routes>
-                    <Route element={<Layout/>}>
                         <Route path="/" element={<MainScroll />} /> {/* 메인 페이지 */}
                         <Route path="/bulletin-board" element={<ReformBoard />} /> {/* 게시판 페이지 */}
-                    </Route>
                 </Routes>
+                <LayoutFooter/>
             </div>
         </BrowserRouter>
     );
