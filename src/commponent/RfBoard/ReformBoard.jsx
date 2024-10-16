@@ -1,18 +1,12 @@
 import { useState, useEffect } from 'react';
 import {Button} from "react-bootstrap";
 
-// 게시글 더미 데이터 (예시)
-const posts = Array.from({ length: 100 }, (_, i) => ({
-    postId: i + 1,
-    title: `게시글 ${i + 1}`,
-    category: i % 2 === 0 ? '문의' : '의뢰',
-    status: i % 3 === 0 ? 'OPEN' : 'CLOSED',
-    createdAt: `2023-10-${String(i % 30).padStart(2, '0')}`
-}));
-
 const MAX_PAGES_DISPLAY = 10; // 최대 페이지네이션 버튼 수
 
 export default function ReformBoard() {
+    const [posts, setPosts] = useState([]);  // 게시글 리스트 상태
+    const [loading, setLoading] = useState(true);  // 로딩 상태
+
     const [filteredPosts, setFilteredPosts] = useState(posts);  // 필터링된 게시글 리스트
     const [activeTab, setActiveTab] = useState('전체');         // 현재 활성화된 탭
     const [searchQuery, setSearchQuery] = useState('');         // 검색어 상태
@@ -20,6 +14,25 @@ export default function ReformBoard() {
 
     const postsPerPage = 5;                                   // 한 페이지에 보여줄 게시글 수
     const totalPages = Math.ceil(filteredPosts.length / postsPerPage); // 총 페이지 수
+
+    // Spring Boot에서 게시글 데이터를 불러오는 함수
+    const fetchPosts = async () => {
+        try {
+            const response = await fetch('http://192.168.0.25:8080/api/posts', {
+                mode: 'cors'  // CORS 모드를 명시적으로 설정
+            });  // API 호출
+            const data = await response.json();  // JSON 형식으로 응답받기
+            setPosts(data);  // 데이터 상태 업데이트
+            setLoading(false);  // 로딩 완료
+        } catch (error) {
+            console.error('데이터 로딩 에러:', error);
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchPosts();  // 컴포넌트 마운트 시 API 호출
+    }, []);
 
     // 탭이나 검색어가 변경될 때마다 필터링 처리
     useEffect(() => {
@@ -73,11 +86,27 @@ export default function ReformBoard() {
     };
 
     // 글쓰기 버튼을 눌렀을 때 동작하는 함수
-    const handleWritePost = () => {
-        // 글쓰기 페이지로 이동하거나 모달을 띄우는 로직을 추가
-        alert("글쓰기 버튼을 눌렀습니다!");  // 임시 동작, 실제로는 작성 페이지로 이동
+    const handleWritePost = async () => {
+        try {
+            const response = await fetch('http://192.168.0.25:8080/api/check-login', {
+                method: 'GET',
+                credentials: 'include',  // 세션 정보를 포함하는 옵션
+            });
+
+            if (response.ok) {
+                window.location.href = '/write';
+            } else if (response.status === 401) {
+                window.location.href = '/login';  // 스프링 부트 로그인 페이지
+            }
+        } catch (error) {
+            console.error('로그인 확인 에러:', error);
+        }
     };
 
+
+    if (loading) {
+        return <p>로딩 중...</p>;  // 데이터를 불러오는 동안 로딩 표시
+    }
 
     return (
         <div className="container">
@@ -121,13 +150,13 @@ export default function ReformBoard() {
                 </tr>
                 </thead>
                 <tbody>
-                {currentPosts.length > 0 ? (
-                    currentPosts.map(post => (
-                        <tr key={post.postId}>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{post.title}</td>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{post.category}</td>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{post.status}</td>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{post.createdAt}</td>
+                {posts.length > 0 ? (
+                    posts.map(post => (
+                        <tr key={post.post_id}>
+                            <td>{post.title}</td>
+                            <td>{post.category}</td>
+                            <td>{post.readCount}</td>
+                            <td>{new Date(post.created_at).toLocaleDateString()}</td>
                         </tr>
                     ))
                 ) : (
@@ -141,7 +170,7 @@ export default function ReformBoard() {
             </table>
 
             {/* 글쓰기 버튼 */}
-            <div>
+            <div className="write-btn">
                 <Button variant="primary" onClick={handleWritePost}>
                     글쓰기
                 </Button>
@@ -151,7 +180,7 @@ export default function ReformBoard() {
             {totalPages > 1 && (
                 <div className="pagination">
                     <button onClick={() => setCurrentPage(1)}>{'<<'}</button>
-                    <button onClick={() => setCurrentPage(Math.max(1, currentPage-10))}>{'<'}</button>
+                    <button onClick={() => setCurrentPage(Math.max(1, currentPage-MAX_PAGES_DISPLAY))}>{'<'}</button>
                     {getPageNumbers().map(pageNumber => (
                         <button key={pageNumber} onClick={() => handlePageChange(pageNumber)}
                                 style={{
@@ -161,7 +190,7 @@ export default function ReformBoard() {
                             {pageNumber}
                         </button>
                     ))}
-                    <button onClick={() => setCurrentPage(Math.min(currentPage+10,totalPages))}>{'>'}</button>
+                    <button onClick={() => setCurrentPage(Math.min(currentPage+MAX_PAGES_DISPLAY,totalPages))}>{'>'}</button>
                     <button onClick={() => setCurrentPage(totalPages)}>{'>>'}</button>
                 </div>
             )}
