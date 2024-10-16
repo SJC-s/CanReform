@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import {Button} from "react-bootstrap";
 
 // 게시글 더미 데이터 (예시)
 const posts = Array.from({ length: 100 }, (_, i) => ({
@@ -17,7 +18,7 @@ export default function ReformBoard() {
     const [searchQuery, setSearchQuery] = useState('');         // 검색어 상태
     const [currentPage, setCurrentPage] = useState(1);          // 현재 페이지 상태
 
-    const postsPerPage = 10;                                   // 한 페이지에 보여줄 게시글 수
+    const postsPerPage = 5;                                   // 한 페이지에 보여줄 게시글 수
     const totalPages = Math.ceil(filteredPosts.length / postsPerPage); // 총 페이지 수
 
     // 탭이나 검색어가 변경될 때마다 필터링 처리
@@ -69,6 +70,12 @@ export default function ReformBoard() {
 
         startPage = Math.max(1, endPage === totalPages ? endPage-MAX_PAGES_DISPLAY+1 : startPage);
         return Array.from({ length: endPage - startPage + 1 }, (_, idx) => startPage + idx);
+    };
+
+    // 글쓰기 버튼을 눌렀을 때 동작하는 함수
+    const handleWritePost = () => {
+        // 글쓰기 페이지로 이동하거나 모달을 띄우는 로직을 추가
+        alert("글쓰기 버튼을 눌렀습니다!");  // 임시 동작, 실제로는 작성 페이지로 이동
     };
 
 
@@ -133,19 +140,31 @@ export default function ReformBoard() {
                 </tbody>
             </table>
 
+            {/* 글쓰기 버튼 */}
+            <div>
+                <Button variant="primary" onClick={handleWritePost}>
+                    글쓰기
+                </Button>
+            </div>
+
             {/* 페이지네이션 */}
             {totalPages > 1 && (
-                <div className="pagination" >
+                <div className="pagination">
+                    <button onClick={() => setCurrentPage(1)}>{'<<'}</button>
+                    <button onClick={() => setCurrentPage(Math.max(1, currentPage-10))}>{'<'}</button>
                     {getPageNumbers().map(pageNumber => (
                         <button key={pageNumber} onClick={() => handlePageChange(pageNumber)}
-                                style={{backgroundColor: currentPage === pageNumber ? '#007bff' : '#f0f0f0',
-                                    color: currentPage === pageNumber ? 'white' : 'black',}}>
+                                style={{
+                                    backgroundColor: currentPage === pageNumber ? '#007bff' : '#f0f0f0',
+                                    color: currentPage === pageNumber ? 'white' : 'black',
+                                }}>
                             {pageNumber}
                         </button>
                     ))}
+                    <button onClick={() => setCurrentPage(Math.min(currentPage+10,totalPages))}>{'>'}</button>
+                    <button onClick={() => setCurrentPage(totalPages)}>{'>>'}</button>
                 </div>
             )}
-
         </div>
     );
 }

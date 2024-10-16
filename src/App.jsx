@@ -6,7 +6,6 @@ import ReformBoard from './commponent/RfBoard/ReformBoard.jsx';
 import Layout from "./Layout.jsx";
 import LayoutHeader from "./LayoutHeader.jsx";
 import LayoutFooter from "./LayoutFooter.jsx"; // 게시판 컴포넌트
-
 export default function App () {
 
     return (
