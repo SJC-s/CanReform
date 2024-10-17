@@ -42,24 +42,7 @@
     color: #007bff;
 }
 
-.pagination {
-    margin-top: 20px;
-    text-align: center;
-}
 
-/* 페이지네이션 버튼 스타일 */
-.pagination button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    cursor: pointer;
-}
-
-.pagination button:active {
-    background-color: #007bff;
-    color: white;
-}
 
 .header-row {
     display: flex;
@@ -89,3 +72,31 @@
     width: 100%;
     border-collapse: collapse;
 }
+
+
+.write-btn {
+    width: 100%;
+    margin-top: 10px;
+    text-align: right;
+}
+
+.pagination {
+    display: inline-block;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* 페이지네이션 버튼 스타일 */
+.pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.pagination button:active {
+    background-color: #007bff;
+    color: white;
+}
+
