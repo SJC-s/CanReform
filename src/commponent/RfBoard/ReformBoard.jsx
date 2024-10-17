@@ -18,10 +18,7 @@ export default function ReformBoard() {
             })
     );
 
-
-    // const [posts, setPosts] = useState({});  // 게시글 리스트 상태
-
-    const [filteredPosts, setFilteredPosts] = useState(posts);  // 필터링된 게시글 리스트
+    const [filteredPosts, setFilteredPosts] = useState([]);  // 필터링된 게시글 리스트
     const [activeTab, setActiveTab] = useState('all');         // 현재 활성화된 탭
     const [searchQuery, setSearchQuery] = useState('');         // 검색어 상태
     const [currentPage, setCurrentPage] = useState(1);          // 현재 페이지 상태
@@ -32,22 +29,19 @@ export default function ReformBoard() {
 
     // Spring Boot에서 게시글 데이터를 불러오는 함수
     useEffect(() => {
-
-    }, []);
-
-    // 탭이나 검색어가 변경될 때마다 필터링 처리
-    useEffect(() => {
-        handleSearch();
-    }, [activeTab]);
-
+            console.log(posts)
+        if (status === 'success') {
+            handleSearch();  // 서버에서 데이터를 받아온 후 필터링
+        }
+    }, [posts, activeTab]);
 
 
     // 카테고리와 검색어 필터링 처리 함수
     const handleSearch = () => {
-        const filtered = posts.filter(post => {
+        const filtered = posts.filter(([post , ])=> {
             return (activeTab === 'all' || post.category === activeTab) &&
-                post.title.toLowerCase().includes(searchQuery.toLowerCase()); // 제목 검색 필터
-        });
+                post.title.toLowerCase().includes(searchQuery.toLowerCase())// 제목 검색 필터
+        }).sort((a, b) => new Date(b[0].created_at) - new Date(a[0].created_at)); // 작성일 기준 내림차순 정렬
         setFilteredPosts(filtered);
         setCurrentPage(1); // 검색 시 첫 페이지로 이동
     };
@@ -72,8 +66,6 @@ export default function ReformBoard() {
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);  // 필터링된 게시글에서 페이징 처리
-
-
 
     // 페이지 이동 처리 함수
     const handlePageChange = (pageNumber) => {
@@ -121,13 +113,13 @@ export default function ReformBoard() {
             <div className="header-row">
                 {/* 탭 메뉴 */}
                 <div className="tabs">
-                    <button onClick={() => handleTabChange('all')} className={activeTab === 'all' ? 'active' : ''}>
+                    <button onClick={() => handleTabChange('all')} className={'btn ' + (activeTab === 'all' ? 'btn-primary' : 'btn-outline-primary')}>
                         전체
                     </button>
-                    <button onClick={() => handleTabChange('Inquiry')} className={activeTab === 'Inquiry' ? 'active' : ''}>
+                    <button onClick={() => handleTabChange('Inquiry')} className={'btn ' + (activeTab === 'Inquiry' ? 'btn-primary' : 'btn-outline-primary')}>
                         문의
                     </button>
-                    <button onClick={() => handleTabChange('request')} className={activeTab === 'request' ? 'active' : ''}>
+                    <button onClick={() => handleTabChange('request')} className={'btn ' + (activeTab === 'request' ? 'btn-primary' : 'btn-outline-primary')}>
                         의뢰
                     </button>
                 </div>
@@ -147,22 +139,28 @@ export default function ReformBoard() {
             </div>
 
             {/* 게시판 테이블 리스트 */}
-            <table className="post-table">
+            <table className="table table-hover table-light table-bordered">
                 <thead>
                 <tr>
-                    <th style={{border: '1px solid #ddd', padding: '8px'}}>제목</th>
-                    <th style={{border: '1px solid #ddd', padding: '8px'}}>카테고리</th>
-                    <th style={{border: '1px solid #ddd', padding: '8px'}}>조회수</th>
-                    <th style={{border: '1px solid #ddd', padding: '8px'}}>작성일</th>
+                    <th style={{width: '10%'}}>카테고리</th>
+                    <th style={{width: '10%'}}>공개</th>
+                    <th style={{width: '30%'}}>제목</th>
+                    <th style={{width: '10%'}}>작성자</th>
+                    <th style={{width: '10%'}}>조회수</th>
+                    <th style={{width: '10%'}}>댓글수</th>
+                    <th style={{width: '10%'}}>작성일</th>
                 </tr>
                 </thead>
                 <tbody>
                 {currentPosts.length > 0 ? (
-                    currentPosts.map(post => (
+                    currentPosts.map(([post, username]) => (
                         <tr key={post.post_id}>
+                            <td>{post.category === 'Inquiry' ? '문의' : '의뢰'}</td>
+                            <td>{post.is_private === 'Y' ? '공개' : '비공개'}</td>
                             <td>{post.title}</td>
-                            <td>{post.category}</td>
+                            <td>{username}</td>
                             <td>{post.readCount}</td>
+                            <td>{post.commentCount}</td>
                             <td>{new Date(post.created_at).toLocaleDateString()}</td>
                         </tr>
                     ))

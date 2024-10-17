@@ -9,7 +9,7 @@ function SpreadBtn() {
     return (
         <DropdownButton className="spread-button" drop="down" title={<FontAwesomeIcon icon={faBars} />}>
             <DropdownItem><Link to="/" className=""><div>홈페이지</div></Link></DropdownItem>
-            <DropdownItem><Link to="/bulletin-board" className=""><div>게시판</div></Link></DropdownItem>
+            <DropdownItem><Link to="/posts" className=""><div>게시판</div></Link></DropdownItem>
             <DropdownItem><Link to="#" className="">일정관리</Link></DropdownItem>
         </DropdownButton>
     );

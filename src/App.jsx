@@ -1,9 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import MainScroll from "./commponent/RfMain/MainScroll.jsx";
-import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import ReformBoard from './commponent/RfBoard/ReformBoard.jsx';
-import Layout from "./Layout.jsx";
 import LayoutHeader from "./LayoutHeader.jsx";
 import LayoutFooter from "./LayoutFooter.jsx";
 import {QueryClient, QueryClientProvider} from "react-query"; // 게시판 컴포넌트
@@ -35,7 +34,7 @@ export default function App () {
                 <LayoutHeader/>
                 <Routes>
                         <Route path="/" element={<MainScroll />} /> {/* 메인 페이지 */}
-                        <Route path="/bulletin-board" element={<ReformBoard />} /> {/* 게시판 페이지 */}
+                        <Route path="/posts/*" element={<ReformBoard />} /> {/* 게시판 페이지 */}
                 </Routes>
                 <LayoutFooter/>
             </div>
