@@ -5,10 +5,16 @@ import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 import ReformBoard from './commponent/RfBoard/ReformBoard.jsx';
 import Layout from "./Layout.jsx";
 import LayoutHeader from "./LayoutHeader.jsx";
-import LayoutFooter from "./LayoutFooter.jsx"; // 게시판 컴포넌트
+import LayoutFooter from "./LayoutFooter.jsx";
+import {QueryClient, QueryClientProvider} from "react-query"; // 게시판 컴포넌트
+
+
+
+const queryClient = new QueryClient();
 export default function App () {
 
     return (
+        <QueryClientProvider client={queryClient}>
         <BrowserRouter>
             <div className="App">
                 {/* 헤더 메뉴*/}
@@ -34,5 +40,6 @@ export default function App () {
                 <LayoutFooter/>
             </div>
         </BrowserRouter>
+        </QueryClientProvider>
     );
 }
