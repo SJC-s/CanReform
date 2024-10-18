@@ -5,7 +5,8 @@ import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import LayoutHeader from "./LayoutHeader.jsx";
 import LayoutFooter from "./LayoutFooter.jsx";
 import {QueryClient, QueryClientProvider} from "react-query";
-import ReformPage from "./commponent/RfBoard/ReformPage.jsx"; // 게시판 컴포넌트
+import ReformPage from "./commponent/RfBoard/ReformPage.jsx";
+import Signup from "./Signup.jsx"; // 게시판 컴포넌트
 
 
 
@@ -20,8 +21,9 @@ export default function App () {
                 <LayoutHeader/>
                 {/* 페이지 라우팅 설정 */}
                 <Routes>
-                        <Route path="/" element={<MainScroll />} /> {/* 메인 페이지 */}
-                        <Route path="/posts/*" element={<ReformPage />} /> {/* 게시판 페이지 */}
+                    <Route path="/" element={<MainScroll />} /> {/* 메인 페이지 */}
+                    <Route path="/posts/*" element={<ReformPage />} /> {/* 게시판 페이지 */}
+                    <Route path="/signup" element={<Signup />} />
                 </Routes>
                 {/* footer 메뉴 */}
                 <LayoutFooter/>
