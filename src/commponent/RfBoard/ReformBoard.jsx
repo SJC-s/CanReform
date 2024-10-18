@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import {useQuery} from "react-query";
 import {Button} from "react-bootstrap";
+import {Link, useNavigate} from "react-router-dom";
+import {FaLock, FaUnlock, FaUnlockAlt} from "react-icons/fa";
 
 const MAX_PAGES_DISPLAY = 10; // 최대 페이지네이션 버튼 수
 
@@ -26,6 +28,8 @@ export default function ReformBoard() {
     const postsPerPage = 5;                                   // 한 페이지에 보여줄 게시글 수
     const totalPages = Math.ceil(filteredPosts.length / postsPerPage); // 총 페이지 수
 
+    const navigate = useNavigate();
+
 
     // Spring Boot에서 게시글 데이터를 불러오는 함수
     useEffect(() => {
@@ -41,7 +45,7 @@ export default function ReformBoard() {
         const filtered = posts.filter(([post , ])=> {
             return (activeTab === 'all' || post.category === activeTab) &&
                 post.title.toLowerCase().includes(searchQuery.toLowerCase())// 제목 검색 필터
-        }).sort((a, b) => new Date(b[0].created_at) - new Date(a[0].created_at)); // 작성일 기준 내림차순 정렬
+        })
         setFilteredPosts(filtered);
         setCurrentPage(1); // 검색 시 첫 페이지로 이동
     };
@@ -92,13 +96,12 @@ export default function ReformBoard() {
             if (response.ok) {
                 window.location.href = '/write';
             } else if (response.status === 401) {
-                window.location.href = '/login';  // 스프링 부트 로그인 페이지
+                navigate('/login');  // 스프링 부트 로그인 페이지
             }
         } catch (error) {
             console.error('로그인 확인 에러:', error);
         }
     };
-
 
     if (status === "error") {
         return <p>{error}</p>
@@ -156,8 +159,16 @@ export default function ReformBoard() {
                     currentPosts.map(([post, username]) => (
                         <tr key={post.post_id}>
                             <td>{post.category === 'Inquiry' ? '문의' : '의뢰'}</td>
-                            <td>{post.is_private === 'Y' ? '공개' : '비공개'}</td>
-                            <td>{post.title}</td>
+                            <td>{post.is_private === 'Y' ? <FaUnlockAlt style={{color:"darkblue"}}/>: <FaLock style={{color:"gray"}}/>}</td>
+                            <td>
+                                {post.is_private === 'N' ? (
+                                    <span style={{ color: 'grey' }}>{post.title}</span> // 비활성화된 제목
+                                ) : (
+                                <Link to={`/posts/${post.post_id}`} state={{post, username}}>
+                                    {post.title}
+                                </Link> // 활성화된 제목 (공개글이거나 작성자가 본인인 경우)
+                                )}
+                            </td>
                             <td>{username}</td>
                             <td>{post.readCount}</td>
                             <td>{post.commentCount}</td>

@@ -2,10 +2,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import MainScroll from "./commponent/RfMain/MainScroll.jsx";
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
-import ReformBoard from './commponent/RfBoard/ReformBoard.jsx';
 import LayoutHeader from "./LayoutHeader.jsx";
 import LayoutFooter from "./LayoutFooter.jsx";
-import {QueryClient, QueryClientProvider} from "react-query"; // 게시판 컴포넌트
+import {QueryClient, QueryClientProvider} from "react-query";
+import ReformPage from "./commponent/RfBoard/ReformPage.jsx"; // 게시판 컴포넌트
 
 
 
@@ -16,26 +16,14 @@ export default function App () {
         <QueryClientProvider client={queryClient}>
         <BrowserRouter>
             <div className="App">
-                {/* 헤더 메뉴*/}
-                {/*<header>*/}
-                {/*    <nav className="navbar">*/}
-                {/*        <ul>*/}
-                {/*            <li>*/}
-                {/*                <Link to="/">메인</Link>  메인 페이지로 이동*/}
-                {/*            </li>*/}
-                {/*            <li>*/}
-                {/*                <Link to="/bulletin-board">게시판</Link>  게시판 페이지로 이동*/}
-                {/*            </li>*/}
-                {/*        </ul>*/}
-                {/*    </nav>*/}
-                {/*</header>*/}
-
-                {/* 페이지 라우팅 설정 */}
+                {/* Header 메뉴*/}
                 <LayoutHeader/>
+                {/* 페이지 라우팅 설정 */}
                 <Routes>
                         <Route path="/" element={<MainScroll />} /> {/* 메인 페이지 */}
-                        <Route path="/posts/*" element={<ReformBoard />} /> {/* 게시판 페이지 */}
+                        <Route path="/posts/*" element={<ReformPage />} /> {/* 게시판 페이지 */}
                 </Routes>
+                {/* footer 메뉴 */}
                 <LayoutFooter/>
             </div>
         </BrowserRouter>
