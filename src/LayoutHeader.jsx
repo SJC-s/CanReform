@@ -32,7 +32,7 @@ export default function LayoutHeader() {
                             <img src={logo_sample} alt="LOGO" className="logo-image" />
                         </div>
                         <Nav className="justify-content-end gap-2 nav-custom">
-                            <Button variant="outline-secondary" as={Link} to="http://localhost:8080/login" className="text-reset">로그인</Button>
+                            <Button variant="outline-secondary" as={Link} to="/login" className="text-reset">로그인</Button>
                             <Button variant="outline-secondary" as={Link} to="/signup" className="text-reset">회원가입</Button>
                             <Button variant="outline-secondary" as={Link} to="/mypage" className="text-reset">내정보</Button>
                             <Button variant="outline-secondary" as={Link} to="http://localhost:8080/logout" className="text-reset">로그아웃</Button>

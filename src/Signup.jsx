@@ -4,12 +4,9 @@ import {useMutation} from "react-query";
 
 export default function Signup() {
     const navigate = useNavigate();
-    const [successMessage, setSuccessMessage] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username , setUsername] = useState('');
-    const [user_id, setUser_id] = useState('');
 
     // useMutation 훅을 사용하여 회원가입 요청을 처리
     const { mutate, isLoading, isError, error } = useMutation(
@@ -20,10 +17,12 @@ export default function Signup() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    user_id: user_id,
+                    user_id: 1,
                     email: email,
                     password: password,
-                    username: username
+                    username: username,
+                    usersrole: 'MEMBER',
+                    is_active: 'Y'
                 })
             }).then(resp => {
                 if (!resp.ok) {
@@ -47,14 +46,24 @@ export default function Signup() {
 
 
     const handleSignup = () => {
-        console.log({
-            user_id: user_id,
-            email: email,
-            password: password,
-            username: username
-        });
-        mutate(); // 회원가입 요청을 보냄
-    }
+        // 아이디 중복 체크 API 호출
+        fetch(`http://localhost:8080/api/check-username?username=${username}`)
+            .then((resp) => resp.json())
+            .then((isExists) => {
+                if (isExists) {
+                    // 아이디가 이미 존재하는 경우 처리
+                    alert('아이디가 이미 존재합니다. 다른 아이디를 사용하세요.');
+                } else {
+                    // 중복이 없으면 회원가입 진행
+                    mutate();
+                }
+            })
+            .catch((error) => {
+                alert('오류 발생: ' + error.message);
+            });
+    };
+
+
     const returnback = () => {
         if (window.history.length > 1) {
             navigate(-1)
@@ -63,15 +72,13 @@ export default function Signup() {
         }
     }
 
+
+
+
     return (
         <>
             <div>
                 <h2>회원가입</h2>
-            </div>
-            <div>
-                <label htmlFor="user_id">사용자아이디:</label>
-                <input type="text" id="user_id" name="user_id" value={user_id}
-                       onChange={(e) => setUser_id(e.target.value)} required />
             </div>
             <div>
                 <label htmlFor="username">사용자명:</label>
@@ -94,49 +101,13 @@ export default function Signup() {
                 </button>
                 <button type="button" onClick={returnback}>돌아가기</button>
                 <button type="button" onClick={() => {
-                    setUsername(''); setPassword(''); setEmail(''); setUser_id('');
+                    setUsername('');
+                    setPassword('');
+                    setEmail('');
                 }}>초기화</button>
             </div>
             {isError && <p style={{ color: 'red' }}>오류: {error.message}</p>}
         </>
     );
-
-    /*return (
-        <>
-            <div>
-                <h2>회원가입</h2>
-            </div>
-            <div>
-                <label htmlFor="user_id">사용자아이디:</label>
-                <input type="text" id="user_id" name="user_id" value={user_id}
-                       onChange={(e) => setUser_id(e.target.value)} required/>
-            </div>
-            <div>
-                <label htmlFor="username">사용자명:</label>
-                <input type="text" id="username" name="username" value={username}
-                       onChange={(e) => setUsername(e.target.value)} required/>
-            </div>
-            <div>
-                <label htmlFor="password">비밀번호:</label>
-                <input type="password" id="password" name="password" value={password}
-                       onChange={(e) => setPassword(e.target.value)} required/>
-            </div>
-            <div>
-                <label htmlFor="email">이메일:</label>
-                <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                       required/>
-            </div>
-            <div>
-                <button type="button" onClick={handleSignup}>회원가입</button>
-                <button type="button" onClick={returnback}>돌아가기</button>
-                <button type="button" onClick={() => {
-                    setUsername('');
-                    setPassword('');
-                    setEmail('');
-                }}>초기화
-                </button>
-            </div>
-        </>
-    )*/
 }
 
