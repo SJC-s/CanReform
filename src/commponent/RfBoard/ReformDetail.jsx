@@ -71,7 +71,7 @@ export default function ReformDetail() {
                                 <Col md={2}><p><strong>작성자:</strong> {username}</p></Col>
                                 <Col><p><strong>작성일:</strong> {new Date(post.created_at).toLocaleDateString()}</p></Col>
                                 <Col><p><strong>조회수:</strong> {post.readCount}</p></Col>
-                                <Col><p><strong>공개 여부:</strong> {post.is_private === 'Y' ? '비공개' : '공개'}</p></Col>
+                                <Col><p><strong>공개 여부:</strong> {post.is_private === 'Y' ? '공개' : '비공개'}</p></Col>
                             </Row>
                         </Card.Header>
                         <Card.Body>
