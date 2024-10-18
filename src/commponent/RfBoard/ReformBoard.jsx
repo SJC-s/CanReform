@@ -8,7 +8,7 @@ const MAX_PAGES_DISPLAY = 10; // 최대 페이지네이션 버튼 수
 
 export default function ReformBoard() {
 
-    const url = 'http://192.168.0.25:8080/api/posts'
+    const url = 'http://localhost:8080/api/posts'
     const {data: posts = [], status, error} = useQuery(
         "posts",
         () => fetch(url)  // method : GET
@@ -88,7 +88,7 @@ export default function ReformBoard() {
     // 글쓰기 버튼을 눌렀을 때 동작하는 함수
     const handleWritePost = async () => {
         try {
-            const response = await fetch('http://192.168.0.25:8080/api/check-login', {
+            const response = await fetch('http://localhost:8080/api/check-login', {
                 method: 'GET',
                 credentials: 'include',  // 세션 정보를 포함하는 옵션
             });
