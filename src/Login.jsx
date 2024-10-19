@@ -1,6 +1,180 @@
 import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
+import {Container, Row, Col, Form, Button, Alert, InputGroup} from "react-bootstrap";
+import {useMutation} from "react-query";
+import {FaLock, FaUser} from "react-icons/fa";
+import {TiDelete} from "react-icons/ti";
 
+export default function Login({ setIsLoggedIn }) {
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [userId, setUserId] = useState('');
+    const [password, setPassword] = useState('');
+    const [showClearIdButton, setShowClearIdButton] = useState(false);
+
+
+    const navigate = useNavigate();
+    const location = useLocation(); // 방금 전에 있었던 페이지 경로를 저장하는 훅
+    const [previousPage, setPreviousPage] = useState("/"); // 이전 페이지 기본값을 '/'로 설정
+
+    // 컴포넌트가 마운트 될 때 바로 이전 페이지를 기록
+    useEffect(() => {
+        if (location.state?.from) {
+            setPreviousPage(location.state.from); // 이전 페이지 경로를 저장
+        }
+    }, [location]);
+
+    // 로그인 요청을 처리하는 mutation
+    const {mutate, isLoading} = useMutation(
+        () => {
+            return fetch(`http://localhost:8080/api/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    userId: userId,
+                    password: password
+                })
+            }).then(resp => {
+                if (!resp.ok && resp.status !== 400) {
+                    throw new Error("로그인 실패");
+                }
+                return resp.json();
+            });
+        },
+        {
+            onSuccess: (data) => {
+                // 로그인 성공 시 처리
+                localStorage.setItem('token', data.token); // 예시로 토큰 저장
+                setSuccessMessage("로그인 성공");
+                setIsLoggedIn(true); // 로그인 상태 업데이트
+                navigate("/"); // 메인 페이지로 이동
+                navigate(previousPage); // 성공 시 메인 페이지로 이동
+            },
+            onError: (error) => {
+                // 로그인 실패 시 처리
+                setErrorMessage(error.message);
+            }
+        }
+    );
+
+    // 로그인 버튼 클릭 시 실행되는 함수
+    const handleLogin = () => {
+        if (!userId || !password) {
+            setErrorMessage("사용자명과 비밀번호를 입력하세요.");
+            return;
+        }
+        mutate(); // 로그인 요청 보내기
+    };
+
+    // 뒤로 가기 함수
+    const returnBack = () => {
+        navigate(previousPage); // 이전 페이지로 돌아감
+    };
+
+    const handleIdChange = (e) => {
+        setUserId(e.target.value);
+        setShowClearIdButton(e.target.value.length > 0);
+    };
+
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+    };
+
+    const clearIdField = () => {
+        setUserId('');
+        setShowClearIdButton(false);
+    };
+
+
+    return (
+        <Container className="mt-5">
+            <Row className="justify-content-md-center">
+                <Col md={5}>
+                    <h2 className="text-center mb-4">로그인</h2>
+
+                    {/* 로그인 성공 메시지 */}
+                    {successMessage && (
+                        <Alert variant="success">
+                            {successMessage}
+                        </Alert>
+                    )}
+
+                    {/* 에러 메시지 */}
+                    {errorMessage && (
+                        <Alert variant="danger">
+                            {errorMessage}
+                        </Alert>
+                    )}
+
+                    <Form>
+                        <Row>
+                            <Col md={1}>
+                                <FaUser/>
+                            </Col>
+                            <Col>
+                                <InputGroup>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="사용자 아이디를 입력하세요"
+                                        value={userId}
+                                        onChange={handleIdChange}
+                                        required
+                                    />
+                                    {showClearIdButton && (
+                                        <Button
+                                            variant="outline-secondary"
+                                            className="btn_delete"
+                                            id="id_clear"
+                                            onClick={clearIdField}
+                                        >
+                                            <TiDelete/>
+                                        </Button>
+                                    )}
+                                </InputGroup>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={1}>
+                                <FaLock/>
+                            </Col>
+                            <Col>
+                                <Form.Group className="mb-3" controlId="password">
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="비밀번호를 입력하세요"
+                                        value={password}
+                                        onChange={handlePasswordChange}
+                                        required
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+
+                        <div className="d-grid gap-2">
+                            <Button
+                                variant="primary"
+                                onClick={handleLogin}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? '로그인 중...' : '로그인'}
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                onClick={returnBack}
+                            >
+                                돌아가기
+                            </Button>
+                        </div>
+                    </Form>
+                </Col>
+            </Row>
+        </Container>
+    );
+}
+/*
 
 export default function Login() {
     const [successMessage, setSuccessMessage] = useState('');
@@ -26,18 +200,19 @@ export default function Login() {
 
 
     const handleLogin = () => {
-        const username = document.querySelector(`#username`)
+        const userId = document.querySelector(`#userId`)
         const password = document.querySelector(`#password`)
         const formData = new URLSearchParams();
-        formData.append('username', username.value);
+        formData.append('userId', userId.value);
         formData.append('password', password.value);
-        fetch(`http://localhost:8080/login`, {
+        fetch(`http://localhost:8080/api/login`, {
             method : 'POST',
             headers : {
                 'Content-Type' : 'application/x-www-form-urlencoded'
             },
             credentials: 'include',
-            body : formData.toString()
+            body : formData.toString(),
+            mode : "cors"
         })
             .then((resp) => {
                 console.log(resp)
@@ -73,14 +248,14 @@ export default function Login() {
                     <h2>로그인</h2>
                 </div>
 
-                {/* 회원가입 성공 메시지 */}
+                {/!* 회원가입 성공 메시지 *!/}
                 {successMessage && (
                     <div style={{ color: 'green' }}>
                         <p>{successMessage}</p>
                     </div>
                 )}
 
-                {/* 에러 메시지 */}
+                {/!* 에러 메시지 *!/}
                 {errorMessage && (
                     <div className="error-message">
                         <p>{errorMessage}</p>
@@ -88,8 +263,8 @@ export default function Login() {
                 )}
 
                 <div>
-                    <label htmlFor="username">사용자명:</label>
-                    <input type="text" id="username" name="username" required />
+                    <label htmlFor="userId">사용자명:</label>
+                    <input type="text" id="userId" name="userId" required />
                 </div>
                 <div>
                     <label htmlFor="password">비밀번호:</label>
@@ -102,4 +277,4 @@ export default function Login() {
             </div>
         </>
     );
-}
+}*/

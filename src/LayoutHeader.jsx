@@ -2,8 +2,9 @@ import { Button, Col, DropdownButton, DropdownItem, Nav, Row } from 'react-boots
 import './Layout.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import logo_sample from '../public/upload/logo_sample.svg';
+import {useEffect, useState} from "react";
 
 function SpreadBtn() {
     return (
@@ -21,7 +22,17 @@ function SpreadBtn() {
     );
 }
 
-export default function LayoutHeader() {
+export default function LayoutHeader({ isLoggedIn, setIsLoggedIn }) {
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        // 로그아웃 처리
+        localStorage.removeItem("token"); // 토큰 삭제
+        setIsLoggedIn(false); // 로그인 상태 변경
+        navigate("/"); // 로그아웃 후 메인 페이지로 이동
+    };
+
     return (
         <>
             <Row>
@@ -32,10 +43,17 @@ export default function LayoutHeader() {
                             <img src={logo_sample} alt="LOGO" className="logo-image" />
                         </div>
                         <Nav className="justify-content-end gap-2 nav-custom">
-                            <Button variant="outline-secondary" as={Link} to="/login" className="text-reset">로그인</Button>
-                            <Button variant="outline-secondary" as={Link} to="/signup" className="text-reset">회원가입</Button>
-                            <Button variant="outline-secondary" as={Link} to="/mypage" className="text-reset">내정보</Button>
-                            <Button variant="outline-secondary" as={Link} to="http://localhost:8080/logout" className="text-reset">로그아웃</Button>
+                            {!isLoggedIn ? (
+                                <>
+                                    <Button variant="outline-secondary" as={Link} to="/login" className="text-reset">로그인</Button>
+                                    <Button variant="outline-secondary" as={Link} to="/signup" className="text-reset">회원가입</Button>
+                                </>
+                            ) : (
+                                <>
+                                    <Button variant="outline-secondary" as={Link} to="/mypage" className="text-reset">내정보</Button>
+                                    <Button variant="outline-secondary" onClick={handleLogout} className="text-reset">로그아웃</Button>
+                                </>
+                            )}
                         </Nav>
                     </div>
                 </Col>

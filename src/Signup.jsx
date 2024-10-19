@@ -1,12 +1,16 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useMutation} from "react-query";
+import {Alert, Button, Col, Container, Form, Row, Spinner} from "react-bootstrap";
+import {FaLock, FaMailBulk, FaUser} from "react-icons/fa";
+import {BiRename} from "react-icons/bi";
 
 export default function Signup() {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username , setUsername] = useState('');
+    const [userId, setUserId] = useState('');
 
     // useMutation 훅을 사용하여 회원가입 요청을 처리
     const { mutate, isLoading, isError, error } = useMutation(
@@ -17,12 +21,12 @@ export default function Signup() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    user_id: 1,
+                    userId: userId,
                     email: email,
                     password: password,
                     username: username,
-                    usersrole: 'MEMBER',
-                    is_active: 'Y'
+                    usersRole: 'MEMBER',
+                    isActive: 'Y'
                 })
             }).then(resp => {
                 if (!resp.ok) {
@@ -47,7 +51,7 @@ export default function Signup() {
 
     const handleSignup = () => {
         // 아이디 중복 체크 API 호출
-        fetch(`http://localhost:8080/api/check-username?username=${username}`)
+        fetch(`http://localhost:8080/api/check-userId?userId=${userId}`)
             .then((resp) => resp.json())
             .then((isExists) => {
                 if (isExists) {
@@ -76,38 +80,98 @@ export default function Signup() {
 
 
     return (
-        <>
-            <div>
-                <h2>회원가입</h2>
-            </div>
-            <div>
-                <label htmlFor="username">사용자명:</label>
-                <input type="text" id="username" name="username" value={username}
-                       onChange={(e) => setUsername(e.target.value)} required />
-            </div>
-            <div>
-                <label htmlFor="password">비밀번호:</label>
-                <input type="password" id="password" name="password" value={password}
-                       onChange={(e) => setPassword(e.target.value)} required />
-            </div>
-            <div>
-                <label htmlFor="email">이메일:</label>
-                <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                       required />
-            </div>
-            <div>
-                <button type="button" onClick={handleSignup} disabled={isLoading}>
-                    {isLoading ? '등록 중...' : '회원가입'}
-                </button>
-                <button type="button" onClick={returnback}>돌아가기</button>
-                <button type="button" onClick={() => {
-                    setUsername('');
-                    setPassword('');
-                    setEmail('');
-                }}>초기화</button>
-            </div>
-            {isError && <p style={{ color: 'red' }}>오류: {error.message}</p>}
-        </>
+        <Container>
+            <Row className="justify-content-md-center">
+                <Col md={5}>
+                    <Form>
+                        <Row>
+                            <Col md={1}>
+                                <FaUser/>
+                            </Col>
+                            <Col>
+                                <Form.Group controlId="user_id" className="mb-3">
+
+                                    <Form.Control
+                                        placeholder="사용자 아이디"
+                                        type="text"
+                                        name="user_id"
+                                        value={userId}
+                                        onChange={(e) => setUserId(e.target.value)}
+                                        required
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={1}>
+                                <FaLock/>
+                            </Col>
+                            <Col>
+                                <Form.Group controlId="password" className="mb-3">
+                                    <Form.Control
+                                        placeholder="비밀번호"
+                                        type="password"
+                                        name="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={1}>
+                                <BiRename/>
+                            </Col>
+                            <Col>
+                                <Form.Group controlId="username" className="mb-3">
+                                    <Form.Control
+                                        placeholder="사용자명"
+                                        type="text"
+                                        name="username"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        required
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={1}>
+                                <FaMailBulk/>
+                            </Col>
+                            <Col>
+                                <Form.Group controlId="email" className="mb-3">
+                                    <Form.Control
+                                        placeholder="이메일"
+                                        type="email"
+                                        name="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+
+                        <div className="d-grid gap-2">
+                            <Button variant="primary" onClick={handleSignup} disabled={isLoading}>
+                                {isLoading ? <Spinner as="span" animation="border" size="sm" /> : '회원가입'}
+                            </Button>
+                            <Button variant="secondary" onClick={returnback}>돌아가기</Button>
+                            <Button variant="danger" onClick={() => {
+                                setUserId('');
+                                setUsername('');
+                                setPassword('');
+                                setEmail('');
+                            }}>초기화</Button>
+                        </div>
+
+                        {isError && <Alert variant="danger" className="mt-3">오류: {error.message}</Alert>}
+                    </Form>
+                </Col>
+            </Row>
+        </Container>
     );
 }
 
