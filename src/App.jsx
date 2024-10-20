@@ -10,7 +10,8 @@ import Signup from "./Signup.jsx";
 import Login from "./Login.jsx";
 import {useEffect, useState} from "react"; // 게시판 컴포넌트
 import MainFade from "./commponent/RfMain/MainFade.jsx";
-import MainSlide from "./commponent/RfMain/MainSlide.jsx"; // 게시판 컴포넌트
+import MainSlide from "./commponent/RfMain/MainSlide.jsx";
+import MainPage from "./commponent/RfMain/MainPage.jsx"; // 게시판 컴포넌트
 
 
 
@@ -33,9 +34,7 @@ export default function App () {
                 <LayoutHeader isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
                 {/* 페이지 라우팅 설정 */}
                 <Routes>
-                    <Route path="/1" element={<MainScroll/>} /> {/* 메인 페이지 */}
-                    <Route path="/2" element={<MainFade/>} /> {/* 메인 페이지 */}
-                    <Route path="/3" element={<MainSlide/>} /> {/* 메인 페이지 */}
+                    <Route path="/" element={<MainPage/>} /> {/* 메인 페이지 */}
                     <Route path="/posts/*" element={<ReformPage />} /> {/* 게시판 페이지 */}
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn}/>} />

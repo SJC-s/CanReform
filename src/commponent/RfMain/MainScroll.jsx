@@ -66,7 +66,7 @@ export default function MainScroll() {
 
 
     return (
-        <div className="container">
+        <div className="main-scroll">
             {data.map((fileName, idx) => (
                 <div
                     key={idx}

@@ -29,25 +29,20 @@ export default function MainSlide() {
     };
 
     return (
-        <div className="container">
-            <div className='logoimg'>
-                <img src={`/upload/logo_sample.svg`} alt='logo' />
+        <div className="main-slider" style={{ overflowX: 'hidden' }}>
+            <button className="prev" onClick={goToPrevious}>
+                &#10094;
+            </button>
+            <div className="slide-track" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+                {images.map((image, index) => (
+                    <div key={index} className={`slide ${index === currentIndex ? "active" : ""}`}>
+                        <img src={`/upload/${image}`} alt={`slide-${index}`} />
+                    </div>
+                ))}
             </div>
-            <div className="slider">
-                <button className="prev" onClick={goToPrevious}>
-                    &#10094;
-                </button>
-                <div className="slide-track" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-                    {images.map((image, index) => (
-                        <div key={index} className={`slide ${index === currentIndex ? "active" : ""}`}>
-                            <img src={`/upload/${image}`} alt={`slide-${index}`} />
-                        </div>
-                    ))}
-                </div>
-                <button className="next" onClick={goToNext}>
-                    &#10095;
-                </button>
-            </div>
+            <button className="next" onClick={goToNext}>
+                &#10095;
+            </button>
         </div>
     );
 }
