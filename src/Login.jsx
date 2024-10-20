@@ -12,17 +12,8 @@ export default function Login({ setIsLoggedIn }) {
     const [password, setPassword] = useState('');
     const [showClearIdButton, setShowClearIdButton] = useState(false);
 
-
     const navigate = useNavigate();
-    const location = useLocation(); // 방금 전에 있었던 페이지 경로를 저장하는 훅
-    const [previousPage, setPreviousPage] = useState("/"); // 이전 페이지 기본값을 '/'로 설정
 
-    // 컴포넌트가 마운트 될 때 바로 이전 페이지를 기록
-    useEffect(() => {
-        if (location.state?.from) {
-            setPreviousPage(location.state.from); // 이전 페이지 경로를 저장
-        }
-    }, [location]);
 
     // 로그인 요청을 처리하는 mutation
     const {mutate, isLoading} = useMutation(
@@ -50,8 +41,7 @@ export default function Login({ setIsLoggedIn }) {
                 localStorage.setItem('token', data.token); // 예시로 토큰 저장
                 setSuccessMessage("로그인 성공");
                 setIsLoggedIn(true); // 로그인 상태 업데이트
-                navigate("/"); // 메인 페이지로 이동
-                navigate(previousPage); // 성공 시 메인 페이지로 이동
+                navigate(-1); // 메인 페이지로 이동
             },
             onError: (error) => {
                 // 로그인 실패 시 처리
@@ -69,9 +59,11 @@ export default function Login({ setIsLoggedIn }) {
         mutate(); // 로그인 요청 보내기
     };
 
-    // 뒤로 가기 함수
-    const returnBack = () => {
-        navigate(previousPage); // 이전 페이지로 돌아감
+    // 엔터 키 입력 감지 함수
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleLogin(); // 엔터 키 입력 시 검색 실행
+        }
     };
 
     const handleIdChange = (e) => {
@@ -121,6 +113,7 @@ export default function Login({ setIsLoggedIn }) {
                                         placeholder="사용자 아이디를 입력하세요"
                                         value={userId}
                                         onChange={handleIdChange}
+                                        onKeyDown={handleKeyDown}
                                         required
                                     />
                                     {showClearIdButton && (
@@ -147,6 +140,7 @@ export default function Login({ setIsLoggedIn }) {
                                         placeholder="비밀번호를 입력하세요"
                                         value={password}
                                         onChange={handlePasswordChange}
+                                        onKeyDown={handleKeyDown}
                                         required
                                     />
                                 </Form.Group>
@@ -163,7 +157,7 @@ export default function Login({ setIsLoggedIn }) {
                             </Button>
                             <Button
                                 variant="secondary"
-                                onClick={returnBack}
+                                onClick={() => navigate(-1)}
                             >
                                 돌아가기
                             </Button>
