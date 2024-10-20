@@ -15,9 +15,6 @@ function SpreadBtn() {
             <DropdownItem as={Link} to="/posts">
                 게시판
             </DropdownItem>
-            <DropdownItem as={Link} to="#">
-                일정관리
-            </DropdownItem>
         </DropdownButton>
     );
 }

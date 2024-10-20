@@ -1,0 +1,49 @@
+/* Main.css */
+.slider {
+    position: relative;
+    width: 100%; /* 슬라이더 전체 너비 */
+    height: 400px; /* 슬라이더 높이 */
+    overflow: hidden; /* 슬라이드 범위를 벗어나는 부분 숨김 */
+}
+
+.slide-track {
+    display: flex; /* 슬라이드 아이템들을 옆으로 나열 */
+    transition: transform 0.5s ease-in-out; /* 슬라이드 이동 시 부드러운 애니메이션 */
+    width: 100%; /* 슬라이드 트랙의 너비 설정 */
+}
+
+.slide {
+    min-width: 100%; /* 한 번에 하나의 슬라이드만 보이도록 설정 */
+    height: 100%; /* 슬라이드의 높이를 부모 요소에 맞춤 */
+    opacity: 0; /* 기본 투명도 0 */
+    transition: opacity 0.5s ease-in-out; /* 슬라이드 전환 시 부드러운 투명도 애니메이션 */
+}
+
+.slide.active {
+    opacity: 1; /* 활성화된 슬라이드는 보이도록 설정 */
+}
+
+img {
+    width: 100%; /* 이미지 너비를 슬라이드 너비에 맞춤 */
+    height: auto; /* 이미지 비율 유지 */
+}
+
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 24px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
