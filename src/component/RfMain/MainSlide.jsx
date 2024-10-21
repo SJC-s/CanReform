@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import '../../../public/css/MainSlide.css';
+import '../../css/MainSlide.css';
 
 const images = [
     "imgSlide01.jpg",
@@ -59,9 +59,6 @@ export default function MainSlide() {
                     ))}
                 </ul>
             </div>
-            <button className="next" onClick={goToNext}>
-                &#10095;
-            </button>
         </div>
     );
 }

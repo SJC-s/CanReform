@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import { Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { FaLock, FaUnlockAlt } from "react-icons/fa";
+import '../../css/ReformBoard.css';
 
 const MAX_PAGES_DISPLAY = 10; // 최대 페이지네이션 버튼 수
 
@@ -107,6 +108,12 @@ export default function ReformBoard({ isLoggedIn }) {
 
     return (
         <div className="container">
+            {/* 배너 광고 */}
+            <div className="bannerSpace">
+                <div className="bannerAds">
+                    <img src={`/upload/imgBanner/imgBanner02.jpg`} alt="banner" className="imgBanner"/>
+                </div>
+            </div>
             {/* 검색 창 및 탭 메뉴 - 가로로 나란히 배치 */}
             <div className="header-row">
                 {/* 탭 메뉴 */}

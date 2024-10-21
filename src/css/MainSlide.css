@@ -59,7 +59,7 @@ img {
 
 .banner-list button{
     border-radius : 50%;
-    background-color: black;
+    background-color: lightgray;
     width : 1vw;
     height : 1vw;
     padding : 0;            /* 기본 패딩 삭제 */
@@ -75,6 +75,6 @@ img {
 }
 
 .banner-list .active{
-    background-color : lightgray;
+    background-color : black;
 }
 

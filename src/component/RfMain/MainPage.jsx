@@ -1,6 +1,6 @@
 import MainSlide from "./MainSlide.jsx";
 import MainScroll from "./MainScroll.jsx";
-import '../../../public/css/MainPage.css';
+import '../../css/MainPage.css';
 
 export default function MainPage() {
 
