@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import {Link, useNavigate} from "react-router-dom";
 import logo_sample from '../../../public/upload/logo_sample.svg';
+import {useEffect, useState} from "react";
 
 function SpreadBtn() {
     return (

@@ -71,11 +71,7 @@ export default function MainScroll() {
                 <div
                     key={idx}
                     className="row align-items-center bg-info-subtle mb-3 p-3"
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        marginBottom: '20px'
-                    }}         // flexbox : 수직 가운데 정렬 적용
+                    style={{ display: 'flex', alignItems: 'center', marginBottom:'20px' }}         // flexbox : 수직 가운데 정렬 적용
                 >
                     {/* 파일 이름을 이미지 경로로 설정 : 좌측 이미지 */}
                     {/* 홀수 인덱스는 좌측에 이미지 */}
