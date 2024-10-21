@@ -83,7 +83,7 @@ export default function MainScroll() {
                         <>
                             <div className="col-md-6 text-center">
                                 <img
-                                    src={`/upload/${fileName}`}
+                                    src={`/upload/imgScroll/${fileName}`}
                                     alt={fileName}
                                     className="img-fluid"
                                     style={{width: '500px', maxWidth: '100%', height: 'auto'}}
@@ -103,7 +103,7 @@ export default function MainScroll() {
                             </div>
                             <div className="col-md-6 text-center">
                                 <img
-                                    src={`/upload/${fileName}`}
+                                    src={`/upload/imgScroll/${fileName}`}
                                     alt={fileName}
                                     className="img-fluid"
                                     style={{width: '500px', maxWidth: '100%', height: 'auto'}}

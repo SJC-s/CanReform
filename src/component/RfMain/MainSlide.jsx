@@ -16,7 +16,7 @@ export default function MainSlide() {
         }, 2500);
 
         return () => clearInterval(intervalId);
-    }, []);
+    }, [currentIndex]);
 
     const goToPrevious = () => {
         setCurrentIndex((prevIndex) =>
@@ -41,7 +41,7 @@ export default function MainSlide() {
                 <div className="slide-track" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
                     {images.map((image, index) => (
                         <div key={index} className={`slide ${index === currentIndex ? "active" : ""}`}>
-                            <img src={`/upload/${image}`} alt={`slide-${index}`} />
+                            <img src={`/upload/imgSlide/${image}`} alt={`slide-${index}`} />
                         </div>
                     ))}
                 </div>
