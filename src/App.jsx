@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../public/css/App.css'
-import MainScroll from "./component/RfMain/MainScroll.jsx";
+import MainPage from "./component/RfMain/MainPage.jsx";
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import LayoutHeader from "./component/RfLayout/LayoutHeader.jsx";
 import LayoutFooter from "./component/RfLayout/LayoutFooter.jsx";
@@ -9,9 +9,6 @@ import ReformPage from "./component/RfBoard/ReformPage.jsx";
 import Signup from "./component/RfAuthorization/Signup.jsx";
 import Login from "./component/RfAuthorization/Login.jsx";
 import {useEffect, useState} from "react"; // 게시판 컴포넌트
-import MainFade from "./component/RfMain/MainFade.jsx";
-import MainSlide from "./component/RfMain/MainSlide.jsx";
-import MainPage from "./component/RfMain/MainPage.jsx"; // 게시판 컴포넌트
 
 
 

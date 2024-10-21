@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-
+import '../../../public/css/MainSlide.css';
 
 export default function MainScroll() {
     const fileList = [
@@ -32,7 +32,7 @@ export default function MainScroll() {
             setShowLoadMore(false); // 모든 파일을 불러오면 더보기 버튼 숨김
         }
         setIsLoading(false); // 로딩 완료
-    }, [currentIndex, data.length, fileList, isLoading]);
+    }, [currentIndex, data.length, fileList, isLoading, lastIndex]);
 
     // IntersectionObserver가 loader에 도달했을 때 이벤트
     const handleObserver = useCallback(
@@ -61,12 +61,12 @@ export default function MainScroll() {
     // "더보기" 버튼을 눌렀을 때 파일을 하나씩 불러오는 함수
     const handleLoadMore = () => {
         getFiles(); // 새로운 파일 목록을 가져옴
-        setLastIndex(lastIndex+3)
+        setLastIndex(lastIndex + 3)
     };
 
 
     return (
-        <div className="main-scroll">
+        <div className="container">
             {data.map((fileName, idx) => (
                 <div
                     key={idx}
@@ -82,7 +82,7 @@ export default function MainScroll() {
                                     src={`/upload/${fileName}`}
                                     alt={fileName}
                                     className="img-fluid"
-                                    style={{width:'500px', maxWidth: '100%', height: 'auto' }}
+                                    style={{width: '500px', maxWidth: '100%', height: 'auto'}}
                                 />
                             </div>
                             <div className="col-md-6" style={{flex: 1, textAlign: 'left', paddingLeft: '20px'}}>
@@ -102,7 +102,7 @@ export default function MainScroll() {
                                     src={`/upload/${fileName}`}
                                     alt={fileName}
                                     className="img-fluid"
-                                    style={{width:'500px', maxWidth: '100%', height: 'auto' }}
+                                    style={{width: '500px', maxWidth: '100%', height: 'auto'}}
                                 />
                             </div>
                         </>
@@ -114,9 +114,10 @@ export default function MainScroll() {
 
             {/* 더보기 버튼 */}
             {showLoadMore && (
-                <button onClick={handleLoadMore} style={{ marginTop: '20px' }}>
+                <button onClick={handleLoadMore} style={{marginTop: '20px'}}>
                     더보기
                 </button>
+
             )}
         </div>
     )

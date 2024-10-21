@@ -14,7 +14,6 @@ export default function Login({ setIsLoggedIn }) {
 
     const navigate = useNavigate();
 
-
     // 로그인 요청을 처리하는 mutation
     const {mutate, isLoading} = useMutation(
         () => {
@@ -64,7 +63,6 @@ export default function Login({ setIsLoggedIn }) {
         if (e.key === 'Enter') {
             handleLogin(); // 엔터 키 입력 시 검색 실행
         }
-    };
 
     const handleIdChange = (e) => {
         setUserId(e.target.value);

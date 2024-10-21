@@ -63,7 +63,6 @@ export default function ReformBoard({ isLoggedIn }) {
     };
 
 
-
     // 카테고리와 검색어 필터링 처리 함수
     const handleSearch = () => {
         setCurrentPage(1); // 검색 시 첫 페이지로 이동
