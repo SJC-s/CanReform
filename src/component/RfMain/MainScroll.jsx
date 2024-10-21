@@ -3,9 +3,9 @@ import '../../../public/css/MainSlide.css';
 
 export default function MainScroll() {
     const fileList = [
-        "business.jpg",
-        "marketing.jpg",
-        "socialmedia.jpg",
+        "imgScroll01.jpg",
+        "imgScroll02.jpg",
+        "imgScroll03.jpg",
         // 더 많은 이미지 파일 추가
     ];
     const [data, setData] = useState(fileList);

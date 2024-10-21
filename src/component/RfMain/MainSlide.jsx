@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import '../../../public/css/MainSlide.css';
 
 const images = [
-    "business.jpg",
-    "marketing.jpg",
-    "socialmedia.jpg",
+    "imgSlide01.jpg",
+    "imgSlide02.jpg",
+    "imgSlide03.jpg",
 ];
 
 export default function MainSlide() {
@@ -28,11 +28,12 @@ export default function MainSlide() {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     };
 
+    function goToSlide(index) {
+        setCurrentIndex(index);
+    }
+
     return (
         <div className="container">
-            <div className='logoimg'>
-                <img src={`/upload/logo_sample.svg`} alt='logo' />
-            </div>
             <div className="slider">
                 <button className="prev" onClick={goToPrevious}>
                     &#10094;
@@ -47,6 +48,16 @@ export default function MainSlide() {
                 <button className="next" onClick={goToNext}>
                     &#10095;
                 </button>
+                <ul className="banner-list gap-3">
+                    {images.map((image, index) => (
+                    <div key={index}>
+                        <button
+                            className={index === currentIndex ? "active" : ""}
+                            onClick={()=> goToSlide(index)}>
+                        </button>
+                    </div>
+                    ))}
+                </ul>
             </div>
         </div>
     );

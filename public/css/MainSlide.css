@@ -38,6 +38,7 @@ img {
     font-size: 24px;
     padding: 10px;
     cursor: pointer;
+    z-index : 10;       /* 버튼 위치를 그림 앞으로 고정 */
 }
 
 .prev {
@@ -47,3 +48,35 @@ img {
 .next {
     right: 10px;
 }
+
+.banner-list{
+    position : absolute;
+    display : flex;
+    top : 98%;
+    left : 50%;
+    transform: translate(-50%,-50%);
+}
+
+.banner-list button{
+    border-radius : 50%;
+    background-color: black;
+    width : 10px;
+    height : 10px;
+    min-width: 10px;
+    min-height: 10px;
+    padding : 0;            /* 기본 패딩 삭제 */
+    z-index : 10;           /* 버튼 위치를 그림 위로 */
+}
+
+.banner-list div{
+    width : 100%;
+}
+
+.banner-list button:hover{
+    background-color : gray;
+}
+
+.banner-list .active{
+    background-color : lightgray;
+}
+
