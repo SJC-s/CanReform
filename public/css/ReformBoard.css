@@ -1,0 +1,46 @@
+.bannerSpace {
+    margin-top : -80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom : 5vw;
+}
+
+.bannerAds {
+    display : flex;
+    justify-content: center;
+    align-items: center;
+    width : 65vw;
+    height : 15vw;
+}
+
+.imgBanner {
+    max-width : 100%;
+    max-height : 100%;
+}
+
+
+.tabs button {
+    border-radius : 0;
+}
+
+.pagination {
+    display : flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+
+.pagination button{
+    width : 40px;
+    height : 40px;
+    padding : 0;
+    border-radius : 0;
+}
+
+.pagination button:hover{
+    background-color : dimgray;
+    color : white;
+    border-color : gray;
+}
+

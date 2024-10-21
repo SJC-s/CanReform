@@ -59,9 +59,6 @@ export default function MainSlide() {
                     ))}
                 </ul>
             </div>
-            <button className="next" onClick={goToNext}>
-                &#10095;
-            </button>
         </div>
     );
 }

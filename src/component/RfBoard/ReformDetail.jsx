@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import {useLocation, useParams} from 'react-router-dom';
 import {Button, Card, Col, Container, Row} from "react-bootstrap";
+import '../../../public/css/ReformDetail.css'
 
 export default function ReformDetail() {
     const { post, username } = useLocation().state || {}; // location.state에서 post와 username을 가져옴
@@ -61,7 +62,7 @@ export default function ReformDetail() {
                                 <div>
                                     <Button variant="secondary" onClick={() => window.history.back()}>목록으로</Button>
                                 </div>
-                                <div>
+                                <div className="control-button">
                                     <Button variant="primary" className="mr-2">수정</Button>
                                     <Button variant="danger">삭제</Button>
                                 </div>

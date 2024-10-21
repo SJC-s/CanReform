@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import {Link, useNavigate} from "react-router-dom";
 import logo_sample from '../../../public/upload/logo_sample.svg';
-import {useEffect, useState} from "react";
 
 function SpreadBtn() {
     return (
@@ -42,13 +41,13 @@ export default function LayoutHeader({ isLoggedIn, setIsLoggedIn }) {
                         <Nav className="justify-content-end gap-2 nav-custom">
                             {!isLoggedIn ? (
                                 <>
-                                    <Button variant="outline-secondary" as={Link} to="/login" className="text-reset">로그인</Button>
-                                    <Button variant="outline-secondary" as={Link} to="/signup" className="text-reset">회원가입</Button>
+                                    <Button variant="outline-secondary" as={Link} to="/login" className="navbtn btn1">로그인</Button>
+                                    <Button variant="outline-secondary" as={Link} to="/signup" className="navbtn btn2">회원가입</Button>
                                 </>
                             ) : (
                                 <>
-                                    <Button variant="outline-secondary" as={Link} to="/mypage" className="text-reset">내정보</Button>
-                                    <Button variant="outline-secondary" onClick={handleLogout} className="text-reset">로그아웃</Button>
+                                    <Button variant="outline-secondary" as={Link} to="/mypage" className="navbtn btn3">내정보</Button>
+                                    <Button variant="outline-secondary" onClick={handleLogout} className="navbtn btn4">로그아웃</Button>
                                 </>
                             )}
                         </Nav>

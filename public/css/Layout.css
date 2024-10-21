@@ -38,20 +38,34 @@
     min-width : 200px;
 }
 
-.nav-custom>button{
-    background-color : lightgrey;
-    color : black;
-    border : none;
+.nav-custom .navbtn{
+    background-color : aquamarine;
+    color : white;
     text-decoration : none;
     min-width : 80px;
+    transition : filter 0.1s ease;
+    border : none;
 }
 
-
-.nav-custom>button:hover{
-    background-color : dimgray;
-    color : cornsilk;
+.nav-custom .btn1 {
+    background-color : #0f5132;
 }
 
+.nav-custom .btn2 {
+    background-color : #4d5154;
+}
+
+.nav-custom .btn3 {
+    background-color : #565e64;
+}
+
+.nav-custom .btn4 {
+    background-color : #bb2d3b;
+}
+
+.nav-custom .navbtn:hover{
+    filter : brightness(0.85);
+}
 
 footer {
     bottom : 0;
