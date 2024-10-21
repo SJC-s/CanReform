@@ -9,41 +9,6 @@ export default function ReformDetail() {
         return <p>게시글 정보를 불러올 수 없습니다.</p>;
     }
 
-   /* const { post_id } = useParams(); // URL에서 postId를 가져옴
-    const [postDetail, setPostDetail] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        // 게시글 상세 정보 API 호출
-        const fetchPostDetail = async () => {
-            try {
-                const response = await fetch(`http://localhost:8080/api/posts/${postId}`);
-                const data = await response.json();
-                setPostDetail(data);
-                setLoading(false);
-            } catch (error) {
-                console.error('게시글을 불러오는 중 오류 발생:', error);
-            }
-        };
-
-        fetchPostDetail();
-    }, [post_id]);
-
-    if (loading) {
-        return <p>로딩 중...</p>;
-    }
-
-    return (
-        <div className="container">
-            <h2>{postDetail.title}</h2>
-            <p>작성자: {postDetail.username}</p>
-            <p>{postDetail.content}</p>
-            <p>작성일: {new Date(postDetail.created_at).toLocaleDateString()}</p>
-            <p>조회수: {postDetail.readCount}</p>
-            <p>댓글수: {postDetail.commentCount}</p>
-        </div>
-    );*/
-
     return (
         <Container fluid style={{padding: "0px", marginTop:"10px", marginBottom:"10px"}}>
             <Row>
@@ -68,10 +33,10 @@ export default function ReformDetail() {
                         </Card.Header>
                         <Card.Header>
                             <Row>
-                                <Col md={2}><p><strong>작성자:</strong> {username}</p></Col>
-                                <Col><p><strong>작성일:</strong> {new Date(post.created_at).toLocaleDateString()}</p></Col>
+                                <Col md={2}><p><strong>작성자:</strong> {post.userId}</p></Col>
+                                <Col><p><strong>작성일:</strong> {new Date(post.createdAt).toLocaleDateString()}</p></Col>
                                 <Col><p><strong>조회수:</strong> {post.readCount}</p></Col>
-                                <Col><p><strong>공개 여부:</strong> {post.is_private === 'Y' ? '공개' : '비공개'}</p></Col>
+                                <Col><p><strong>공개 여부:</strong> {post.isPrivate === 'Y' ? '공개' : '비공개'}</p></Col>
                             </Row>
                         </Card.Header>
                         <Card.Body>

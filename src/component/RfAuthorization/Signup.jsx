@@ -68,17 +68,6 @@ export default function Signup() {
     };
 
 
-    const returnback = () => {
-        if (window.history.length > 1) {
-            navigate(-1)
-        } else {
-            location.href = "/"
-        }
-    }
-
-
-
-
     return (
         <Container>
             <Row className="justify-content-md-center">
@@ -158,7 +147,7 @@ export default function Signup() {
                             <Button variant="primary" onClick={handleSignup} disabled={isLoading}>
                                 {isLoading ? <Spinner as="span" animation="border" size="sm" /> : '회원가입'}
                             </Button>
-                            <Button variant="secondary" onClick={returnback}>돌아가기</Button>
+                            <Button variant="secondary" onClick={() => navigate(-1)}>돌아가기</Button>
                             <Button variant="danger" onClick={() => {
                                 setUserId('');
                                 setUsername('');
