@@ -10,7 +10,8 @@ export default function ReformBoard({ isLoggedIn }) {
 
     const [filteredPosts, setFilteredPosts] = useState([]);  // 필터링된 게시글 리스트
     const [category, setCategory] = useState('all');         // 현재 활성화된 탭
-    const [search, setSearch] = useState('');         // 검색어 상태
+    const [searchValue, setSearchValue] = useState('');         // 검색어 상태
+    const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);          // 현재 페이지 상태
 
     const postsPerPage = 5;                                   // 한 페이지에 보여줄 게시글 수
@@ -66,6 +67,7 @@ export default function ReformBoard({ isLoggedIn }) {
     // 카테고리와 검색어 필터링 처리 함수
     const handleSearch = () => {
         setCurrentPage(1); // 검색 시 첫 페이지로 이동
+        setSearch(searchValue)
         refetch(); // react-query의 useQuery에 의해 자동으로 갱신
     };
 
@@ -74,6 +76,7 @@ export default function ReformBoard({ isLoggedIn }) {
         setCategory(tab);
         if (tab === 'all') {
             setSearch('');  // 전체 탭이면 검색어 초기화
+            setSearchValue('');
         }
         handleSearch();  // 탭이 변경될 때 필터링 처리
     };
@@ -82,11 +85,9 @@ export default function ReformBoard({ isLoggedIn }) {
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             handleSearch(); // 엔터 키 입력 시 검색 실행
+            e.target.focus; // 검색 후 커서 유지
         }
     };
-
-    // 현재 페이지에 해당하는 게시글 가져오기
-    const currentPosts = filteredPosts.slice();  // 필터링된 게시글에서 페이징 처리
 
     // 글쓰기 버튼을 눌렀을 때 동작하는 함수
     const handleWritePost = async () => {
@@ -126,8 +127,8 @@ export default function ReformBoard({ isLoggedIn }) {
                     <input
                         type="text"
                         placeholder="게시글 검색"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}
                         onKeyDown={handleKeyDown}
                     />
                     <button onClick={handleSearch}>
@@ -150,8 +151,8 @@ export default function ReformBoard({ isLoggedIn }) {
                 </tr>
                 </thead>
                 <tbody>
-                {currentPosts.length > 0 ? (  // 배열의 길이를 확인
-                    currentPosts.map(post => (
+                {filteredPosts.length > 0 ? (  // 배열의 길이를 확인
+                    filteredPosts.map(post => (
                         <tr key={post.postId}>
                             <td>{post.category === 'Inquiry' ? '문의' : '의뢰'}</td>
                             <td>{post.isPrivate === 'Y' ? <FaUnlockAlt style={{color:"darkblue"}}/>: <FaLock style={{color:"gray"}}/>}</td>
