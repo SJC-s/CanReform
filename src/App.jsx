@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../public/css/App.css'
+import './css/App.css'
 import MainPage from "./component/RfMain/MainPage.jsx";
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import LayoutHeader from "./component/RfLayout/LayoutHeader.jsx";

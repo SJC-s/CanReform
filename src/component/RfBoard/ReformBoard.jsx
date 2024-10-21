@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { FaLock, FaUnlockAlt } from "react-icons/fa";
-import '../../../public/css/ReformBoard.css';
+import '../../css/ReformBoard.css';
 
 const MAX_PAGES_DISPLAY = 10; // 최대 페이지네이션 버튼 수
 

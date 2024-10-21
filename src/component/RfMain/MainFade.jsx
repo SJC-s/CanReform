@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import '../../../public/css/MainFade.css';
+import '../../css/MainFade.css';
 
 const images = [
     "business.jpg",

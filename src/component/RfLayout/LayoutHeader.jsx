@@ -1,9 +1,8 @@
 import { Button, Col, DropdownButton, DropdownItem, Nav, Row } from 'react-bootstrap';
-import '../../../public/css/Layout.css';
+import '../../css/Layout.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import {Link, useNavigate} from "react-router-dom";
-import logo_sample from '../../../public/upload/logo_sample.svg';
 
 function SpreadBtn() {
     return (
@@ -36,7 +35,7 @@ export default function LayoutHeader({ isLoggedIn, setIsLoggedIn }) {
                     <div className="d-flex justify-content-between align-items-center header-custom">
                         <SpreadBtn />
                         <div className="logo justify-content-center">
-                            <img src={logo_sample} alt="LOGO" className="logo-image" onClick={()=>navigate('/')}/>
+                            <img src="/upload/logo_sample.svg" alt="LOGO" className="logo-image" onClick={()=>navigate('/')}/>
                         </div>
                         <Nav className="justify-content-end gap-2 nav-custom">
                             {!isLoggedIn ? (

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {useLocation, useParams} from 'react-router-dom';
 import {Button, Card, Col, Container, Row} from "react-bootstrap";
-import '../../../public/css/ReformDetail.css'
+import '../../css/ReformDetail.css'
 
 export default function ReformDetail() {
     const { post, username } = useLocation().state || {}; // location.state에서 post와 username을 가져옴
