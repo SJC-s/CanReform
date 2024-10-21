@@ -131,6 +131,11 @@ export default function ReformBoard({ isLoggedIn }) {
                 </div>
                 {/* 검색 창 - 우측 상단에 위치 */}
                 <div className="search-bar">
+                    <select className="form-select-sm m-1">
+                        <option>전체</option>
+                        <option>제목</option>
+                        <option>작성자</option>
+                    </select>
                     <input
                         type="text"
                         placeholder="게시글 검색"
