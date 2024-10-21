@@ -1,23 +1,21 @@
 import { useState, useEffect } from 'react';
-import '../../MainFade.css';
+import '../../../public/css/MainSlide.css';
 
 const images = [
     "business.jpg",
     "marketing.jpg",
     "socialmedia.jpg",
-    // 더 많은 이미지 파일 추가
 ];
 
-export default function MainFade() {
+export default function MainSlide() {
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    // 2.5초마다 이미지 전환
     useEffect(() => {
         const intervalId = setInterval(() => {
             setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
         }, 2500);
 
-        return () => clearInterval(intervalId); // 컴포넌트가 unmount될 때 타이머 정리
+        return () => clearInterval(intervalId);
     }, []);
 
     const goToPrevious = () => {
@@ -33,20 +31,19 @@ export default function MainFade() {
     return (
         <div className="container">
             <div className='logoimg'>
-                <img src={`/upload/logo_sample.svg`} alt='logo'/>
+                <img src={`/upload/logo_sample.svg`} alt='logo' />
             </div>
-            <div className="fader">
+            <div className="slider">
                 <button className="prev" onClick={goToPrevious}>
                     &#10094;
                 </button>
-                {images.map((image, index) => (
-                    <div
-                        key={index}
-                        className={`fade ${index === currentIndex ? "active" : ""}`}
-                    >
-                        <img src={`/upload/${image}`} alt={`fade-${index}`}/>
-                    </div>
-                ))}
+                <div className="slide-track" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+                    {images.map((image, index) => (
+                        <div key={index} className={`slide ${index === currentIndex ? "active" : ""}`}>
+                            <img src={`/upload/${image}`} alt={`slide-${index}`} />
+                        </div>
+                    ))}
+                </div>
                 <button className="next" onClick={goToNext}>
                     &#10095;
                 </button>
