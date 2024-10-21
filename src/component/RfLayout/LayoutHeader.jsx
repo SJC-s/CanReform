@@ -1,10 +1,9 @@
 import { Button, Col, DropdownButton, DropdownItem, Nav, Row } from 'react-bootstrap';
-import './Layout.css';
+import '../../../public/css/Layout.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import {Link, useNavigate} from "react-router-dom";
-import logo_sample from '../public/upload/logo_sample.svg';
-import {useEffect, useState} from "react";
+import logo_sample from '../../../public/upload/logo_sample.svg';
 
 function SpreadBtn() {
     return (

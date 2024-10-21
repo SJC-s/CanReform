@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import './Layout.css';
+import '../../../public/css/Layout.css';
 import LayoutHeader from "./LayoutHeader.jsx";
 import LayoutFooter from "./LayoutFooter.jsx";
 import {Col, Container} from 'react-bootstrap';
