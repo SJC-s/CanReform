@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import '../../MainSlide.css';
+import '../../../public/css/MainSlide.css';
 
 const images = [
     "business.jpg",

@@ -1,17 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css'
-import MainScroll from "./commponent/RfMain/MainScroll.jsx";
+import '../public/css/App.css'
+import MainScroll from "./component/RfMain/MainScroll.jsx";
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
-import LayoutHeader from "./LayoutHeader.jsx";
-import LayoutFooter from "./LayoutFooter.jsx";
+import LayoutHeader from "./component/RfLayout/LayoutHeader.jsx";
+import LayoutFooter from "./component/RfLayout/LayoutFooter.jsx";
 import {QueryClient, QueryClientProvider} from "react-query";
-import ReformPage from "./commponent/RfBoard/ReformPage.jsx";
-import Signup from "./Signup.jsx";
-import Login from "./Login.jsx";
+import ReformPage from "./component/RfBoard/ReformPage.jsx";
+import Signup from "./component/RfAuthorization/Signup.jsx";
+import Login from "./component/RfAuthorization/Login.jsx";
 import {useEffect, useState} from "react"; // 게시판 컴포넌트
-import MainFade from "./commponent/RfMain/MainFade.jsx";
-import MainSlide from "./commponent/RfMain/MainSlide.jsx";
-import MainPage from "./commponent/RfMain/MainPage.jsx"; // 게시판 컴포넌트
+import MainFade from "./component/RfMain/MainFade.jsx";
+import MainSlide from "./component/RfMain/MainSlide.jsx";
+import MainPage from "./component/RfMain/MainPage.jsx"; // 게시판 컴포넌트
 
 
 
