@@ -23,15 +23,7 @@
 .logo {
     height: 6em;
     padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
     align-items : center;
-}
-.logo:hover {
-    filter: drop-shadow(0 0 1em #d63384);
-}
-.logo.react:hover {
-    filter: drop-shadow(0 0 1em #d63384);
 }
 
 .logo-image{
@@ -39,7 +31,7 @@
 }
 
 .logo-image:hover{
-
+    cursor : pointer;
 }
 
 .nav-custom{

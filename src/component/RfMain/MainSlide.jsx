@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import '../../../public/css/MainSlide.css';
 
 const images = [
-    "business.jpg",
-    "marketing.jpg",
-    "socialmedia.jpg",
+    "imgSlide01.jpg",
+    "imgSlide02.jpg",
+    "imgSlide03.jpg",
 ];
 
 export default function MainSlide() {
@@ -16,7 +16,7 @@ export default function MainSlide() {
         }, 2500);
 
         return () => clearInterval(intervalId);
-    }, []);
+    }, [currentIndex]);
 
     const goToPrevious = () => {
         setCurrentIndex((prevIndex) =>
@@ -28,17 +28,36 @@ export default function MainSlide() {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     };
 
+    function goToSlide(index) {
+        setCurrentIndex(index);
+    }
+
     return (
-        <div className="main-slider" style={{ overflowX: 'hidden' }}>
-            <button className="prev" onClick={goToPrevious}>
-                &#10094;
-            </button>
-            <div className="slide-track" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-                {images.map((image, index) => (
-                    <div key={index} className={`slide ${index === currentIndex ? "active" : ""}`}>
-                        <img src={`/upload/${image}`} alt={`slide-${index}`} />
+        <div className="container">
+            <div className="slider">
+                <button className="prev" onClick={goToPrevious}>
+                    &#10094;
+                </button>
+                <div className="slide-track" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+                    {images.map((image, index) => (
+                        <div key={index} className={`slide ${index === currentIndex ? "active" : ""}`}>
+                            <img src={`/upload/imgSlide/${image}`} alt={`slide-${index}`} />
+                        </div>
+                    ))}
+                </div>
+                <button className="next" onClick={goToNext}>
+                    &#10095;
+                </button>
+                <ul className="banner-list gap-3">
+                    {images.map((image, index) => (
+                    <div key={index}>
+                        <button
+                            className={index === currentIndex ? "active" : ""}
+                            onClick={()=> goToSlide(index)}>
+                        </button>
                     </div>
-                ))}
+                    ))}
+                </ul>
             </div>
             <button className="next" onClick={goToNext}>
                 &#10095;

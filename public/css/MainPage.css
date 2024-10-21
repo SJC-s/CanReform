@@ -1,0 +1,26 @@
+.logoimg {
+    display : flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.logoimg img {
+    max-width: 50%;
+    height : auto;
+    transition: filter 0.5s ease;
+    cursor : pointer;
+
+}
+
+.logoimg img:hover {
+    filter: drop-shadow(0 0 1em #4682B4);
+}
+
+.logoimg img.react {
+    transition: filter 0.5s ease;
+}
+
+.logoimg img.react:hover {
+    filter: drop-shadow(0 0 1em #4682B4);
+}
