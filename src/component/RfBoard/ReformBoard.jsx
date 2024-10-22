@@ -14,6 +14,7 @@ export default function ReformBoard({ isLoggedIn }) {
     const [searchValue, setSearchValue] = useState('');         // 검색어 상태
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);          // 현재 페이지 상태
+    const [searchClass, setSearchClass] = useState('');   // 검색 범위 설정
 
     const postsPerPage = 5;                                   // 한 페이지에 보여줄 게시글 수
 
@@ -26,7 +27,8 @@ export default function ReformBoard({ isLoggedIn }) {
             page,
             limit,
             search,
-            category
+            category,
+            searchClass
         });
         const response = await fetch(url + `?${queryParams.toString()}`);
         if (!response.ok) {
@@ -37,8 +39,8 @@ export default function ReformBoard({ isLoggedIn }) {
 
     // 리액트 쿼리를 사용하여 데이터 가져오기
     const { data: posts = { content: [], totalPages: 0 }, status, error, refetch } = useQuery(
-        ["posts", currentPage, postsPerPage, search, category],
-        () => fetchPosts(currentPage, postsPerPage, search, category),
+        ["posts", currentPage, postsPerPage, search, category, searchClass],
+        () => fetchPosts(currentPage, postsPerPage, search, category, searchClass),
     );
 
     // Spring Boot에서 게시글 데이터를 불러오는 함수
@@ -131,10 +133,11 @@ export default function ReformBoard({ isLoggedIn }) {
                 </div>
                 {/* 검색 창 - 우측 상단에 위치 */}
                 <div className="search-bar">
-                    <select className="form-select-sm m-1">
-                        <option>전체</option>
-                        <option>제목</option>
-                        <option>작성자</option>
+                    <select className="form-select-sm m-1" value={searchClass} onChange={(e) => setSearchClass(e.target.value)}>
+                        <option value="all">전체</option>
+                        <option value="title">제목</option>
+                        <option value="content">내용</option>
+                        <option value="username">작성자</option>
                     </select>
                     <input
                         type="text"
