@@ -24,6 +24,11 @@
     border-radius : 0;
 }
 
+.form-select-sm {
+    width : 80px;
+    height : 35px;
+}
+
 .pagination {
     display : flex;
     align-items: center;
