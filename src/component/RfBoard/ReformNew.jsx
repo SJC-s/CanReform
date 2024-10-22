@@ -7,7 +7,7 @@ export default function ReformNew() {
     const [content, setContent] = useState("");
     const [category, setCategory] = useState("Inquiry");
     const [isPrivate, setIsPrivate] = useState("Y");
-    const [filenames, setFilenames] = useState(null);
+    const [filenames, setFilenames] = useState([]);
 
     const navigate = useNavigate();
 
@@ -15,6 +15,13 @@ export default function ReformNew() {
         e.preventDefault();
 
         const token = localStorage.getItem('token');  // JWT 토큰을 로컬 스토리지에서 가져옴
+
+        const formData = new FormData();
+        formData.append("post", new Blob([JSON.stringify({ title, content, category, isPrivate })], { type: "application/json" })); // 게시글 데이터 추가
+
+        Array.from(filenames).forEach((file) => {
+            formData.append("files", file); // 파일 추가
+        });
 
         const postData = {
             title,
@@ -27,10 +34,9 @@ export default function ReformNew() {
         await fetch("http://localhost:8080/api/posts", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
                 'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify(postData),
+            body: formData,
         }).then(data => {
             if (data.status === 200) {
                 alert("글이 성공적으로 등록되었습니다.");
@@ -104,7 +110,8 @@ export default function ReformNew() {
                                     <Form.Label>첨부 파일</Form.Label>
                                     <Form.Control
                                         type="file"
-                                        onChange={(e) => setFilenames(e.target.files[0].name)}
+                                        multiple
+                                        onChange={(e) => setFilenames(e.target.files)}
                                     />
                                 </Form.Group>
 

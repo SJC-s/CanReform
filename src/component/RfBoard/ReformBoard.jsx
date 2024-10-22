@@ -135,7 +135,7 @@ export default function ReformBoard({ isLoggedIn }) {
                 </div>
                 {/* 검색 창 - 우측 상단에 위치 */}
                 <div className="search-bar">
-                    <select className="form-select-sm m-1" value={searchClass} onChange={(e) => setSearchClassValue(e.target.value)}>
+                    <select className="form-select-sm m-1" value={searchClassValue} onChange={(e) => setSearchClassValue(e.target.value)}>
                         <option value="all">전체</option>
                         <option value="title">제목</option>
                         <option value="content">내용</option>
