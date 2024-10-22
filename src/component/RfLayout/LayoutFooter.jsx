@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { Col, Row } from 'react-bootstrap';
-import '../../css/Layout.css';
+import '../../css/RfLayout/Layout.css';
 
 
 export default function LayoutFooter() {
