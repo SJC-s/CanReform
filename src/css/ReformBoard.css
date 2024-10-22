@@ -4,14 +4,17 @@
     justify-content: center;
     align-items: center;
     padding-bottom : 5vw;
+    min-width : 1200px;
 }
 
 .bannerAds {
     display : flex;
     justify-content: center;
     align-items: center;
-    width : 65vw;
-    height : 15vw;
+    width : 800px;
+    height : 200px;
+    min-width : 800px;
+    min-height : 200px;
 }
 
 .imgBanner {

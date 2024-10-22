@@ -11,6 +11,7 @@
     background-color: skyblue;
     padding: 15px;
     margin-bottom : 50px;
+    min-width : 1200px;
 }
 
 .spread-button .dropdown-toggle{
@@ -67,17 +68,21 @@
     filter : brightness(0.85);
 }
 
-footer {
+footer .tail {
     bottom : 0;
     width : 100%;
     height : 100px;
     background-color : skyblue;
     display : flex;
-    justify-content: center;
-    align-items: center;
     margin-top : 50px;
+    min-width : 1200px;
 }
-footer>p{
-    margin : 0;
+footer .tail-table{
+    margin : 10px;
+    text-align: start;
+    font-size : 12px;
 }
 
+footer .tail-table span {
+    margin : 0 15px;
+}
