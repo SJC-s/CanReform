@@ -23,14 +23,6 @@ export default function ReformNew() {
             formData.append("files", file); // 파일 추가
         });
 
-        const postData = {
-            title,
-            content,
-            category,
-            isPrivate,
-            filenames,
-        };
-
         await fetch("http://localhost:8080/api/posts", {
             method: "POST",
             headers: {

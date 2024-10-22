@@ -54,7 +54,9 @@ export default function ReformDetail() {
                             {post.filenames && (
                                 <div>
                                     <h5>첨부 사진</h5>
-                                    <a href={`/api/download/${post.filenames}`} download>{post.filenames}</a>
+                                    <a href={`http://localhost:8080/api/posts/download/${post.filenames}`} target="_blank" rel="noopener noreferrer">
+                                        {post.filenames}
+                                    </a>
                                 </div>
                             )}
                         </Card.Body>
