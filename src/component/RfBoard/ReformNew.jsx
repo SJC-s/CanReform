@@ -14,6 +14,8 @@ export default function ReformNew() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const token = localStorage.getItem('token');  // JWT 토큰을 로컬 스토리지에서 가져옴
+
         const postData = {
             title,
             content,
@@ -22,25 +24,26 @@ export default function ReformNew() {
             filenames,
         };
 
-        try {
-            const response = await fetch("http://localhost:8080/api/posts", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(postData),
-            });
-
-            if (response.ok) {
+        await fetch("http://localhost:8080/api/posts", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify(postData),
+        }).then(data => {
+            if (data.status === 200) {
                 alert("글이 성공적으로 등록되었습니다.");
                 navigate("/posts"); // 게시글 목록으로 이동
             } else {
                 alert("글 작성 중 오류가 발생했습니다.");
             }
-        } catch (error) {
-            console.error("Error:", error);
-            alert("서버 통신 중 문제가 발생했습니다.");
-        }
+
+        })
+            .catch(error => {
+                console.error('Error:', error)
+                alert("서버 통신 중 문제가 발생했습니다.");
+            });
     };
 
     return (
@@ -79,7 +82,7 @@ export default function ReformNew() {
                                 <Form.Group controlId="postPrivate" className="mt-3">
                                     <Form.Check
                                         type="checkbox"
-                                        label="비공개 여부"
+                                        label="공개 여부"
                                         checked={isPrivate === "Y"}
                                         onChange={(e) => setIsPrivate(e.target.checked ? "Y" : "N")}
                                     />

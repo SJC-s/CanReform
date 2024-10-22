@@ -8,7 +8,7 @@ export default function ReformPage({ isLoggedIn }) {
         <Routes>
             <Route path="/" element={<ReformBoard isLoggedIn={isLoggedIn} />}/>
             <Route path="/:post_id" element={<ReformDetail />} />
-            <Route path="/wrte" element={<ReformNew />} />
+            <Route path="/write" element={<ReformNew />} />
         </Routes>
     )
 }
