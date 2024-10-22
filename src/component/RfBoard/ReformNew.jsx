@@ -8,8 +8,39 @@ export default function ReformNew() {
     const [category, setCategory] = useState("Inquiry");
     const [isPrivate, setIsPrivate] = useState("Y");
     const [filenames, setFilenames] = useState([]);
+    const [filePreviews, setFilePreviews] = useState([]); // 미리보기 URL 저장
 
     const navigate = useNavigate();
+
+    // 허용할 확장자 목록
+    const allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+
+    // 확장자 확인 함수
+    const isValidExtension = (filename) => {
+        const extension = filename.split('.').pop().toLowerCase(); // 파일 확장자 추출
+        return allowedExtensions.includes(extension);
+    };
+
+
+    const handleFileChange = (e) => {
+        const selectedFiles = Array.from(e.target.files);
+
+        // 확장자가 허용된 파일만 필터링
+        const validFiles = selectedFiles.filter((file) => isValidExtension(file.name));
+
+        if (validFiles.length !== selectedFiles.length) {
+            alert("허용된 확장자 파일만 업로드할 수 있습니다: " + allowedExtensions.join(", "));
+            return;
+        }
+
+        setFilenames(validFiles); // 유효한 파일만 상태에 저장
+
+        // 이미지 파일 미리보기 URL 생성
+        const previews = validFiles.map((file) => URL.createObjectURL(file));
+        setFilePreviews(previews);
+    };
+
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -99,12 +130,28 @@ export default function ReformNew() {
                                 </Form.Group>
 
                                 <Form.Group controlId="formFile" className="mt-3">
-                                    <Form.Label>첨부 파일</Form.Label>
+                                    <Form.Label>첨부 파일 (허용된 파일: {allowedExtensions.join(", ")})</Form.Label>
                                     <Form.Control
                                         type="file"
                                         multiple
-                                        onChange={(e) => setFilenames(e.target.files)}
+                                        onChange={handleFileChange}
+                                        accept="image/*" // 이미지 파일만 선택 가능
                                     />
+                                    <div className="mt-3">
+                                        {filePreviews.length > 0 && (
+                                            <div>
+                                                <h5>이미지 미리보기</h5>
+                                                {filePreviews.map((preview, index) => (
+                                                    <img
+                                                        key={index}
+                                                        src={preview}
+                                                        alt="미리보기"
+                                                        style={{ maxWidth: "200px", marginRight: "10px" }}
+                                                    />
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 </Form.Group>
 
                                 <div className="mt-4">

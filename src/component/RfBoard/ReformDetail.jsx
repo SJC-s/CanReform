@@ -11,6 +11,15 @@ export default function ReformDetail() {
         return <p>게시글 정보를 불러올 수 없습니다.</p>;
     }
 
+    // 허용된 이미지 파일 확장자 목록
+    const allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+
+    // 확장자 확인 함수
+    const isValidImage = (filename) => {
+        const extension = filename.split('.').pop().toLowerCase();
+        return allowedExtensions.includes(extension);
+    };
+
     return (
         <Container className='detail-container' fluid style={{padding: "0px", marginTop: "10px", marginBottom: "10px"}}>
             <Row>
@@ -52,10 +61,20 @@ export default function ReformDetail() {
                             {/* 파일 링크 */}
                             {post.filenames && (
                                 <div>
-                                    <h5>첨부 사진</h5>
-                                    <a href={`http://localhost:8080/api/posts/download/${post.filenames}`} target="_blank" rel="noopener noreferrer">
-                                        {post.filenames}
-                                    </a>
+                                    <h5>첨부 사진(클릭시 다운로드)</h5>
+                                    {/* 이미지 미리보기 */}
+                                    {isValidImage(post.filenames) && (
+                                        <div className="mt-3">
+                                            <a href={`http://localhost:8080/api/posts/download/${post.filenames}`}
+                                               target="_blank" rel="noopener noreferrer">
+                                                <img
+                                                    src={`http://localhost:8080/api/posts/download/${post.filenames}`}
+                                                    alt="첨부 이미지 미리보기"
+                                                    style={{maxWidth: "400px", marginTop: "10px"}}
+                                                />
+                                            </a>
+                                        </div>
+                                        )}
                                 </div>
                             )}
                         </Card.Body>
