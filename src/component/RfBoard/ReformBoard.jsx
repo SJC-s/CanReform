@@ -11,10 +11,11 @@ export default function ReformBoard({ isLoggedIn }) {
 
     const [filteredPosts, setFilteredPosts] = useState([]);  // 필터링된 게시글 리스트
     const [category, setCategory] = useState('all');         // 현재 활성화된 탭
-    const [searchValue, setSearchValue] = useState('');         // 검색어 상태
-    const [search, setSearch] = useState('');
+    const [searchValue, setSearchValue] = useState('');         // 검색어 상태(현재 상태 설정)
+    const [search, setSearch] = useState('');                   // 검색어 상태(전송)
     const [currentPage, setCurrentPage] = useState(1);          // 현재 페이지 상태
-    const [searchClass, setSearchClass] = useState('');   // 검색 범위 설정
+    const [searchClassValue, setSearchClassValue] = useState('');   // 검색 범위 설정(현재 상태 설정)
+    const [searchClass, setSearchClass] = useState('');   // 검색 범위 설정(전송)
 
     const postsPerPage = 5;                                   // 한 페이지에 보여줄 게시글 수
 
@@ -71,6 +72,7 @@ export default function ReformBoard({ isLoggedIn }) {
     const handleSearch = () => {
         setCurrentPage(1); // 검색 시 첫 페이지로 이동
         setSearch(searchValue)
+        setSearchClass(searchClassValue)
         refetch(); // react-query의 useQuery에 의해 자동으로 갱신
     };
 
@@ -95,7 +97,7 @@ export default function ReformBoard({ isLoggedIn }) {
     // 글쓰기 버튼을 눌렀을 때 동작하는 함수
     const handleWritePost = async () => {
         if (isLoggedIn) {
-            navigate("/write");
+            navigate("/posts/write");
         } else {
             alert("로그인 후 글쓰기를 할 수 있습니다.");
             navigate("/login");  // 로그인 페이지로 이동
@@ -133,11 +135,11 @@ export default function ReformBoard({ isLoggedIn }) {
                 </div>
                 {/* 검색 창 - 우측 상단에 위치 */}
                 <div className="search-bar">
-                    <select className="form-select-sm m-1" value={searchClass} onChange={(e) => setSearchClass(e.target.value)}>
+                    <select className="form-select-sm m-1" value={searchClass} onChange={(e) => setSearchClassValue(e.target.value)}>
                         <option value="all">전체</option>
                         <option value="title">제목</option>
                         <option value="content">내용</option>
-                        <option value="username">작성자</option>
+                        <option value="userId">작성자</option>
                     </select>
                     <input
                         type="text"
