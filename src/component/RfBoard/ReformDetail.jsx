@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react';
-import {useLocation, useParams} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import '../../css/RfBoard/ReformDetail.css'
 import ReformCommentWrite from "./ReformCommentWrite.jsx";
 import ReformCommentList from "./ReformCommentList.jsx";
 
 export default function ReformDetail() {
-    const { post, username } = useLocation().state || {}; // location.state에서 post와 username을 가져옴
+    const { post } = useLocation().state || {}; // location.state에서 post를 가져옴
 
     if (!post) {
         return <p>게시글 정보를 불러올 수 없습니다.</p>;
