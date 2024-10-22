@@ -1,3 +1,7 @@
+.detail-container {
+    min-width : 1200px;
+}
+
 .control-button button{
     margin-left : 10px;
 }

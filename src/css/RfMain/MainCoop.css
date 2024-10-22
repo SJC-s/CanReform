@@ -1,0 +1,17 @@
+.coop{
+    display : flex;
+    margin-bottom : 10px;
+    width : 100%;
+}
+
+.imgSet {
+    display : flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left : 20px;
+}
+
+.coopImg{
+    margin-right : 30px;
+    width : 20%;
+}

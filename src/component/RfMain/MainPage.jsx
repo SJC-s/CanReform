@@ -1,6 +1,7 @@
 import MainSlide from "./MainSlide.jsx";
 import MainScroll from "./MainScroll.jsx";
-import '../../css/MainPage.css';
+import '../../css/RfMain/MainPage.css';
+import MainCoop from "./MainCoop.jsx";
 
 export default function MainPage() {
 
@@ -11,6 +12,7 @@ export default function MainPage() {
             </div>
             <MainSlide/>
             <MainScroll/>
+            <MainCoop/>
         </>
     )
 }

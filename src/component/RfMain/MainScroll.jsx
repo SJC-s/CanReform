@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import '../../css/MainSlide.css';
+import '../../css/RfMain/MainScroll.css';
 
 export default function MainScroll() {
     const fileList = [

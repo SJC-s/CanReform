@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import {useLocation, useParams} from 'react-router-dom';
 import {Button, Card, Col, Container, Row} from "react-bootstrap";
-import '../../css/ReformDetail.css'
+import '../../css/RfBoard/ReformDetail.css'
+import ReformCommentWrite from "./ReformCommentWrite.jsx";
+import ReformCommentList from "./ReformCommentList.jsx";
 
 export default function ReformDetail() {
     const { post, username } = useLocation().state || {}; // location.state에서 post와 username을 가져옴
@@ -11,10 +13,10 @@ export default function ReformDetail() {
     }
 
     return (
-        <Container fluid style={{padding: "0px", marginTop:"10px", marginBottom:"10px"}}>
+        <Container className='detail-container' fluid style={{padding: "0px", marginTop: "10px", marginBottom: "10px"}}>
             <Row>
                 <Col className="text-start" md={12}>
-                    <Card style={{padding:'0px'}}>
+                    <Card style={{padding: '0px'}}>
                         <Card.Header>
                             <Row>
                                 <Col>
@@ -48,7 +50,6 @@ export default function ReformDetail() {
                                     <hr/>
                                 </Col>
                             </Row>
-
                             {/* 파일 링크 */}
                             {post.filenames && (
                                 <div>
@@ -71,6 +72,8 @@ export default function ReformDetail() {
                     </Card>
                 </Col>
             </Row>
+            <ReformCommentList/>
+            <ReformCommentWrite/>
         </Container>
     );
 
