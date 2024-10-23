@@ -31,25 +31,6 @@ export default function ReformDetail({ isLoggedInId }) {
         return allowedExtensions.includes(extension);
     };
 
-
-    // 게시글 삭제 함수
-    const handleDelete = async () => {
-        if (currentPost.userId !== isLoggedInId) {
-            alert("이 게시글을 삭제할 권한이 없습니다.");
-            return;
-        }
-        if (window.confirm("정말 삭제하시겠습니까?")) {
-            try {
-                await axios.delete(`http://localhost:8080/api/posts/${currentPost.postId}`);
-                alert("게시글이 삭제되었습니다.");
-                navigate('/posts');
-            } catch (error) {
-                console.error("게시글 삭제 중 오류 발생:", error);
-                alert("게시글 삭제 중 오류가 발생했습니다.");
-            }
-        }
-    };
-
     // 게시글 수정 페이지로 이동
     const handleEdit = () => {
         if (currentPost.userId !== isLoggedInId) {
@@ -59,6 +40,33 @@ export default function ReformDetail({ isLoggedInId }) {
         navigate(`/posts/edit/${currentPost.postId}`, { state: { post: currentPost } });
     };
 
+    // 게시글 삭제 함수
+    const handleDelete = async () => {
+        if (currentPost.userId !== isLoggedInId) {
+            alert("이 게시글을 삭제할 권한이 없습니다.");
+            return;
+        }
+        if (window.confirm("정말 삭제하시겠습니까?")) {
+            try {
+                const token = localStorage.getItem('token');  // JWT 토큰 가져오기
+
+                await axios.delete(`http://localhost:8080/api/posts/${currentPost.postId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                alert("게시글이 삭제되었습니다.");
+                navigate('/posts');
+            } catch (error) {
+                console.error("게시글 삭제 중 오류 발생:", error);
+                if (error.response) {
+                    alert(`게시글 삭제 중 오류가 발생했습니다: ${error.response.data}`);
+                } else {
+                    alert("서버와의 통신 중 문제가 발생했습니다.");
+                }
+            }
+        }
+    };
 
     return (
         <Container className='detail-container' fluid style={{padding: "0px", marginTop: "10px", marginBottom: "10px"}}>
@@ -123,10 +131,12 @@ export default function ReformDetail({ isLoggedInId }) {
                                 <div>
                                     <Button variant="secondary" onClick={() => window.history.back()}>목록으로</Button>
                                 </div>
-                                <div className="control-button">
-                                    <Button variant="primary" className="mr-2" onClick={handleEdit}>수정</Button>
-                                    <Button variant="danger" onClick={handleDelete}>삭제</Button>
-                                </div>
+                                { currentPost.userId === isLoggedInId &&
+                                    <div className="control-button">
+                                        <Button variant="primary" className="mr-2" onClick={handleEdit}>수정</Button>
+                                        <Button variant="danger" onClick={handleDelete}>삭제</Button>
+                                    </div>
+                                }
                             </div>
                         </Card.Footer>
                     </Card>

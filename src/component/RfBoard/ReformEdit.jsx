@@ -1,18 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Container, Row, Col, Card, Form } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useMutation } from "react-query";
 import ReformFormFields from "./ReformFormFields.jsx";
-import { allowedExtensions, filterValidFiles } from "../utils/fileUtils";
+import { allowedExtensions, filterValidFiles } from "../utils/fileUtils"; // 유틸리티 함수 가져오기
 
-export default function ReformNew() {
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [category, setCategory] = useState("Inquiry");
-    const [isPrivate, setIsPrivate] = useState("Y");
+export default function ReformEdit() {
+    const { state } = useLocation();
+    const { post } = state || {};
+
+    const [title, setTitle] = useState(post ? post.title : "");
+    const [content, setContent] = useState(post ? post.content : "");
+    const [category, setCategory] = useState(post ? post.category : "Inquiry");
+    const [isPrivate, setIsPrivate] = useState(post ? post.isPrivate : "Y");
     const [filenames, setFilenames] = useState([]);
     const [filePreviews, setFilePreviews] = useState([]); // 미리보기 URL 저장
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!post) {
+            navigate("/posts"); // 게시글이 없으면 목록으로 이동
+        }
+    }, [post, navigate]);
 
     const handleFileChange = (e) => {
         const selectedFiles = Array.from(e.target.files);
@@ -26,37 +36,42 @@ export default function ReformNew() {
         setFilePreviews(previews);
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
+    const mutation = useMutation(async (formData) => {
         const token = localStorage.getItem('token');  // JWT 토큰을 로컬 스토리지에서 가져옴
 
+        const response = await fetch(`http://localhost:8080/api/posts/${post.postId}`, {
+            method: "PUT",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formData,
+        });
+        if (!response.ok) {
+            throw new Error("글 수정 중 오류가 발생했습니다.");
+        }
+        return response;
+    }, {
+        onSuccess: () => {
+            alert("글이 성공적으로 수정되었습니다.");
+            navigate("/posts"); // 게시글 목록으로 이동
+        },
+        onError: (error) => {
+            console.error('Error:', error);
+            alert("서버 통신 중 문제가 발생했습니다.");
+        }
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
         const formData = new FormData();
-        formData.append("post", new Blob([JSON.stringify({ title, content, category, isPrivate })], { type: "application/json" })); // 게시글 데이터 추가
+        formData.append("post", new Blob([JSON.stringify({ postId: post.postId, title, content, category, isPrivate })], { type: "application/json" })); // 게시글 데이터 추가
 
         Array.from(filenames).forEach((file) => {
             formData.append("files", file); // 파일 추가
         });
 
-        await fetch("http://localhost:8080/api/posts", {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-            body: formData,
-        }).then(data => {
-            if (data.status === 200) {
-                alert("글이 성공적으로 등록되었습니다.");
-                navigate("/posts"); // 게시글 목록으로 이동
-            } else {
-                alert("글 작성 중 오류가 발생했습니다.");
-            }
-
-        })
-            .catch(error => {
-                console.error('Error:', error)
-                alert("서버 통신 중 문제가 발생했습니다.");
-            });
+        mutation.mutate(formData);
     };
 
     return (
@@ -65,7 +80,7 @@ export default function ReformNew() {
                 <Col className="text-start" md={12}>
                     <Card>
                         <Card.Header>
-                            <h2>글 작성</h2>
+                            <h2>글 수정</h2>
                         </Card.Header>
                         <Card.Body>
                             <Form onSubmit={handleSubmit}>
@@ -84,7 +99,7 @@ export default function ReformNew() {
                                 />
                                 <div className="mt-4">
                                     <Button variant="primary" type="submit">
-                                        작성
+                                        수정
                                     </Button>
                                     <Button variant="secondary" className="ml-2" onClick={() => navigate(-1)}>
                                         취소
