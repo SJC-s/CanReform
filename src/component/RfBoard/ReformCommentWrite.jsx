@@ -1,4 +1,4 @@
-import {Button, CardGroup, Row} from "react-bootstrap";
+import {Button, Row} from "react-bootstrap";
 import '/src/css/RfBoard/ReformCommentWrite.css'
 import {FaTrash} from "react-icons/fa";
 import {useCallback, useEffect, useRef} from "react";
@@ -27,7 +27,7 @@ export default function ReformCommentWrite() {
             <Row className="comment-box">
                 <div className="comment-group">
                     <div className="input-group">
-                        <textarea className="userid" rows={1} readOnly/>
+                        <textarea className="userid" rows={1} disabled/>
                         <textarea className="commentContent" rows={1} ref={textarea} onInput={handleTextAreaSize}/>
                     </div>
                     <div className="btns">

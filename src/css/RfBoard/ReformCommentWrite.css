@@ -15,7 +15,7 @@
 
 .comment-group {
     display : flex;
-    padding : 5px 15px;
+    padding : 5px 0 15px 0;
     flex-shrink : 0;    /* 창 크기가 줄어들어도 크기를 유지함 */
     min-width : 1200px;
 }
@@ -23,13 +23,15 @@
 .input-group textarea {
     height : auto;
     overflow : hidden;  /* 입력값이 칸 크기를 넘어갔을 때 자동으로 생기는 스크롤을 없앰 */
-    resize: none    /* 사용자가 임의로 textarea의 크기를 조절할 수 없음 */
+    resize: none;    /* 사용자가 임의로 textarea의 크기를 조절할 수 없음 */
 }
 
 .input-group .userid {
-    height : 30px;
     margin-right : 10px;
-    text-align: right;
+    text-align: left;
+    width : 10%;
+    border : none;
+    background : none;
 }
 
 .input-group .commentContent {
@@ -42,7 +44,7 @@
 .btns {
     position : absolute;
     right : 40px;
-    bottom : 7px;
+    bottom : 13px;
 }
 .btns Button{
     width : 50px;
