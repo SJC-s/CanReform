@@ -8,7 +8,8 @@ import {QueryClient, QueryClientProvider} from "react-query";
 import ReformPage from "./component/RfBoard/ReformPage.jsx";
 import Signup from "./component/RfAuthorization/Signup.jsx";
 import Login from "./component/RfAuthorization/Login.jsx";
-import {useEffect, useState} from "react"; // 게시판 컴포넌트
+import {useEffect, useState} from "react";
+
 
 
 
@@ -25,21 +26,21 @@ export default function App () {
 
     return (
         <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-            <div className="App">
-                {/* Header 메뉴*/}
-                <LayoutHeader isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-                {/* 페이지 라우팅 설정 */}
-                <Routes>
-                    <Route path="/" element={<MainPage/>} /> {/* 메인 페이지 */}
-                    <Route path="/posts/*" element={<ReformPage isLoggedIn={isLoggedIn}/>} /> {/* 게시판 페이지 */}
-                    <Route path="/signup" element={<Signup isLoggedIn={isLoggedIn}/>} />
-                    <Route path="/login" element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>} />
-                </Routes>
-                {/* footer 메뉴 */}
-                <LayoutFooter/>
-            </div>
-        </BrowserRouter>
+            <BrowserRouter>
+                <div className="App">
+                    {/* Header 메뉴*/}
+                    <LayoutHeader isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+                    {/* 페이지 라우팅 설정 */}
+                    <Routes>
+                        <Route path="/" element={<MainPage/>} /> {/* 메인 페이지 */}
+                        <Route path="/posts/*" element={<ReformPage isLoggedIn={isLoggedIn}/>} /> {/* 게시판 페이지 */}
+                        <Route path="/signup" element={<Signup isLoggedIn={isLoggedIn}/>} />
+                        <Route path="/login" element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>} />
+                    </Routes>
+                    {/* footer 메뉴 */}
+                    <LayoutFooter/>
+                </div>
+            </BrowserRouter>
         </QueryClientProvider>
     );
 }
