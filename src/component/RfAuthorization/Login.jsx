@@ -4,8 +4,9 @@ import {Container, Row, Col, Form, Button, Alert, InputGroup} from "react-bootst
 import {useMutation} from "react-query";
 import {FaLock, FaUser} from "react-icons/fa";
 import {TiDelete} from "react-icons/ti";
+import {jwtDecode} from "jwt-decode";
 
-export default function Login({ setIsLoggedIn }) {
+export default function Login({ setIsLoggedInId }) {
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [userId, setUserId] = useState('');
@@ -39,7 +40,10 @@ export default function Login({ setIsLoggedIn }) {
                 // 로그인 성공 시 처리
                 localStorage.setItem('token', data.token); // 예시로 토큰 저장
                 setSuccessMessage("로그인 성공");
-                setIsLoggedIn(true); // 로그인 상태 업데이트
+                if (data) {
+                    const decoded = jwtDecode(data.token);
+                    setIsLoggedInId(decoded.sub); // 백엔드에서 JWT에 userId를 클레임으로 포함시켰다고 가정
+                }
                 navigate(-1); // 메인 페이지로 이동
             },
             onError: (error) => {

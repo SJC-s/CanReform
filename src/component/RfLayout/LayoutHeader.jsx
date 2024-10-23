@@ -17,14 +17,14 @@ function SpreadBtn() {
     );
 }
 
-export default function LayoutHeader({ isLoggedIn, setIsLoggedIn }) {
+export default function LayoutHeader({ isLoggedInId, setIsLoggedInId }) {
 
     const navigate = useNavigate();
 
     const handleLogout = () => {
         // 로그아웃 처리
         localStorage.removeItem("token"); // 토큰 삭제
-        setIsLoggedIn(false); // 로그인 상태 변경
+        setIsLoggedInId(''); // 로그인 상태 변경
         navigate("/"); // 로그아웃 후 메인 페이지로 이동
     };
 
@@ -38,7 +38,7 @@ export default function LayoutHeader({ isLoggedIn, setIsLoggedIn }) {
                             <img src="/upload/logo.svg" alt="LOGO" className="logo-image" onClick={()=>navigate('/')}/>
                         </div>
                         <Nav className="justify-content-end gap-2 nav-custom">
-                            {!isLoggedIn ? (
+                            { !isLoggedInId ? (
                                 <>
                                     <Button variant="outline-secondary" as={Link} to="/login" className="navbtn btn1">로그인</Button>
                                     <Button variant="outline-secondary" as={Link} to="/signup" className="navbtn btn2">회원가입</Button>
