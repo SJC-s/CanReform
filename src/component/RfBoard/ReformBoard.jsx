@@ -7,7 +7,7 @@ import '../../css/RfBoard/ReformBoard.css';
 
 const MAX_PAGES_DISPLAY = 10; // 최대 페이지네이션 버튼 수
 
-export default function ReformBoard({ isLoggedIn }) {
+export default function ReformBoard({ isLoggedInId }) {
 
     const [filteredPosts, setFilteredPosts] = useState([]);  // 필터링된 게시글 리스트
     const [category, setCategory] = useState('all');         // 현재 활성화된 탭
@@ -96,7 +96,7 @@ export default function ReformBoard({ isLoggedIn }) {
 
     // 글쓰기 버튼을 눌렀을 때 동작하는 함수
     const handleWritePost = async () => {
-        if (isLoggedIn) {
+        if (isLoggedInId) {
             navigate("/posts/write");
         } else {
             alert("로그인 후 글쓰기를 할 수 있습니다.");
@@ -135,7 +135,7 @@ export default function ReformBoard({ isLoggedIn }) {
                 </div>
                 {/* 검색 창 - 우측 상단에 위치 */}
                 <div className="search-bar">
-                    <select className="form-select-sm m-1" value={searchClass} onChange={(e) => setSearchClassValue(e.target.value)}>
+                    <select className="form-select-sm m-1" value={searchClassValue} onChange={(e) => setSearchClassValue(e.target.value)}>
                         <option value="all">전체</option>
                         <option value="title">제목</option>
                         <option value="content">내용</option>
@@ -174,8 +174,8 @@ export default function ReformBoard({ isLoggedIn }) {
                             <td>{post.category === 'Inquiry' ? '문의' : '의뢰'}</td>
                             <td>{post.isPrivate === 'Y' ? <FaUnlockAlt style={{color:"darkblue"}}/>: <FaLock style={{color:"gray"}}/>}</td>
                             <td>
-                                {post.isPrivate === 'N' ? (
-                                    <span style={{ color: 'grey' }}>{post.title}</span> // 비활성화된 제목
+                                {post.isPrivate === 'N' && post.userId !== isLoggedInId ? (
+                                    <span style={{ color: 'grey' }}>{post.title}</span> // 비활성화된 제목 (비공개 글이면서 작성자가 본인이 아닌 경우)
                                 ) : (
                                     <Link to={`/posts/${post.postId}`} state={{post}}>
                                         {post.title}
