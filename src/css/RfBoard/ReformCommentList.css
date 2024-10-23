@@ -9,6 +9,10 @@
     min-width : 1200px;
 }
 
+.commentListBox hr{
+    margin : 0
+}
+
 .commentList-group {
     display : flex;
     padding : 5px 15px;
@@ -25,12 +29,15 @@
 .commentList textarea {
     height : auto;
     overflow : hidden;  /* 입력값이 칸 크기를 넘어갔을 때 자동으로 생기는 스크롤을 없앰 */
-    resize: none    /* 사용자가 임의로 textarea의 크기를 조절할 수 없음 */
+    resize: none;    /* 사용자가 임의로 textarea의 크기를 조절할 수 없음 */
+    border : none;
+    background : none;
 }
 
 .commentList .userid {
     margin-right : 10px;
-    text-align: right;
+    text-align: left;
+    width : 10%;
 }
 
 .commentList .comment {
