@@ -31,6 +31,8 @@ export default function ReformDetail({ isLoggedInId }) {
         return allowedExtensions.includes(extension);
     };
 
+    console.log(currentPost.filenames)
+
 
     // 게시글 삭제 함수
     const handleDelete = async () => {
@@ -40,7 +42,21 @@ export default function ReformDetail({ isLoggedInId }) {
         }
         if (window.confirm("정말 삭제하시겠습니까?")) {
             try {
-                await axios.delete(`http://localhost:8080/api/posts/${currentPost.postId}`);
+                // 인증 토큰 가져오기 (예: localStorage에서)
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    alert("인증 정보가 없습니다. 로그인 후 다시 시도하세요.");
+                    return;
+                }
+
+                // 삭제 요청 시 헤더에 인증 토큰 추가
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                };
+
+                await axios.delete(`http://localhost:8080/api/posts/${currentPost.postId}`, config);
                 alert("게시글이 삭제되었습니다.");
                 navigate('/posts');
             } catch (error) {
@@ -99,22 +115,27 @@ export default function ReformDetail({ isLoggedInId }) {
                                 </Col>
                             </Row>
                             {/* 파일 링크 */}
-                            {currentPost.filenames && (
+                            {currentPost.filenames && currentPost.filenames.length > 0 && (
                                 <div>
                                     <h5>첨부 사진(클릭시 다운로드)</h5>
-                                    {/* 이미지 미리보기 */}
-                                    {isValidImage(currentPost.filenames) && (
-                                        <div className="mt-3">
-                                            <a href={`http://localhost:8080/api/posts/download/${currentPost.filenames}`}
-                                               target="_blank" rel="noopener noreferrer">
-                                                <img
-                                                    src={`http://localhost:8080/api/posts/download/${currentPost.filenames}`}
-                                                    alt="첨부 이미지 미리보기"
-                                                    style={{maxWidth: "400px", marginTop: "10px"}}
-                                                />
-                                            </a>
-                                        </div>
-                                        )}
+                                    <Row>
+                                        {currentPost.filenames.split(',').map((filename, index) => (
+                                            <Col key={index} md={4} className="mb-3">
+                                                {isValidImage(filename) && (
+                                                    <div>
+                                                        <a href={`http://localhost:8080/api/posts/download/${filename}`}
+                                                           target="_blank" rel="noopener noreferrer">
+                                                            <img
+                                                                src={`http://localhost:8080/api/posts/download/${filename}`}
+                                                                alt={`첨부 이미지 미리보기 ${index + 1}`}
+                                                                style={{maxWidth: "100%", marginTop: "10px"}}
+                                                            />
+                                                        </a>
+                                                    </div>
+                                                )}
+                                            </Col>
+                                        ))}
+                                    </Row>
                                 </div>
                             )}
                         </Card.Body>
