@@ -27,23 +27,21 @@
 }
 
 .input-group .userid {
-    margin-right : 10px;
+    margin-left : 10px;
     text-align: left;
-    width : 10%;
     border : none;
     background : none;
 }
 
 .input-group .commentContent {
     height : auto;
-    width : 850px;
     overflow : hidden;  /* 입력값이 칸 크기를 넘어갔을 때 자동으로 생기는 스크롤을 없앰 */
     resize: none    /* 사용자가 임의로 textarea의 크기를 조절할 수 없음 */
 }
 
 .btns {
     position : absolute;
-    right : 40px;
+    right : 100px;
     bottom : 13px;
 }
 .btns Button{

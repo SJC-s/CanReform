@@ -32,21 +32,21 @@ export default function App () {
 
     return (
         <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-            <div className="App">
-                {/* Header 메뉴*/}
-                <LayoutHeader isLoggedInId={isLoggedInId} setIsLoggedInId={setIsLoggedInId} />
-                {/* 페이지 라우팅 설정 */}
-                <Routes>
-                    <Route path="/" element={<MainPage/>} /> {/* 메인 페이지 */}
-                    <Route path="/posts/*" element={<ReformPage isLoggedInId={isLoggedInId}/>} /> {/* 게시판 페이지 */}
-                    <Route path="/signup" element={ isLoggedInId ? <Navigate to="/" replace /> : <Signup />} />
-                    <Route path="/login" element={ isLoggedInId ? <Navigate to="/" replace /> : <Login setIsLoggedInId={setIsLoggedInId}/>} />
-                </Routes>
-                {/* footer 메뉴 */}
-                <LayoutFooter/>
-            </div>
-        </BrowserRouter>
+          <BrowserRouter>
+              <div className="App">
+                  {/* Header 메뉴*/}
+                  <LayoutHeader isLoggedInId={isLoggedInId} setIsLoggedInId={setIsLoggedInId} />
+                  {/* 페이지 라우팅 설정 */}
+                  <Routes>
+                      <Route path="/" element={<MainPage/>} /> {/* 메인 페이지 */}
+                      <Route path="/posts/*" element={<ReformPage isLoggedInId={isLoggedInId}/>} /> {/* 게시판 페이지 */}
+                      <Route path="/signup" element={ isLoggedInId ? <Navigate to="/" replace /> : <Signup />} />
+                      <Route path="/login" element={ isLoggedInId ? <Navigate to="/" replace /> : <Login setIsLoggedInId={setIsLoggedInId}/>} />
+                  </Routes>
+                  {/* footer 메뉴 */}
+                  <LayoutFooter/>
+              </div>
+          </BrowserRouter>
         </QueryClientProvider>
     );
 }
