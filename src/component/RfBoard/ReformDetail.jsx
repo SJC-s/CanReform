@@ -58,20 +58,26 @@ export default function ReformDetail({ isLoggedInId }) {
         return allowedExtensions.includes(extension);
     };
 
-    const handleAddReport = async (reportData) => {
-        console.log(reportData)
-        const resp = await fetch(`http://localhost:8080/api/report/addReport/${currentPost.postId}`, {
-            method: "POST",
-            headers : {
-                "Content-Type" : "application/json",
-            },
-            body : JSON.stringify(reportData)
-        });
-        if(!resp.ok) {
-            throw Error("잘못된 신고 요청입니다.")
+    const handleAddReport = async ({reportData}) => {
+        try{
+            console.log(reportData)
+            const resp = await fetch(`http://localhost:8080/api/report/addReport/${currentPost.postId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(reportData)
+            });
+            if (!resp.ok) {
+                throw Error("잘못된 신고 요청입니다.")
+            }
+            const updateReport = await axios.get(`http://localhost:8080/api/posts/${currentPost.postId}`);
+            setCurrentPost(updateReport.data);
+            return true;
+        } catch (error) {
+            console.error('Error submitting report:', error);
+            return false; // 실패 시 false 반환
         }
-        const updateReport = await axios.get(`http://localhost:8080/api/posts/${currentPost.postId}`);
-        setCurrentPost(updateReport.data);
     }
 
     // 게시글 삭제 함수
