@@ -61,13 +61,15 @@ function ReformFormFields({ title, setTitle, category, setCategory, isPrivate, s
             </Form.Group>
 
             <Form.Group controlId="formFile" className="mt-3">
-                <Form.Label>첨부 파일 (허용된 파일: {allowedExtensions.join(", ")})</Form.Label>
+                <Form.Label>사진 첨부 (최대 10MB, 허용되는 파일: {allowedExtensions.join(", ")})</Form.Label>
+                <Col md={5}>
                 <Form.Control
                     type="file"
                     multiple
                     onChange={handleFileChange}
                     accept="image/*" // 이미지 파일만 선택 가능
                 />
+                </Col>
                 <div className="mt-3">
                     {filePreviews.length > 0 && (
                         <div>
