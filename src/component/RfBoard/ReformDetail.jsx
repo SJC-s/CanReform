@@ -20,13 +20,6 @@ export default function ReformDetail({ isLoggedInId }) {
         if (!post) {
             // 게시글 정보가 없으면 목록으로 이동
             navigate('/posts');
-        }
-    }, [post, navigate]);
-
-    useEffect(() => {
-        if (!post) {
-            // 게시글 정보가 없으면 목록으로 이동
-            navigate('/posts');
         } else if (!hasFetchedPost.current) {
             // 플래그가 false일 때만 API 호출
             hasFetchedPost.current = true; // 플래그 설정
@@ -140,19 +133,6 @@ export default function ReformDetail({ isLoggedInId }) {
                                 <Col>
                                     <h2>{currentPost.title}</h2>
                                 </Col>
-                                <Col md={2}>
-                                    <p className="postReportCount">신고 수 : {currentPost.reportCount}</p>
-                                </Col>
-                            </Row>
-                        </Card.Header>
-                        <Card.Header>
-                            <Row className="mt-2">
-                                <Col md={2}>
-                                    <p><strong>카테고리:</strong> {currentPost.category === 'Inquiry' ? '문의' : '의뢰'}</p>
-                                </Col>
-                                <Col>
-                                    <p><strong>상태: {currentPost.status}</strong></p>
-                                </Col>
                                 <Col md={1}>
                                     <Button className="btn-danger" onClick={handleShowModal}>신고</Button>
                                     <ReportFormModal
@@ -163,14 +143,29 @@ export default function ReformDetail({ isLoggedInId }) {
                                         userId={isLoggedInId}
                                     />
                                 </Col>
+
+                            </Row>
+                        </Card.Header>
+                        <Card.Header>
+                            <Row className="mt-2">
+                                <Col md={2}>
+                                    <p><strong>카테고리:</strong> {currentPost.category === 'Inquiry' ? '문의' : '의뢰'}</p>
+                                </Col>
+                                <Col>
+                                    <p><strong>상태: {currentPost.status}</strong></p>
+                                </Col>
+                                <Col><p><strong>공개 여부:</strong> {currentPost.isPrivate === 'Y' ? '공개' : '비공개'}</p></Col>
+                                <Col md={2}>
+                                    <p className="postReportCount"><strong>신고수:</strong> {currentPost.reportCount}</p>
+                                </Col>
                             </Row>
                         </Card.Header>
                         <Card.Header>
                             <Row>
                                 <Col md={2}><p><strong>작성자:</strong> {currentPost.userId}</p></Col>
                                 <Col><p><strong>작성일:</strong> {new Date(currentPost.createdAt).toLocaleDateString()}</p></Col>
-                                <Col><p><strong>조회수:</strong> {currentPost.readCount}</p></Col>
-                                <Col><p><strong>공개 여부:</strong> {currentPost.isPrivate === 'Y' ? '공개' : '비공개'}</p></Col>
+                                <Col md={2}><p><strong>조회수:</strong> {currentPost.readCount}</p></Col>
+
                             </Row>
                         </Card.Header>
                         <Card.Body>
