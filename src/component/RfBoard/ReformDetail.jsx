@@ -5,11 +5,13 @@ import ReformCommentWrite from "./ReformCommentWrite.jsx";
 import ReformCommentList from "./ReformCommentList.jsx";
 import {useEffect, useState} from "react";
 import axios from 'axios'; // HTTP 요청을 기본적으로 비동기로 수행하기 위해 자바스크립트에서 널리 사용되는 라이브러리
+import StarRating from "../StarRating.jsx"; // 별점 컴포넌트 import
 
 export default function ReformDetail({ isLoggedInId }) {
     const { post } = useLocation().state || {}; // location.state에서 post를 가져옴
     const navigate = useNavigate();
     const [currentPost, setCurrentPost] = useState(post);
+    const [rating, setRating] = useState(0); // 별점 상태 추가
 
     useEffect(() => {
         if (!post) {
@@ -17,6 +19,18 @@ export default function ReformDetail({ isLoggedInId }) {
             navigate('/posts');
         }
     }, [post, navigate]);
+
+
+
+    const handleRatingChange = (newRating) => {
+        console.log("Selected Rating:", newRating); // 새로운 별점 출력
+        setRating(newRating); // 상태 업데이트
+        // 여기에서 API 호출 등을 통해 평점을 저장할 수 있습니다.
+    };
+
+
+
+
 
     if (!post) {
         return <p>게시글 정보를 불러올 수 없습니다.</p>;
@@ -34,7 +48,6 @@ export default function ReformDetail({ isLoggedInId }) {
     console.log(currentPost.filenames)
 
 
-    // 게시글 삭제 함수
     const handleDelete = async () => {
         if (currentPost.userId !== isLoggedInId) {
             alert("이 게시글을 삭제할 권한이 없습니다.");
@@ -114,6 +127,13 @@ export default function ReformDetail({ isLoggedInId }) {
                                     <hr/>
                                 </Col>
                             </Row>
+                            {/* 별점 컴포넌트 추가 */}
+                            {isLoggedInId && (
+                                <div>
+                                    <StarRating rating={rating} onRatingChange={handleRatingChange} />
+                                    <p>현재 평점: {rating}</p>
+                                </div>
+                            )}
                             {/* 파일 링크 */}
                             {currentPost.filenames && currentPost.filenames.length > 0 && (
                                 <div>

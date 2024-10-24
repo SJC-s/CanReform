@@ -11,9 +11,6 @@ import Login from "./component/RfAuthorization/Login.jsx";
 import {useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode"; // 게시판 컴포넌트
 
-
-
-
 const queryClient = new QueryClient();
 export default function App () {
     const [isLoggedInId, setIsLoggedInId] = useState(''); // id가 있으면 로그인으로 가정

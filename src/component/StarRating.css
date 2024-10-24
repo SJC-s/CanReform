@@ -1,0 +1,8 @@
+.star-rating {
+    display: flex;
+    align-items: center;
+}
+
+.star-rating img {
+    margin-right: 5px; /* 별 사이 간격 */
+}
