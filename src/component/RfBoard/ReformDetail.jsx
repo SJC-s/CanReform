@@ -5,7 +5,6 @@ import ReformCommentWrite from "./ReformCommentWrite.jsx";
 import ReformCommentList from "./ReformCommentList.jsx";
 import {useEffect, useRef, useState} from "react";
 import axios from 'axios';
-import {useMutation, useQueryClient} from "react-query";
 import ReportFormModal from "../Modal/ReportFormModal.jsx"; // HTTP 요청을 기본적으로 비동기로 수행하기 위해 자바스크립트에서 널리 사용되는 라이브러리
 
 export default function ReformDetail({ isLoggedInId }) {
@@ -46,10 +45,6 @@ export default function ReformDetail({ isLoggedInId }) {
         }
     }, [post, navigate]);
 
-    useEffect(() => {
-
-    }, [currentPost.reportCount])
-
     if (!post) {
         return <p>게시글 정보를 불러올 수 없습니다.</p>;
     }
@@ -63,9 +58,14 @@ export default function ReformDetail({ isLoggedInId }) {
         return allowedExtensions.includes(extension);
     };
 
-    const handleAddReport = async (currentPost) => {
+    const handleAddReport = async (reportData) => {
+        console.log(reportData)
         const resp = await fetch(`http://localhost:8080/api/report/addReport/${currentPost.postId}`, {
             method: "POST",
+            headers : {
+                "Content-Type" : "application/json",
+            },
+            body : JSON.stringify(reportData)
         });
         if(!resp.ok) {
             throw Error("잘못된 신고 요청입니다.")
@@ -154,6 +154,7 @@ export default function ReformDetail({ isLoggedInId }) {
                                         handleClose={handleCloseModal}
                                         handleSubmit={handleAddReport}
                                         postId={currentPost.postId}
+                                        userId={isLoggedInId}
                                     />
                                 </Col>
                             </Row>

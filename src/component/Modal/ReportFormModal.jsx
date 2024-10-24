@@ -1,13 +1,20 @@
-import React, {useState} from 'react';
-import {Modal, Button, Row, Col} from 'react-bootstrap';
+import {useState} from 'react';
+import {Modal, Button} from 'react-bootstrap';
 import '/src/css/RfBoard/ReportFormModal.css';
 
-const ReportFormModal = ({ show, handleClose, handleSubmit, postId }) => {
+const ReportFormModal = ({ show, handleClose, handleSubmit, postId, userId }) => {
     const [reportContent, setReportContent] = useState('');
 
     const handleSubmitForm = (e) => {
         e.preventDefault();
-        handleSubmit({ reportContent }); // 데이터 제출
+        console.log(userId);
+        console.log(postId)
+        const reportData = {
+            reason : reportContent,
+            postId : postId,
+            userId : userId,
+        };
+        handleSubmit({reportData}) // 데이터 제출
     };
 
     return (
@@ -18,11 +25,7 @@ const ReportFormModal = ({ show, handleClose, handleSubmit, postId }) => {
             <Modal.Body>
                 <form onSubmit={handleSubmitForm}>
                     <div className="mb-3">
-                        <label htmlFor="reportTitle" className="form-label">제목 </label><br/>
-                        <input type={"text"} className={"reportTitle"} />
-                        <br/>
-                        <br/>
-                        <label htmlFor="reportContent" className="form-label">내용</label>
+                        <label htmlFor="reportContent" className="form-label">신고 내용</label>
                         <textarea
                             id="reportContent"
                             className="form-control reportContent"
