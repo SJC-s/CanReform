@@ -4,12 +4,14 @@ import '../../css/RfBoard/ReformDetail.css'
 import ReformCommentWrite from "./ReformCommentWrite.jsx";
 import ReformCommentList from "./ReformCommentList.jsx";
 import {useEffect, useRef, useState} from "react";
-import axios from 'axios'; // HTTP 요청을 기본적으로 비동기로 수행하기 위해 자바스크립트에서 널리 사용되는 라이브러리
+import axios from 'axios';
+import ReportFormModal from "../Modal/ReportFormModal.jsx"; // HTTP 요청을 기본적으로 비동기로 수행하기 위해 자바스크립트에서 널리 사용되는 라이브러리
 
 export default function ReformDetail({ isLoggedInId }) {
     const { post } = useLocation().state || {}; // location.state에서 post를 가져옴
     const navigate = useNavigate();
     const [currentPost, setCurrentPost] = useState(post);
+    const [showModal, setShowModal] = useState(false);
 
     // useRef로 API 호출 여부를 추적하기 위한 플래그 설정
     const hasFetchedPost = useRef(false);
@@ -56,7 +58,21 @@ export default function ReformDetail({ isLoggedInId }) {
         return allowedExtensions.includes(extension);
     };
 
-
+    const handleAddReport = async (reportData) => {
+        console.log(reportData)
+        const resp = await fetch(`http://localhost:8080/api/report/addReport/${currentPost.postId}`, {
+            method: "POST",
+            headers : {
+                "Content-Type" : "application/json",
+            },
+            body : JSON.stringify(reportData)
+        });
+        if(!resp.ok) {
+            throw Error("잘못된 신고 요청입니다.")
+        }
+        const updateReport = await axios.get(`http://localhost:8080/api/posts/${currentPost.postId}`);
+        setCurrentPost(updateReport.data);
+    }
 
     // 게시글 삭제 함수
     const handleDelete = async () => {
@@ -99,6 +115,14 @@ export default function ReformDetail({ isLoggedInId }) {
         navigate(`/posts/edit/${currentPost.postId}`, { state: { post: currentPost } });
     };
 
+    // 신고 모달 열기 / 닫기
+    const handleShowModal = () => {
+        setShowModal(true);
+    }
+    const handleCloseModal = () => {
+        setShowModal(false);
+    }
+
 
     return (
         <Container className='detail-container' fluid style={{padding: "0px", marginTop: "10px", marginBottom: "10px"}}>
@@ -110,6 +134,9 @@ export default function ReformDetail({ isLoggedInId }) {
                                 <Col>
                                     <h2>{currentPost.title}</h2>
                                 </Col>
+                                <Col md={2}>
+                                    <p className="postReportCount">신고 수 : {currentPost.reportCount}</p>
+                                </Col>
                             </Row>
                         </Card.Header>
                         <Card.Header>
@@ -119,6 +146,16 @@ export default function ReformDetail({ isLoggedInId }) {
                                 </Col>
                                 <Col>
                                     <p><strong>상태: {currentPost.status}</strong></p>
+                                </Col>
+                                <Col md={1}>
+                                    <Button className="btn-danger" onClick={handleShowModal}>신고</Button>
+                                    <ReportFormModal
+                                        show={showModal}
+                                        handleClose={handleCloseModal}
+                                        handleSubmit={handleAddReport}
+                                        postId={currentPost.postId}
+                                        userId={isLoggedInId}
+                                    />
                                 </Col>
                             </Row>
                         </Card.Header>
