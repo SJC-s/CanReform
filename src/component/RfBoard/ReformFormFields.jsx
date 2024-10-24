@@ -1,6 +1,19 @@
-import { Form } from "react-bootstrap";
+import {Button, Col, Form, Row} from "react-bootstrap";
+import {FaX} from "react-icons/fa6";
 
-function ReformFormFields({ title, setTitle, category, setCategory, isPrivate, setIsPrivate, content, setContent, allowedExtensions, handleFileChange, filePreviews }) {
+function ReformFormFields({ title, setTitle, category, setCategory, isPrivate, setIsPrivate, content,
+                              setContent, allowedExtensions, handleFileChange, filePreviews, setFilePreviews, filenames, setFilenames }) {
+
+    // 이미지 삭제 함수
+    const handleImageDelete = (filenameToDelete) => {
+        const updatedPreviews = filePreviews.filter((filename) => filename !== filenameToDelete);
+        setFilePreviews(updatedPreviews);
+
+        // 파일 이름도 업데이트
+        const updatedFilenames = filenames.filter((filename) => !filenameToDelete.includes(filename));
+        setFilenames(updatedFilenames);
+    };
+
     return (
         <>
             <Form.Group controlId="postTitle">
@@ -58,15 +71,29 @@ function ReformFormFields({ title, setTitle, category, setCategory, isPrivate, s
                 <div className="mt-3">
                     {filePreviews.length > 0 && (
                         <div>
-                            <h5>이미지 미리보기</h5>
-                            {filePreviews.map((preview, index) => (
-                                <img
-                                    key={index}
-                                    src={preview}
-                                    alt="미리보기"
-                                    style={{ maxWidth: "200px", marginRight: "10px" }}
-                                />
-                            ))}
+                            <h5>첨부파일 이미지 미리보기</h5>
+                            <Row>
+                                {filePreviews.map((preview, index) => (
+                                    <Col key={index} md={2} className="mb-3 position-relative">
+                                        <div style={{position: "relative"}}>
+                                            <img
+                                                key={index}
+                                                src={preview}
+                                                alt="미리보기"
+                                                style={{maxWidth: "200px", marginRight: "10px", borderRadius: "4px"}}
+                                            />
+                                            <Button
+                                                variant="danger"
+                                                size="sm"
+                                                style={{position: 'absolute', top: '0px', right: '0px'}}
+                                                onClick={() => handleImageDelete(preview)}
+                                            >
+                                                <FaX/>
+                                            </Button>
+                                        </div>
+                                    </Col>
+                                ))}
+                            </Row>
                         </div>
                     )}
                 </div>
