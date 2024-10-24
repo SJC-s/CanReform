@@ -3,7 +3,7 @@ import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import '../../css/RfBoard/ReformDetail.css'
 import ReformCommentWrite from "./ReformCommentWrite.jsx";
 import ReformCommentList from "./ReformCommentList.jsx";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import axios from 'axios'; // HTTP 요청을 기본적으로 비동기로 수행하기 위해 자바스크립트에서 널리 사용되는 라이브러리
 
 export default function ReformDetail({ isLoggedInId }) {
@@ -11,10 +11,35 @@ export default function ReformDetail({ isLoggedInId }) {
     const navigate = useNavigate();
     const [currentPost, setCurrentPost] = useState(post);
 
+    // useRef로 API 호출 여부를 추적하기 위한 플래그 설정
+    const hasFetchedPost = useRef(false);
+
     useEffect(() => {
         if (!post) {
             // 게시글 정보가 없으면 목록으로 이동
             navigate('/posts');
+        }
+    }, [post, navigate]);
+
+    useEffect(() => {
+        if (!post) {
+            // 게시글 정보가 없으면 목록으로 이동
+            navigate('/posts');
+        } else if (!hasFetchedPost.current) {
+            // 플래그가 false일 때만 API 호출
+            hasFetchedPost.current = true; // 플래그 설정
+            // 서버로부터 조회된 게시글 정보 가져오기 (조회수 증가 포함)
+            const fetchPostDetail = async () => {
+                try {
+                    const response = await axios.get(`http://localhost:8080/api/posts/${post.postId}`);
+                    setCurrentPost(response.data); // 서버에서 가져온 데이터로 업데이트
+                } catch (error) {
+                    console.error("게시글 정보를 불러오는 중 오류 발생:", error);
+                    alert("게시글 정보를 불러오는 중 오류가 발생했습니다.");
+                    navigate('/posts');
+                }
+            };
+            fetchPostDetail();
         }
     }, [post, navigate]);
 
@@ -31,7 +56,6 @@ export default function ReformDetail({ isLoggedInId }) {
         return allowedExtensions.includes(extension);
     };
 
-    console.log(currentPost.filenames)
 
 
     // 게시글 삭제 함수
