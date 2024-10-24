@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { Button, Container, Row, Col, Card, Form } from "react-bootstrap";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useMutation } from "react-query";
+import {useEffect, useState} from "react";
+import {Button, Card, Col, Container, Form, Row} from "react-bootstrap";
+import {useLocation, useNavigate} from "react-router-dom";
+import {useMutation} from "react-query";
 import ReformFormFields from "./ReformFormFields.jsx";
-import { allowedExtensions, filterValidFiles } from "../utils/fileUtils"; // 유틸리티 함수 가져오기
+import {allowedExtensions, filterValidFiles} from "../utils/fileUtils"; // 유틸리티 함수 가져오기
 
 export default function ReformEdit() {
     const { state } = useLocation();
@@ -13,7 +13,8 @@ export default function ReformEdit() {
     const [content, setContent] = useState(post ? post.content : "");
     const [category, setCategory] = useState(post ? post.category : "Inquiry");
     const [isPrivate, setIsPrivate] = useState(post ? post.isPrivate : "Y");
-    const [filenames, setFilenames] = useState([]);
+    const [existingFilenames, setExistingFilenames] = useState(post && post.filenames ? post.filenames.split(",") : []); // 기존 파일은 배열로 변환
+    const [newFiles, setNewFiles] = useState([]); // 새로 추가된 파일 객체 저장
     const [filePreviews, setFilePreviews] = useState([]); // 미리보기 URL 저장
 
     const navigate = useNavigate();
@@ -24,16 +25,31 @@ export default function ReformEdit() {
         }
     }, [post, navigate]);
 
+    useEffect(() => {
+        // 기존 파일 리스트를 filePreviews에 반영
+        if (existingFilenames && existingFilenames.length > 0) {
+            const existingPreviews = existingFilenames
+                .filter((filename) => filename) // 빈 파일명 제거
+                .map((filename) => `http://localhost:8080/api/posts/download/${filename}`);
+
+            setFilePreviews((prevPreviews) => {
+                // 기존 파일 미리보기와 새로 추가된 파일 미리보기 중복 제거
+                return [...new Set([...prevPreviews, ...existingPreviews])];
+            });
+        }
+    }, [existingFilenames]);
+
+
     const handleFileChange = (e) => {
         const selectedFiles = Array.from(e.target.files);
 
         // 확장자가 허용된 파일만 필터링
         const validFiles = filterValidFiles(selectedFiles);
-        setFilenames(validFiles); // 유효한 파일만 상태에 저장
+        setNewFiles((prevFilenames) => [...prevFilenames, ...validFiles]); // 유효한 파일만 상태에 저장
 
         // 이미지 파일 미리보기 URL 생성
         const previews = validFiles.map((file) => URL.createObjectURL(file));
-        setFilePreviews(previews);
+        setFilePreviews((prevPreviews) => [...prevPreviews, ...previews]);
     };
 
     const mutation = useMutation(async (formData) => {
@@ -67,8 +83,14 @@ export default function ReformEdit() {
         const formData = new FormData();
         formData.append("post", new Blob([JSON.stringify({ postId: post.postId, title, content, category, isPrivate })], { type: "application/json" })); // 게시글 데이터 추가
 
-        Array.from(filenames).forEach((file) => {
-            formData.append("files", file); // 파일 추가
+        // 기존 파일명은 문자열로 추가
+        existingFilenames.forEach((filename) => {
+            formData.append("existingFiles", filename);
+        });
+
+        // 새로 추가된 파일 객체는 파일로 추가
+        newFiles.forEach((file) => {
+            formData.append("files", file);
         });
 
         mutation.mutate(formData);
@@ -96,6 +118,9 @@ export default function ReformEdit() {
                                     allowedExtensions={allowedExtensions}
                                     handleFileChange={handleFileChange}
                                     filePreviews={filePreviews}
+                                    setFilePreviews={setFilePreviews}
+                                    filenames={existingFilenames}
+                                    setFilenames={setExistingFilenames}
                                 />
                                 <div className="mt-4">
                                     <Button variant="primary" type="submit">
