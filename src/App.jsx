@@ -9,7 +9,8 @@ import ReformPage from "./component/RfBoard/ReformPage.jsx";
 import Signup from "./component/RfAuthorization/Signup.jsx";
 import Login from "./component/RfAuthorization/Login.jsx";
 import {useEffect, useState} from "react";
-import {jwtDecode} from "jwt-decode"; // 게시판 컴포넌트
+import {jwtDecode} from "jwt-decode";
+import ReformReport from "./component/RfBoard/ReformReport.jsx"; // 게시판 컴포넌트
 
 
 
@@ -42,6 +43,7 @@ export default function App () {
                       <Route path="/posts/*" element={<ReformPage isLoggedInId={isLoggedInId}/>} /> {/* 게시판 페이지 */}
                       <Route path="/signup" element={ isLoggedInId ? <Navigate to="/" replace /> : <Signup />} />
                       <Route path="/login" element={ isLoggedInId ? <Navigate to="/" replace /> : <Login setIsLoggedInId={setIsLoggedInId}/>} />
+                      <Route path="/report/*" element={<ReformReport isLoggedInId={isLoggedInId}/>} /> {/* 신고 처리 페이지 */}
                   </Routes>
                   {/* footer 메뉴 */}
                   <LayoutFooter/>

@@ -64,6 +64,7 @@ export default function LayoutHeader({ isLoggedInId, setIsLoggedInId }) {
                     ) : (
                         <>
                             <DropdownItem variant="outline-secondary" as={Link} to="/mypage" className="navbtn btn3">내정보</DropdownItem>
+                            <DropdownItem variant="outline-secondary" as={Link} to="/report" className="navbtn btn4">신고 처리</DropdownItem>
                             <DropdownItem variant="outline-secondary" onClick={handleLogout} className="navbtn btn4">로그아웃</DropdownItem>
                         </>
                     )}
