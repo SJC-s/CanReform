@@ -114,7 +114,8 @@
     filter : brightness(2);
 }
 .btn:hover .dot,
-.btn:focus .dot {
+.btn:focus .dot,
+.btn.active .dot{
     animation: atom 2s infinite linear;
     display: block;
 }
