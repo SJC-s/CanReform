@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
-import {Card, CardBody, CardGroup, CardHeader, Col, Container, Row,} from "react-bootstrap";
+import {Button, Card, CardBody, CardFooter, CardGroup, CardHeader, Col, Container, Row,} from "react-bootstrap";
 import '/src/css/RfBoard/ReformReportDetail.css'
 
 const ReformReportDetail = ({ isLoggedInId }) => {
@@ -69,60 +69,74 @@ const ReformReportDetail = ({ isLoggedInId }) => {
     return (
         <>
             <Container>
-                <Col className="report-detail ">
-                    <Card className="post-info">
+                <div className={"report-detail text-lg-start"}>
+                    <Card className="post-info p-0 me-2">
                         {post && (
-                            <Card>
-                                <Row>
-                                    <CardHeader>
-                                        <Row>
-                                            <Col>제목 : {title}</Col>
-                                            <Col>글번호 : {postId}</Col>
-                                            <Col>공개 : {isPrivate}</Col>
-                                            <Col>신고처리 상태 : </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col>글쓴이 : {username}</Col>
-                                            <Col>글 생성일 : {createdAt}</Col>
-                                            <Col>최종 수정일 : {updatedAt}</Col>
-                                            <Col>조회수 : {readCount}</Col>
-                                            <Col>신고수 : {reportCount}</Col>
-                                        </Row>
-                                        {filenames && filenames !== '' && filenames !== 'null' && (
+                            <>
+                                <CardHeader>
+                                    <Row>
+                                        <Col><p><strong>제목</strong> : {title}</p></Col>
+                                        <Col><p><strong>글번호</strong> : {postId}</p></Col>
+                                        <Col><p><strong>공개</strong> : {isPrivate}</p></Col>
+                                        <Col><p><strong>처리상태</strong>: </p></Col>
+                                    </Row>
+                                </CardHeader>
+                                <CardHeader>
+                                    <Row>
+                                        <Col><p><strong>글쓴이</strong> : {username}</p></Col>
+                                        <Col><p><strong>조회수</strong> : {readCount}</p></Col>
+                                        <Col><p><strong>신고수</strong> : {reportCount}</p></Col>
+                                    </Row>
+                                </CardHeader>
+                                <CardHeader>
+                                    <Row>
+                                        <Col><p><strong>등록일</strong> : {createdAt.toLocaleString()}</p></Col>
+                                        <Col><p><strong>최종 수정일</strong> : {updatedAt.toLocaleString()}</p></Col>
+                                    </Row>
+                                </CardHeader>
+                                    {filenames && filenames !== '' && filenames !== 'null' && (
+                                        <CardHeader>
                                             <Row>
-                                                <Col>첨부파일 : {filenames}</Col>
+                                                <Col><strong>첨부파일</strong> : {filenames}</Col>
                                             </Row>
-                                        )}
-                                    </CardHeader>
-                                </Row>
-
-                                <Row>
-                                    <CardBody>
+                                        </CardHeader>
+                                    )}
+                                <CardBody>
+                                    <Row>
                                         <Col>{content}</Col>
-                                        <Col></Col>
-                                    </CardBody>
-                                </Row>
-
-                            </Card>
+                                    </Row>
+                                </CardBody>
+                            </>
                         )}
+                        <CardFooter>
+                            <Row>
+                                <Col>
+                                    <Button className={"btn-success"}>처리 완료</Button>
+                                </Col>
+                                <Col className={"text-lg-end"}>
+                                    <Button className={"btn-secondary"}>글잠금</Button>
+                                    <Button className={"ms-3 btn-danger"}>글삭제</Button>
+                                </Col>
+                            </Row>
+                        </CardFooter>
                     </Card>
-                    <CardGroup className="report-info">
-                        {reports && reports.length > 0 ? (
-                            <Card className={"d-grid"}>
-                                {reports.map(report => (
-                                    <Col key={report.reportId}>
-                                        <p>신고자: {report.userId}</p>
-                                        <p>신고 사유: {report.reason}</p>
-                                        <p>신고 날짜: {new Date(report.createdAt).toLocaleString()}</p>
-                                        {/* 다른 ReportsDTO 속성들 */}
-                                    </Col>
-                                ))}
+
+                    {reports && reports.length > 0 ? (
+                    <div className="report-detail-list d-grid gap-3">
+                        {reports.map(report => (
+                            <Card className={"p-0"}>
+                                <CardHeader className={"text-md-start"} key={report.reportId}>
+                                    <Row>신고자: {report.userId}</Row>
+                                    <Row>신고일: {new Date(report.createdAt).toLocaleString()}</Row>
+                                </CardHeader>
+                                <CardBody>
+                                    <Row>{report.reason}</Row>
+                                </CardBody>
                             </Card>
-                        ) : (
-                            <p>신고가 없습니다.</p>
-                        )}
-                    </CardGroup>
-                </Col>
+                        ))}
+                    </div>
+                    ) : (<p>신고가 없습니다.</p>)}
+                </div>
             </Container>
         </>
     );

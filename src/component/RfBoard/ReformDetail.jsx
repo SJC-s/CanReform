@@ -138,7 +138,6 @@ export default function ReformDetail({ isLoggedInId }) {
                                         userId={isLoggedInId}
                                     />
                                 </Col>
-
                             </Row>
                         </Card.Header>
                         <Card.Header>
