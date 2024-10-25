@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
-import {CardBody, CardGroup, CardHeader, Col, Container, Row} from "react-bootstrap";
+import {Card, CardBody, CardGroup, CardHeader, Col, Container, Row,} from "react-bootstrap";
+import '/src/css/RfBoard/ReformReportDetail.css'
 
 const ReformReportDetail = ({ isLoggedInId }) => {
     const { postId } = useParams();
@@ -68,10 +69,10 @@ const ReformReportDetail = ({ isLoggedInId }) => {
     return (
         <>
             <Container>
-                <Col className="report-detail flex-box">
-                    <CardGroup className="post-info">
+                <Col className="report-detail ">
+                    <Card className="post-info">
                         {post && (
-                            <CardBody>
+                            <Card>
                                 <Row>
                                     <CardHeader>
                                         <Row>
@@ -102,12 +103,12 @@ const ReformReportDetail = ({ isLoggedInId }) => {
                                     </CardBody>
                                 </Row>
 
-                            </CardBody>
+                            </Card>
                         )}
-                    </CardGroup>
+                    </Card>
                     <CardGroup className="report-info">
                         {reports && reports.length > 0 ? (
-                            <CardBody className={"d-grid"}>
+                            <Card className={"d-grid"}>
                                 {reports.map(report => (
                                     <Col key={report.reportId}>
                                         <p>신고자: {report.userId}</p>
@@ -116,7 +117,7 @@ const ReformReportDetail = ({ isLoggedInId }) => {
                                         {/* 다른 ReportsDTO 속성들 */}
                                     </Col>
                                 ))}
-                            </CardBody>
+                            </Card>
                         ) : (
                             <p>신고가 없습니다.</p>
                         )}
