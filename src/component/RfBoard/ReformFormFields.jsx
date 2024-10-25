@@ -1,4 +1,4 @@
-import {Button, Col, Form, Row} from "react-bootstrap";
+import {Button, CloseButton, Col, Form, Row} from "react-bootstrap";
 import {FaX} from "react-icons/fa6";
 
 function ReformFormFields({ title, setTitle, category, setCategory, isPrivate, setIsPrivate, content,
@@ -85,12 +85,12 @@ function ReformFormFields({ title, setTitle, category, setCategory, isPrivate, s
                                                 style={{maxWidth: "200px", marginRight: "10px", borderRadius: "4px"}}
                                             />
                                             <Button
-                                                variant="danger"
+                                                variant="outline-secondary"
                                                 size="sm"
                                                 style={{position: 'absolute', top: '0px', right: '0px'}}
                                                 onClick={() => handleImageDelete(preview)}
                                             >
-                                                <FaX/>
+                                                <CloseButton/>
                                             </Button>
                                         </div>
                                     </Col>

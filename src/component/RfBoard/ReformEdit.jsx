@@ -91,7 +91,7 @@ export default function ReformEdit() {
         // 새로 추가된 파일 객체는 파일로 추가
         newFiles.forEach((file) => {
             formData.append("files", file);
-        });
+        }); 
 
         mutation.mutate(formData);
     };
