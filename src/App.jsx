@@ -13,9 +13,6 @@ import {jwtDecode} from "jwt-decode";
 import ReformReport from "./component/RfBoard/ReformReport.jsx";
 import ReformReportDetail from "./component/RfBoard/ReformReportDetail.jsx"; // 게시판 컴포넌트
 
-
-
-
 const queryClient = new QueryClient();
 export default function App () {
     const [isLoggedInId, setIsLoggedInId] = useState(''); // id가 있으면 로그인으로 가정
