@@ -1,6 +1,19 @@
-import { Form } from "react-bootstrap";
+import {Button, CloseButton, Col, Form, Row} from "react-bootstrap";
+import {FaX, FaXmark} from "react-icons/fa6";
 
-function ReformFormFields({ title, setTitle, category, setCategory, isPrivate, setIsPrivate, content, setContent, allowedExtensions, handleFileChange, filePreviews }) {
+function ReformFormFields({ title, setTitle, category, setCategory, isPrivate, setIsPrivate, content,
+                              setContent, allowedExtensions, handleFileChange, filePreviews, setFilePreviews, filenames, setFilenames }) {
+
+    // 이미지 삭제 함수
+    const handleImageDelete = (filenameToDelete) => {
+        const updatedPreviews = filePreviews.filter((filename) => filename !== filenameToDelete);
+        setFilePreviews(updatedPreviews);
+
+        // 파일 이름도 업데이트
+        const updatedFilenames = filenames.filter((filename) => !filenameToDelete.includes(filename));
+        setFilenames(updatedFilenames);
+    };
+
     return (
         <>
             <Form.Group controlId="postTitle">
@@ -48,25 +61,41 @@ function ReformFormFields({ title, setTitle, category, setCategory, isPrivate, s
             </Form.Group>
 
             <Form.Group controlId="formFile" className="mt-3">
-                <Form.Label>첨부 파일 (허용된 파일: {allowedExtensions.join(", ")})</Form.Label>
+                <Form.Label>사진 첨부 (최대 10MB, 허용되는 파일: {allowedExtensions.join(", ")})</Form.Label>
+                <Col md={5}>
                 <Form.Control
                     type="file"
                     multiple
                     onChange={handleFileChange}
                     accept="image/*" // 이미지 파일만 선택 가능
                 />
+                </Col>
                 <div className="mt-3">
                     {filePreviews.length > 0 && (
                         <div>
-                            <h5>이미지 미리보기</h5>
-                            {filePreviews.map((preview, index) => (
-                                <img
-                                    key={index}
-                                    src={preview}
-                                    alt="미리보기"
-                                    style={{ maxWidth: "200px", marginRight: "10px" }}
-                                />
-                            ))}
+                            <h5>첨부파일 이미지 미리보기</h5>
+                            <Row>
+                                {filePreviews.map((preview, index) => (
+                                    <Col key={index} md={2} className="mb-3 position-relative">
+                                        <div style={{position: "relative"}}>
+                                            <img
+                                                key={index}
+                                                src={preview}
+                                                alt="미리보기"
+                                                style={{maxWidth: "200px", marginRight: "10px", borderRadius: "4px"}}
+                                            />
+                                            <Button
+                                                variant="secondary"
+                                                size="sm"
+                                                style={{position: 'absolute', top: '0px', right: '0px'}}
+                                                onClick={() => handleImageDelete(preview)}
+                                            >
+                                                <FaXmark/>
+                                            </Button>
+                                        </div>
+                                    </Col>
+                                ))}
+                            </Row>
                         </div>
                     )}
                 </div>

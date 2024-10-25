@@ -1,0 +1,14 @@
+.report-detail {
+    width : 1200px;
+    display : flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+}
+.post-info {
+    width : 800px;
+}
+
+.report-detail-list{
+    width : 400px;
+}

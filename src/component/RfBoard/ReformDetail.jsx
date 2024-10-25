@@ -3,20 +3,40 @@ import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import '../../css/RfBoard/ReformDetail.css'
 import ReformCommentWrite from "./ReformCommentWrite.jsx";
 import ReformCommentList from "./ReformCommentList.jsx";
-import {useEffect, useState} from "react";
 import axios from 'axios'; // HTTP 요청을 기본적으로 비동기로 수행하기 위해 자바스크립트에서 널리 사용되는 라이브러리
 import StarRating from "../StarRating.jsx"; // 별점 컴포넌트 import
+import {useEffect, useRef, useState} from "react";
+import ReportFormModal from "../Modal/ReportFormModal.jsx"; // HTTP 요청을 기본적으로 비동기로 수행하기 위해 자바스크립트에서 널리 사용되는 라이브러리
 
 export default function ReformDetail({ isLoggedInId }) {
     const { post } = useLocation().state || {}; // location.state에서 post를 가져옴
     const navigate = useNavigate();
     const [currentPost, setCurrentPost] = useState(post);
     const [rating, setRating] = useState(0); // 별점 상태 추가
+    const [showModal, setShowModal] = useState(false);
+
+    // useRef로 API 호출 여부를 추적하기 위한 플래그 설정
+    const hasFetchedPost = useRef(false);
 
     useEffect(() => {
         if (!post) {
             // 게시글 정보가 없으면 목록으로 이동
             navigate('/posts');
+        } else if (!hasFetchedPost.current) {
+            // 플래그가 false일 때만 API 호출
+            hasFetchedPost.current = true; // 플래그 설정
+            // 서버로부터 조회된 게시글 정보 가져오기 (조회수 증가 포함)
+            const fetchPostDetail = async () => {
+                try {
+                    const response = await axios.get(`http://localhost:8080/api/posts/${post.postId}`);
+                    setCurrentPost(response.data); // 서버에서 가져온 데이터로 업데이트
+                } catch (error) {
+                    console.error("게시글 정보를 불러오는 중 오류 발생:", error);
+                    alert("게시글 정보를 불러오는 중 오류가 발생했습니다.");
+                    navigate('/posts');
+                }
+            };
+            fetchPostDetail();
         }
     }, [post, navigate]);
 
@@ -73,7 +93,21 @@ export default function ReformDetail({ isLoggedInId }) {
         return allowedExtensions.includes(extension);
     };
 
-    console.log(currentPost.filenames)
+    const handleAddReport = async ({ reportData }) => {
+        try {
+            // Axios는 자동으로 Content-Type: application/json 설정
+            const resp = await axios.post(`http://localhost:8080/api/report/addReport/${currentPost.postId}`, reportData);
+
+            // 업데이트된 데이터를 다시 가져옴
+            const updateReport = await axios.get(`http://localhost:8080/api/posts/${currentPost.postId}`);
+            setCurrentPost(updateReport.data);
+
+            return true;
+        } catch (error) {
+            console.error('Error submitting report:', error);
+            return false;
+        }
+    };
 
 
     const handleDelete = async () => {
@@ -116,6 +150,14 @@ export default function ReformDetail({ isLoggedInId }) {
         navigate(`/posts/edit/${currentPost.postId}`, { state: { post: currentPost } });
     };
 
+    // 신고 모달 열기 / 닫기
+    const handleShowModal = () => {
+        setShowModal(true);
+    }
+    const handleCloseModal = () => {
+        setShowModal(false);
+    }
+
 
     return (
         <Container className='detail-container' fluid style={{padding: "0px", marginTop: "10px", marginBottom: "10px"}}>
@@ -127,6 +169,16 @@ export default function ReformDetail({ isLoggedInId }) {
                                 <Col>
                                     <h2>{currentPost.title}</h2>
                                 </Col>
+                                <Col md={1}>
+                                    <Button className="btn-danger" onClick={handleShowModal}>신고</Button>
+                                    <ReportFormModal
+                                        show={showModal}
+                                        handleClose={handleCloseModal}
+                                        handleSubmit={handleAddReport}
+                                        postId={currentPost.postId}
+                                        userId={isLoggedInId}
+                                    />
+                                </Col>
                             </Row>
                         </Card.Header>
                         <Card.Header>
@@ -137,14 +189,17 @@ export default function ReformDetail({ isLoggedInId }) {
                                 <Col>
                                     <p><strong>상태: {currentPost.status}</strong></p>
                                 </Col>
+                                <Col><p><strong>공개 여부:</strong> {currentPost.isPrivate === 'Y' ? '공개' : '비공개'}</p></Col>
+                                <Col md={2}>
+                                    <p className="postReportCount"><strong>신고수:</strong> {currentPost.reportCount}</p>
+                                </Col>
                             </Row>
                         </Card.Header>
                         <Card.Header>
                             <Row>
                                 <Col md={2}><p><strong>작성자:</strong> {currentPost.userId}</p></Col>
                                 <Col><p><strong>작성일:</strong> {new Date(currentPost.createdAt).toLocaleDateString()}</p></Col>
-                                <Col><p><strong>조회수:</strong> {currentPost.readCount}</p></Col>
-                                <Col><p><strong>공개 여부:</strong> {currentPost.isPrivate === 'Y' ? '공개' : '비공개'}</p></Col>
+                                <Col md={2}><p><strong>조회수:</strong> {currentPost.readCount}</p></Col>
                             </Row>
                         </Card.Header>
                         <Card.Body>

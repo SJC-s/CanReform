@@ -1,0 +1,15 @@
+.reportTitle {
+    width : 100%;
+}
+
+.reportContent {
+    resize : none;
+}
+
+.btnModal {
+    text-align: right;
+}
+
+.btnModal Button {
+    margin-left : 15px;
+}

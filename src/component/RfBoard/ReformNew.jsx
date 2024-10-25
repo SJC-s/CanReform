@@ -81,6 +81,7 @@ export default function ReformNew() {
                                     allowedExtensions={allowedExtensions}
                                     handleFileChange={handleFileChange}
                                     filePreviews={filePreviews}
+                                    setFilePreviews={setFilePreviews}
                                 />
                                 <div className="mt-4">
                                     <Button variant="primary" type="submit">
