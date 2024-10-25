@@ -100,7 +100,7 @@ export default function ReformReport({ isLoggedInId }) {
                                 {post.isPrivate === 'N' && post.userId !== isLoggedInId ? (
                                     <span style={{color: 'grey'}}>{post.title}</span>
                                 ) : (
-                                    <Link to={`/posts/${post.postId}`} state={{post}}>
+                                    <Link to={`/report/details/${post.postId}`} state={{post}}>
                                         {post.title}
                                     </Link>
                                 )}

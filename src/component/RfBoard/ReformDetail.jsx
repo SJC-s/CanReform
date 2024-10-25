@@ -160,7 +160,6 @@ export default function ReformDetail({ isLoggedInId }) {
                                 <Col md={2}><p><strong>작성자:</strong> {currentPost.userId}</p></Col>
                                 <Col><p><strong>작성일:</strong> {new Date(currentPost.createdAt).toLocaleDateString()}</p></Col>
                                 <Col md={2}><p><strong>조회수:</strong> {currentPost.readCount}</p></Col>
-
                             </Row>
                         </Card.Header>
                         <Card.Body>

@@ -3,6 +3,7 @@ import ReformBoard from "./ReformBoard.jsx";
 import ReformDetail from "./ReformDetail.jsx";
 import ReformNew from "./ReformNew.jsx";
 import ReformEdit from "./ReformEdit.jsx";
+import ReformReportDetail from "./ReformReportDetail.jsx";
 import ReformReport from "./ReformReport.jsx";
 
 export default function ReformPage({ isLoggedInId }) {
@@ -12,6 +13,7 @@ export default function ReformPage({ isLoggedInId }) {
             <Route path="/:postId" element={<ReformDetail isLoggedInId={isLoggedInId}/>} />
             <Route path="/write" element={<ReformNew />} />
             <Route path="/edit/:postId" element={<ReformEdit />} />
+            <Route path="/report" element={<ReformReport isLoggedInId={isLoggedInId} />} />
         </Routes>
     )
 }
