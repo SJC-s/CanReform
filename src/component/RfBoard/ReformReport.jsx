@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
-import { FaLock, FaUnlockAlt } from "react-icons/fa";
+import {useEffect, useState} from 'react';
+import {Link} from "react-router-dom";
+import {FaLock, FaUnlockAlt} from "react-icons/fa";
 import '../../css/RfBoard/ReformBoard.css';
 
 export default function ReformReport({ isLoggedInId }) {
@@ -31,8 +31,7 @@ export default function ReformReport({ isLoggedInId }) {
                 // 기존 아이템과 새로 받은 데이터를 결합하여 중복 제거
                 setItems(prevItems => {
                     const combinedItems = [...prevItems, ...processedData];
-                    const uniqueItems = Array.from(new Map(combinedItems.map(item => [item.postId, item])).values());
-                    return uniqueItems;  // 중복 제거된 항목만 설정
+                    return Array.from(new Map(combinedItems.map(item => [item.postId, item])).values());  // 중복 제거된 항목만 설정
                 });
 
                 if (data.length < 10) setHasMore(false);  // 10개 미만이면 더 이상 데이터 없음

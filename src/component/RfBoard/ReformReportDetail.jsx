@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
-import {CardBody, CardGroup, CardHeader, Col, Container, Row, Table} from "react-bootstrap";
-import {useMutation, useQuery, useQueryClient} from "react-query";
+import {CardBody, CardGroup, CardHeader, Col, Container, Row} from "react-bootstrap";
 
 const ReformReportDetail = ({ isLoggedInId }) => {
     const { postId } = useParams();
