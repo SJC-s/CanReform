@@ -22,10 +22,38 @@ export default function ReformDetail({ isLoggedInId }) {
 
 
 
-    const handleRatingChange = (newRating) => {
+    const handleRatingChange = async (newRating) => {
         console.log("Selected Rating:", newRating); // 새로운 별점 출력
         setRating(newRating); // 상태 업데이트
         // 여기에서 API 호출 등을 통해 평점을 저장할 수 있습니다.
+
+        // 별점 데이터를 서버로 전송하는 API 요청
+        try {
+            const token = localStorage.getItem('token');
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            };
+
+            // 서버로 전송할 데이터
+            const ratingData = {
+                postId: currentPost.postId,
+                userId: isLoggedInId,
+                rating: newRating,
+            };
+
+            // POST 요청을 통해 별점 데이터를 서버로 전송
+            const response = await axios.post('http://localhost:8080/api/ratings', ratingData, config);
+
+            if (response.status === 200) {
+                console.log("별점 전송 성공:", response.data);
+                alert("별점이 저장되었습니다.");
+            }
+        } catch (error) {
+            console.error("별점 전송 중 오류 발생:", error);
+            alert("별점 저장 중 오류가 발생했습니다.");
+        }
     };
 
 
@@ -131,7 +159,7 @@ export default function ReformDetail({ isLoggedInId }) {
                             {isLoggedInId && (
                                 <div>
                                     <StarRating rating={rating} onRatingChange={handleRatingChange} />
-                                    <p>현재 평점: {rating}</p>
+                                    <p id="star">현재 평점: {rating}</p>
                                 </div>
                             )}
                             {/* 파일 링크 */}

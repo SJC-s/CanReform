@@ -1,8 +1,25 @@
 .star-rating {
     display: flex;
     align-items: center;
+    margin-left: 500px;
 }
 
 .star-rating img {
     margin-right: 5px; /* 별 사이 간격 */
+    transition: transform 0.2s ease; /* 별 클릭 시 애니메이션 */
+}
+
+.star-rating img:hover {
+    transform: scale(1.15); /* 살짝 확대 */
+    transition: transform 0.1s ease;
+}
+
+
+#star {
+    margin-left: 550px;
+}
+
+#star2 {
+    margin-left: 10px;
+    margin-top: 15px;
 }
