@@ -51,27 +51,22 @@ export default function ReformDetail({ isLoggedInId }) {
         return allowedExtensions.includes(extension);
     };
 
-    const handleAddReport = async ({reportData}) => {
-        try{
-            console.log(reportData)
-            const resp = await fetch(`http://localhost:8080/api/report/addReport/${currentPost.postId}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(reportData)
-            });
-            if (!resp.ok) {
-                throw Error("잘못된 신고 요청입니다.")
-            }
+    const handleAddReport = async ({ reportData }) => {
+        try {
+            // Axios는 자동으로 Content-Type: application/json 설정
+            const resp = await axios.post(`http://localhost:8080/api/report/addReport/${currentPost.postId}`, reportData);
+
+            // 업데이트된 데이터를 다시 가져옴
             const updateReport = await axios.get(`http://localhost:8080/api/posts/${currentPost.postId}`);
             setCurrentPost(updateReport.data);
+
             return true;
         } catch (error) {
             console.error('Error submitting report:', error);
-            return false; // 실패 시 false 반환
+            return false;
         }
-    }
+    };
+
 
     // 게시글 삭제 함수
     const handleDelete = async () => {
@@ -143,7 +138,6 @@ export default function ReformDetail({ isLoggedInId }) {
                                         userId={isLoggedInId}
                                     />
                                 </Col>
-
                             </Row>
                         </Card.Header>
                         <Card.Header>
@@ -165,7 +159,6 @@ export default function ReformDetail({ isLoggedInId }) {
                                 <Col md={2}><p><strong>작성자:</strong> {currentPost.userId}</p></Col>
                                 <Col><p><strong>작성일:</strong> {new Date(currentPost.createdAt).toLocaleDateString()}</p></Col>
                                 <Col md={2}><p><strong>조회수:</strong> {currentPost.readCount}</p></Col>
-
                             </Row>
                         </Card.Header>
                         <Card.Body>
