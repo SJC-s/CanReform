@@ -9,6 +9,7 @@ import ReformPage from "./component/RfBoard/ReformPage.jsx";
 import Signup from "./component/RfAuthorization/Signup.jsx";
 import Login from "./component/RfAuthorization/Login.jsx";
 import {useEffect, useState} from "react";
+import {GoogleOAuthProvider} from "@react-oauth/google"; // 게시판 컴포넌트
 import {jwtDecode} from "jwt-decode";
 import ReformReport from "./component/RfBoard/ReformReport.jsx";
 import ReformReportDetail from "./component/RfBoard/ReformReportDetail.jsx"; // 게시판 컴포넌트
@@ -30,6 +31,7 @@ export default function App () {
 
 
     return (
+        <GoogleOAuthProvider clientId={"548795536953-gjsd2m5vvbrcmtp61vga5r59m8598va5.apps.googleusercontent.com"}>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
               <div className="App">
@@ -49,5 +51,6 @@ export default function App () {
               </div>
           </BrowserRouter>
         </QueryClientProvider>
+        </GoogleOAuthProvider>
     );
 }

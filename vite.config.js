@@ -6,6 +6,13 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: '0.0.0.0', // 모든 네트워크 인터페이스에서 접근 허용
-    port: 5173
+    port: 5173,
+    proxy: {
+      '/api': 'http://localhost:8080',
+    },
+    headers: {
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Embedder-Policy": "require-corp"
+    },
   }
 })

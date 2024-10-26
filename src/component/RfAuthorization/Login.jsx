@@ -5,6 +5,7 @@ import {useMutation} from "react-query";
 import {FaLock, FaUser} from "react-icons/fa";
 import {TiDelete} from "react-icons/ti";
 import {jwtDecode} from "jwt-decode";
+import GoogleAuthLogin from "./GoogleAuthLogin.jsx";
 
 export default function Login({ setIsLoggedInId }) {
     const [successMessage, setSuccessMessage] = useState('');
@@ -158,6 +159,7 @@ export default function Login({ setIsLoggedInId }) {
                             >
                                 {isLoading ? '로그인 중...' : '로그인'}
                             </Button>
+                            <GoogleAuthLogin/>
                             <Button
                                 variant="secondary"
                                 onClick={() => navigate(-1)}
