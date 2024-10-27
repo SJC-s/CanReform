@@ -11,6 +11,9 @@ export default function Signup() {
     const [password, setPassword] = useState('');
     const [username , setUsername] = useState('');
     const [userId, setUserId] = useState('');
+    const [userIdError, setUserIdError] = useState('');
+    const [emailError, setEmailError] = useState('');
+
 
     // useMutation 훅을 사용하여 회원가입 요청을 처리
     const { mutate, isLoading, isError, error } = useMutation(
@@ -49,22 +52,59 @@ export default function Signup() {
     );
 
 
-    const handleSignup = () => {
-        // 아이디 중복 체크 API 호출
+    // 아이디 중복 확인
+    const checkUserId = ((userId) => {
+        if (userId.length < 4 || userId.length > 20) {
+            setUserIdError('아이디는 4자 이상 20자 이하로 입력하세요.');
+            return;
+        }
+
         fetch(`http://localhost:8080/api/check-userId?userId=${userId}`)
             .then((resp) => resp.json())
             .then((isExists) => {
                 if (isExists) {
-                    // 아이디가 이미 존재하는 경우 처리
-                    alert('아이디가 이미 존재합니다. 다른 아이디를 사용하세요.');
+                    setUserIdError('아이디가 이미 존재합니다. 다른 아이디를 사용하세요.');
                 } else {
-                    // 중복이 없으면 회원가입 진행
-                    mutate();
+                    setUserIdError(''); // 오류 없음
                 }
             })
-            .catch((error) => {
-                alert('오류 발생: ' + error.message);
+            .catch(() => {
+                setUserIdError('아이디 확인 중 오류 발생');
             });
+    });
+
+    // 이메일 중복 확인
+    const checkEmail = ((email) => {
+        if (!email.includes('@')) {
+            setEmailError('유효한 이메일 주소를 입력하세요.');
+            return;
+        }
+
+        fetch(`http://localhost:8080/api/check-email?email=${email}`)
+            .then((resp) => resp.json())
+            .then((emailExists) => {
+                if (emailExists) {
+                    setEmailError('이메일이 이미 사용 중입니다. 다른 이메일을 사용하세요.');
+                } else {
+                    setEmailError(''); // 오류 없음
+                }
+            })
+            .catch(() => {
+                setEmailError('이메일 확인 중 오류 발생');
+            });
+    });
+
+    // 핸들러 함수들
+    const handleUserIdChange = (e) => {
+        const value = e.target.value;
+        setUserId(value);
+        checkUserId(value);
+    };
+
+    const handleEmailChange = (e) => {
+        const value = e.target.value;
+        setEmail(value);
+        checkEmail(value);
     };
 
 
@@ -77,17 +117,17 @@ export default function Signup() {
                             <Col md={1}>
                                 <FaUser/>
                             </Col>
-                            <Col>
+                            <Col  style={{textAlign:"left"}}>
                                 <Form.Group controlId="user_id" className="mb-3">
-
                                     <Form.Control
-                                        placeholder="사용자 아이디"
+                                        placeholder="사용자 아이디 (4~20자)"
                                         type="text"
                                         name="user_id"
                                         value={userId}
-                                        onChange={(e) => setUserId(e.target.value)}
+                                        onChange={handleUserIdChange}
                                         required
                                     />
+                                    {userIdError && <Form.Text className="text-danger">{userIdError}</Form.Text>}
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -98,12 +138,13 @@ export default function Signup() {
                             <Col>
                                 <Form.Group controlId="password" className="mb-3">
                                     <Form.Control
-                                        placeholder="비밀번호"
+                                        placeholder="비밀번호 (6~20자)"
                                         type="password"
                                         name="password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
+                                        autocomplete="new-password"
                                     />
                                 </Form.Group>
                             </Col>
@@ -136,16 +177,18 @@ export default function Signup() {
                                         type="email"
                                         name="email"
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        onChange={handleEmailChange}
                                         required
                                     />
+                                    {emailError && <Form.Text className="text-danger">{emailError}</Form.Text>}
                                 </Form.Group>
                             </Col>
                         </Row>
 
                         <div className="d-grid gap-2">
-                            <Button variant="primary" onClick={handleSignup} disabled={isLoading}>
-                                {isLoading ? <Spinner as="span" animation="border" size="sm" /> : '회원가입'}
+                            <Button variant="primary" onClick={() => mutate()}
+                                    disabled={isLoading || userIdError || emailError || userId.length * email.length === 0}>
+                                {isLoading ? <Spinner as="span" animation="border" size="sm"/> : '회원가입'}
                             </Button>
                             <Button variant="secondary" onClick={() => navigate(-1)}>돌아가기</Button>
                             <Button variant="danger" onClick={() => {
@@ -153,6 +196,8 @@ export default function Signup() {
                                 setUsername('');
                                 setPassword('');
                                 setEmail('');
+                                setUserIdError('');
+                                setEmailError('');
                             }}>초기화</Button>
                         </div>
 
