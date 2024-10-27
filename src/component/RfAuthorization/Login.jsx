@@ -159,7 +159,7 @@ export default function Login({ setIsLoggedInId }) {
                             >
                                 {isLoading ? '로그인 중...' : '로그인'}
                             </Button>
-                            <GoogleAuthLogin/>
+                            <GoogleAuthLogin setIsLoggedInId={setIsLoggedInId}/>
                             <Button
                                 variant="secondary"
                                 onClick={() => navigate(-1)}
