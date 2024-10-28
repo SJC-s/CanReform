@@ -12,13 +12,17 @@ import {useEffect, useState} from "react";
 import {GoogleOAuthProvider} from "@react-oauth/google"; // 게시판 컴포넌트
 import {jwtDecode} from "jwt-decode";
 import ReformReport from "./component/RfBoard/ReformReport.jsx";
-import ReformReportDetail from "./component/RfBoard/ReformReportDetail.jsx"; // 게시판 컴포넌트
+import ReformReportDetail from "./component/RfBoard/ReformReportDetail.jsx";
+import FindUserId from "./component/RfAuthorization/FindUserId.jsx";
+import FindPassword from "./component/RfAuthorization/FindPassword.jsx";
+import ResetPassword from "./component/RfAuthorization/ResetPassword.jsx"; // 게시판 컴포넌트
 
 const queryClient = new QueryClient();
 export default function App () {
     const [isLoggedInId, setIsLoggedInId] = useState(''); // id가 있으면 로그인으로 가정
+    const googleApiKey = import.meta.env.VITE_Google_Client_ID
 
-    useEffect(() => {
+        useEffect(() => {
         // 로그인 여부 확인 (예: 로컬 스토리지에 토큰이 있는지 확인)
         const token = localStorage.getItem("token");
 
@@ -31,7 +35,7 @@ export default function App () {
 
 
     return (
-        <GoogleOAuthProvider clientId={"548795536953-gjsd2m5vvbrcmtp61vga5r59m8598va5.apps.googleusercontent.com"}>
+        <GoogleOAuthProvider clientId={googleApiKey}>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
               <div className="App">
@@ -43,6 +47,9 @@ export default function App () {
                       <Route path="/posts/*" element={<ReformPage isLoggedInId={isLoggedInId}/>} /> {/* 게시판 페이지 */}
                       <Route path="/signup" element={ isLoggedInId ? <Navigate to="/" replace /> : <Signup />} />
                       <Route path="/login" element={ isLoggedInId ? <Navigate to="/" replace /> : <Login setIsLoggedInId={setIsLoggedInId}/>} />
+                      <Route path="/findUserId" element={ isLoggedInId ? <Navigate to="/" replace /> : <FindUserId />} />
+                      <Route path="/findPassword" element={ isLoggedInId ? <Navigate to="/" replace /> : <FindPassword />} />
+                      <Route path="/resetPassword" element={ isLoggedInId ? <Navigate to="/" replace /> : <ResetPassword />} />
                       <Route path="/report" element={<ReformReport isLoggedInId={isLoggedInId}/>} /> {/* 신고 처리 페이지 */}
                       <Route path="/report/details/:postId" element={<ReformReportDetail isLoggedInId={isLoggedInId}/>}/>
                   </Routes>

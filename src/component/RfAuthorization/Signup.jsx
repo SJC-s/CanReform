@@ -59,7 +59,7 @@ export default function Signup() {
             return;
         }
 
-        fetch(`http://localhost:8080/api/check-userId?userId=${userId}`)
+        fetch(`http://localhost:8080/api/checkUserId?userId=${userId}`)
             .then((resp) => resp.json())
             .then((isExists) => {
                 if (isExists) {
@@ -80,7 +80,7 @@ export default function Signup() {
             return;
         }
 
-        fetch(`http://localhost:8080/api/check-email?email=${email}`)
+        fetch(`http://localhost:8080/api/checkEmail?email=${email}`)
             .then((resp) => resp.json())
             .then((emailExists) => {
                 if (emailExists) {

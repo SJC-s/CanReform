@@ -1,6 +1,5 @@
 import { GoogleLogin } from '@react-oauth/google';
 import {useNavigate} from "react-router-dom";
-import {useMutation} from "react-query";
 import {jwtDecode} from "jwt-decode";
 
 export default function GoogleAuthLogin({setIsLoggedInId}) {
@@ -19,6 +18,7 @@ export default function GoogleAuthLogin({setIsLoggedInId}) {
         console.log("로그인 성공", data);
         if (data) {
             const decoded = jwtDecode(data.token);
+            localStorage.setItem('token', data.token);
             setIsLoggedInId(decoded.sub); // 백엔드에서 JWT에 userId를 클레임으로 포함시켰다고 가정
         }
         navigate(-1)

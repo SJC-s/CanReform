@@ -119,6 +119,7 @@ export default function Login({ setIsLoggedInId }) {
                                         onChange={handleIdChange}
                                         onKeyDown={handleKeyDown}
                                         required
+                                        autoComplete={userId}
                                     />
                                     {showClearIdButton && (
                                         <Button
@@ -146,6 +147,7 @@ export default function Login({ setIsLoggedInId }) {
                                         onChange={handlePasswordChange}
                                         onKeyDown={handleKeyDown}
                                         required
+                                        autoComplete="current-password"
                                     />
                                 </Form.Group>
                             </Col>
@@ -161,10 +163,20 @@ export default function Login({ setIsLoggedInId }) {
                             </Button>
                             <GoogleAuthLogin setIsLoggedInId={setIsLoggedInId}/>
                             <Button
-                                variant="secondary"
+                                variant="warning"
                                 onClick={() => navigate(-1)}
                             >
                                 돌아가기
+                            </Button>
+                        </div>
+
+                        {/* 아이디/비밀번호 찾기 링크 */}
+                        <div className="d-flex justify-content-between mt-3">
+                            <Button variant="secondary" onClick={() => navigate('/findUserid')}>
+                                아이디 찾기
+                            </Button>
+                            <Button variant="secondary" onClick={() => navigate('/findPassword')}>
+                                비밀번호 찾기
                             </Button>
                         </div>
                     </Form>
