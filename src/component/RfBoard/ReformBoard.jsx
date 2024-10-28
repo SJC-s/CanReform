@@ -54,7 +54,7 @@ export default function ReformBoard({ isLoggedInId }) {
 
     const getPageNumbers = () => {
         // 시작 페이지와 끝 페이지를 계산
-        const totalPages = posts.totalPages; // 전체 페이지 수
+        const totalPages = posts.page.totalPages; // 전체 페이지 수
         let startPage = Math.max(1, currentPage - Math.floor(MAX_PAGES_DISPLAY / 2));
         let endPage = Math.min(totalPages, startPage + MAX_PAGES_DISPLAY - 1);
 
@@ -164,6 +164,7 @@ export default function ReformBoard({ isLoggedInId }) {
                     <th style={{width: '10%'}}>작성자</th>
                     <th style={{width: '10%'}}>조회수</th>
                     <th style={{width: '10%'}}>댓글수</th>
+                    <th style={{width: '5%'}}>신고수</th>
                     <th style={{width: '10%'}}>작성일</th>
                 </tr>
                 </thead>
@@ -185,6 +186,7 @@ export default function ReformBoard({ isLoggedInId }) {
                             <td>{post.userId}</td>
                             <td>{post.readCount}</td>
                             <td>{post.commentCount}</td>
+                            <td>{post.reportCount}</td>
                             <td>{new Date(post.createdAt).toLocaleDateString()}</td>
                         </tr>
                     ))
@@ -206,7 +208,7 @@ export default function ReformBoard({ isLoggedInId }) {
             </div>
 
             {/* 페이지네이션 */}
-            {posts && posts.totalPages > 1 && (
+            {posts && posts.page.totalPages > 0 && (
                 <div className="pagination">
                     <button onClick={() => setCurrentPage(1)}>{'<<'}</button>
                     <button onClick={() => setCurrentPage(Math.max(1, currentPage - (MAX_PAGES_DISPLAY/2)))}>{'<'}</button>

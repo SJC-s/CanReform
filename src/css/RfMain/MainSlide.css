@@ -49,21 +49,43 @@ img {
     right: 10px;
 }
 
-.banner-list{
-    position : absolute;
-    display : flex;
-    top : 96%;
-    left : 50%;
-    transform: translate(-50%,-50%);
+.banner-list-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;  /* 수평 중앙 정렬 */
+    align-items: center;
+    margin-top: -80px;
 }
 
-.banner-list button{
-    border-radius : 50%;
-    background-color: lightgray;
-    width : 1vw;
-    height : 1vw;
+
+.banner-list {
+    display: flex;
+    gap: 1rem;                /* 각 슬라이드 버튼 간의 간격을 설정 */
+    list-style: none;         /* 기본 리스트 스타일 제거 */
+    padding: 0;
+}
+
+.banner-list button {
+    border-radius: 50%;       /* 버튼을 원 모양으로 */
+    width : 15px;
+    height : 15px;
+    background-color: lightgray;  /* 기본 버튼 색상 */
     padding : 0;            /* 기본 패딩 삭제 */
     z-index : 10;           /* 버튼 위치를 그림 위로 */
+    border: none;             /* 버튼 경계선 제거 */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+.banner-list button.active {
+    background-color: white;  /* 활성화된 버튼의 색상을 강조 */
+    transform: scale(1.2);      /* 활성화된 버튼을 살짝 확대 */
+    /* 기본 둥근 모서리를 제거 */
+    /* 왼쪽 아래 모서리를 둥글게 */
+    /* 오른쪽 아래 모서리를 둥글게 */
+    border-radius: 2.5em;
+    width: 2.5vw;
 }
 
 .banner-list div{
@@ -72,9 +94,5 @@ img {
 
 .banner-list button:hover{
     background-color : gray;
-}
-
-.banner-list .active{
-    background-color : black;
 }
 

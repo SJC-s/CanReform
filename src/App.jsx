@@ -2,21 +2,21 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/App.css'
 import MainPage from "./component/RfMain/MainPage.jsx";
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
-import LayoutHeader from "./component/RfLayout/LayoutHeader.jsx";
-import LayoutFooter from "./component/RfLayout/LayoutFooter.jsx";
 import {QueryClient, QueryClientProvider} from "react-query";
-import ReformPage from "./component/RfBoard/ReformPage.jsx";
 import Signup from "./component/RfAuthorization/Signup.jsx";
 import Login from "./component/RfAuthorization/Login.jsx";
 import {useEffect, useState} from "react";
-import {GoogleOAuthProvider} from "@react-oauth/google"; // 게시판 컴포넌트
+import {GoogleOAuthProvider} from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode";
+import LayoutHeader from "./component/RfLayout/LayoutHeader.jsx";
+import LayoutFooter from "./component/RfLayout/LayoutFooter.jsx";
+import ReformPage from "./component/RfBoard/ReformPage.jsx";
 import ReformReport from "./component/RfBoard/ReformReport.jsx";
 import ReformReportDetail from "./component/RfBoard/ReformReportDetail.jsx";
 import FindUserId from "./component/RfAuthorization/FindUserId.jsx";
 import FindPassword from "./component/RfAuthorization/FindPassword.jsx";
 import ResetPassword from "./component/RfAuthorization/ResetPassword.jsx";
-import ServiceInfo from "./component/RfMain/MainService.jsx"; // 소개 페이지 import
+import ServiceInfo from "./component/RfMain/MainService.jsx";
 
 const queryClient = new QueryClient();
 export default function App () {

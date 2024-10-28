@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import '../../css/RfMain/MainSlide.css';
 
 const images = [
+    "banner-flat-christmas-sale-horizontal.jpg",
     "imgSlide01.jpg",
-    "imgSlide02.jpg",
-    "imgSlide03.jpg",
+    "banner-gradient-year-end-sale.jpg",
+    "banner-new-year-celebration-sale.jpg"
 ];
 
 export default function MainSlide() {
@@ -33,22 +34,22 @@ export default function MainSlide() {
     }
 
     return (
-        <div className="container">
-            <div className="slider">
-                <button className="prev" onClick={goToPrevious}>
-                    &#10094;
-                </button>
-                <div className="slide-track" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-                    {images.map((image, index) => (
-                        <div key={index} className={`slide ${index === currentIndex ? "active" : ""}`}>
-                            <img src={`/upload/imgSlide/${image}`} alt={`slide-${index}`} />
-                        </div>
-                    ))}
-                </div>
-                <button className="next" onClick={goToNext}>
-                    &#10095;
-                </button>
-                <ul className="banner-list gap-3">
+        <div className="slider slider-container">
+            <button className="prev" onClick={goToPrevious}>
+                &#10094;
+            </button>
+            <div className="slide-track" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+                {images.map((image, index) => (
+                    <div key={index} className={`slide ${index === currentIndex ? "active" : ""}`}>
+                        <img src={`/upload/imgSlide/${image}`} alt={`slide-${index}`} />
+                    </div>
+                ))}
+            </div>
+            <button className="next" onClick={goToNext}>
+                &#10095;
+            </button>
+            <div className="banner-list-container">
+                <ul className="banner-list">
                     {images.map((image, index) => (
                     <div key={index}>
                         <button
