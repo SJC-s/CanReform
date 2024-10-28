@@ -95,11 +95,24 @@ export default function ReformDetail({ isLoggedInId }) {
 
     const handleAddReport = async ({ reportData }) => {
         try {
+            const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
             // Axios는 자동으로 Content-Type: application/json 설정
-            const resp = await axios.post(`http://localhost:8080/api/report/addReport/${currentPost.postId}`, reportData);
+            const resp = await axios.post(
+                `http://localhost:8080/api/report/addReport/${currentPost.postId}`,
+                reportData,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}` // 인증 헤더 추가
+                    }
+                }
+            );
 
             // 업데이트된 데이터를 다시 가져옴
-            const updateReport = await axios.get(`http://localhost:8080/api/posts/${currentPost.postId}`);
+            const updateReport = await axios.get(`http://localhost:8080/api/posts/${currentPost.postId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}` // 인증 헤더 추가
+                }
+            });
             setCurrentPost(updateReport.data);
 
             return true;
