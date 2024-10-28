@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {useNavigate, useParams} from "react-router-dom";
-import {Button, Card, CardBody, CardFooter, CardGroup, CardHeader, Col, Container, Row,} from "react-bootstrap";
+import {Button, Card, CardBody, CardFooter, CardHeader, Col, Container, Row,} from "react-bootstrap";
 import '/src/css/RfBoard/ReformReportDetail.css'
 import {useMutation} from "react-query";
 
@@ -90,9 +90,9 @@ const ReformReportDetail = ({ isLoggedInId }) => {
 
     }
 
-    // 댓글 삭제 메서드
-    const deleteComments = () => {
-        fetch(`http://localhost:8080/api/comments/${commentsId}`, {
+    // 리포트 삭제 메서드
+    const deleteReports = () => {
+        fetch(`http://localhost:8080/api/report/${postId}`, {
             method : "DELETE",
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`, // 필요한 경우 토큰 추가
@@ -103,10 +103,32 @@ const ReformReportDetail = ({ isLoggedInId }) => {
                     console.log("서버 삭제 요청 중 오류가 발생하였습니다.");
                     return resp.json().then(error => { throw new Error(error.message || "삭제 요청 실패"); });
                 }
-                return resp.json();
             })
             .then(data => {
-                console.log("게시글 삭제 성공:", data);
+                console.log("리포트 삭제 성공:", data);
+                navigate("/report")
+            })
+            .catch(error => {
+                console.error("삭제 중 오류 발생:", error);
+            });
+    }
+
+    // 댓글 삭제 메서드
+    const deleteComments = () => {
+        fetch(`http://localhost:8080/api/comments/deletePost/${postId}`, {
+            method : "DELETE",
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`, // 필요한 경우 토큰 추가
+            }
+        })
+            .then(resp => {
+                if (!resp.ok) {
+                    console.log("서버 삭제 요청 중 오류가 발생하였습니다.");
+                    return resp.json().then(error => { throw new Error(error.message || "삭제 요청 실패"); });
+                }
+            })
+            .then(data => {
+                console.log("댓글 삭제 성공:", data);
                 navigate("/report")
             })
             .catch(error => {
@@ -127,7 +149,6 @@ const ReformReportDetail = ({ isLoggedInId }) => {
                     console.log("서버 삭제 요청 중 오류가 발생하였습니다.");
                     return resp.json().then(error => { throw new Error(error.message || "삭제 요청 실패"); });
                 }
-                return resp.json();
             })
             .then(data => {
             console.log("게시글 삭제 성공:", data);
@@ -140,6 +161,8 @@ const ReformReportDetail = ({ isLoggedInId }) => {
 
     const handleDeletePost = () => {
         if(confirm("게시글을 삭제하시겠습니까?")){
+            deleteReports()
+            deleteComments()
             deletePost()
         }
     }
