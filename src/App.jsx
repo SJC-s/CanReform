@@ -16,7 +16,6 @@ import ReformReportDetail from "./component/RfBoard/ReformReportDetail.jsx";
 import FindUserId from "./component/RfAuthorization/FindUserId.jsx";
 import FindPassword from "./component/RfAuthorization/FindPassword.jsx";
 import ResetPassword from "./component/RfAuthorization/ResetPassword.jsx";
-import ReformReportDetail from "./component/RfBoard/ReformReportDetail.jsx";
 import ServiceInfo from "./component/RfMain/MainService.jsx"; // 소개 페이지 import
 
 const queryClient = new QueryClient();
