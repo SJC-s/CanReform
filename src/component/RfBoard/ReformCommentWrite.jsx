@@ -97,32 +97,59 @@ export default function ReformCommentWrite() {
         <>
             <hr/>
             <Row className="comment-box">
-                <div className="comment-group">
-                    <div className="input-group">
+                {isLoggedInId ?
+                    <div className="comment-group">
+                        <div className="input-group">
                         <textarea
                             className="userid"
                             rows={1}
                             cols={18}
                             value={isLoggedInId}
                             disabled/>
+                            <textarea
+                                className="commentContent"
+                                rows={1}
+                                cols={88}
+                                ref={textarea}
+                                value={commentText}
+                                onKeyDown={handleKeyDown}
+                                onInput={handleTextAreaSize}
+                                onChange={(e) => {
+                                    setCommentText(e.target.value)
+                                }}
+                                placeholder="댓글을 입력해주세요."
+                            />
+                        </div>
+                        <div className="btns">
+                            <Button variant="primary" onClick={handleSubmit}>등록</Button>
+                            <Button variant="danger" onClick={reset}><FaUndo/></Button>
+                        </div>
+                    </div>
+                    : <div className="comment-group">
+                        <div className="input-group">
                         <textarea
-                            className="commentContent"
+                            className="userid"
                             rows={1}
-                            cols={88}
-                            ref={textarea}
-                            value={commentText}
-                            onKeyDown={handleKeyDown}
-                            onInput={handleTextAreaSize}
-                            onChange={(e) => {setCommentText(e.target.value)}}
-                            placeholder="댓글을 입력해주세요."
-                        />
-                    </div>
-                    <div className="btns">
-                        <Button variant="primary" onClick={handleSubmit}>등록</Button>
-                        <Button variant="danger" onClick={reset}><FaUndo/></Button>
-                    </div>
-                </div>
-            </Row>
-        </>
-    )
-}
+                            cols={18}
+                            value={""}
+                            disabled/>
+                            <textarea
+                                className="commentContent"
+                                rows={1}
+                                cols={88}
+                                ref={textarea}
+                                value={"로그인 후 댓글 작성이 가능합니다."}
+                                onKeyDown={handleKeyDown}
+                                onInput={handleTextAreaSize}
+                                onChange={(e) => {
+                                    setCommentText(e.target.value)
+                                }}
+                                placeholder="댓글을 입력해주세요."
+                                disabled
+                            />
+                        </div>
+                    </div>}
+                    </Row>
+                    </>
+                    )
+                }

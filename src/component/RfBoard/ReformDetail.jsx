@@ -269,8 +269,8 @@ export default function ReformDetail({ isLoggedInId }) {
                     </Card>
                 </Col>
             </Row>
-            <ReformCommentList/>
-            <ReformCommentWrite/>
+                <ReformCommentList/>
+                <ReformCommentWrite/>
         </Container>
     );
 
