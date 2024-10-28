@@ -19,7 +19,7 @@ export default function MainCoop() {
                 (<div
                     key={idx}
                     className="coopImg">
-                    <img src={`/upload/imgCoop/${img}`} alt={img}/>
+                    <img style={{width:200}} src={`/upload/imgCoop/${img}`} alt={img}/>
                 </div>))}
             </div>
         </>

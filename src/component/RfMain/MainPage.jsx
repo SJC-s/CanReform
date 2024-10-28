@@ -7,9 +7,6 @@ export default function MainPage() {
 
     return (
         <>
-            <div className='logoimg'>
-                <img src={`/upload/logo.svg`} alt='logo' onClick={()=>{window.location.href='/'}}/>
-            </div>
             <MainSlide/>
             <MainScroll/>
             <MainCoop/>

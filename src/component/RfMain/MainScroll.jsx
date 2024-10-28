@@ -1,7 +1,8 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import '../../css/RfMain/MainSlide.css';
+import '../../css/RfMain/MainScroll.css';
 import {Button} from "react-bootstrap";
 import {FaStar, FaUser} from "react-icons/fa";
+import {useNavigate} from "react-router-dom";
 
 export default function MainScroll() {
     const [posts, setPosts] = useState([]);
@@ -12,6 +13,7 @@ export default function MainScroll() {
     const loader = useRef(null);
     const [showLoadMore, setShowLoadMore] = useState(false); // 더보기 버튼 표시 여부
     const [lastIndex, setLastIndex] = useState(3); // 더보기 버튼 이전에 보여줄 항목의 수
+    const navigate = useNavigate();
 
     // 백엔드에서 게시물 및 평점 목록을 불러오는 함수
     const fetchData = useCallback(async () => {
@@ -101,74 +103,80 @@ export default function MainScroll() {
         setLastIndex(lastIndex + 3)
     };
 
-    return (
-        <div className="container">
-            <h2>최고의 의뢰글</h2>
-            {combinedData.slice(0,lastIndex).map((file, idx) => (
-                <div
-                    key={idx}
-                    className="row align-items-center bg-info-subtle mb-3 p-3"
-                    style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }} // flexbox : 수직 가운데 정렬 적용
-                >
-                    {/* 파일 이름을 이미지 경로로 설정 : 좌측 이미지 */}
-                    {/* 홀수 인덱스는 좌측에 이미지 */}
-                    {idx % 2 === 0 ? (
-                        <>
-                            <div className="col-md-6 text-center">
-                                <img
-                                    src={`http://localhost:8080/api/posts/download/${file.filenames.split(',').pop()}`}
-                                    alt={file.title}
-                                    className="img-fluid"
-                                    style={{ width: '500px', maxWidth: '100%', height: 'auto' }}
-                                />
-                            </div>
-                            <div className="col-md-6" style={{ flex: 1, textAlign: 'left', paddingLeft: '20px' }}>
-                                <p><FaUser/> <b>{file.userId}</b>
-                                    ({new Date(file.createdAt).toLocaleString('ko-KR', {
-                                        year: 'numeric',
-                                        month: '2-digit',
-                                        day: '2-digit'
-                                    })})</p>
-                                <h3>{file.title}</h3>
-                                <p>{file.content}.</p>
-                                <h6><FaStar/> {file.averageRating.toFixed(2)}</h6>
-                            </div>
-                        </>
-                    ) : (
-                        // 짝수 인덱스는 우측에 이미지
-                        <>
-                        <div className="col-md-6" style={{ flex: 1, textAlign: 'right', paddingRight: '20px' }}>
-                                <p><FaUser/> <b>{file.userId}</b>
-                                    ({new Date(file.createdAt).toLocaleString('ko-KR', {
-                                        year: 'numeric',
-                                        month: '2-digit',
-                                        day: '2-digit'
-                                    })})</p>
-                                <h3>{file.title}</h3>
-                                <p>{file.content}.</p>
-                                <h6><FaStar/> {file.averageRating.toFixed(2)}</h6>
-                            </div>
-                            <div className="col-md-6 text-center">
-                                <img
-                                    src={`http://localhost:8080/api/posts/download/${file.filenames.split(',').pop()}`}
-                                    alt={file.title}
-                                    className="img-fluid"
-                                    style={{ width: '500px', maxWidth: '100%', height: 'auto' }}
-                                />
-                            </div>
-                        </>
-                    )}
-                </div>
-            ))}
-            {/* 스크롤의 끝에 도달하면 이 요소가 관찰됨 */}
-            <div ref={loader} />
+    // 게시물 클릭 시 해당 게시물 상세 페이지로 이동하는 함수
+    const handlePostClick = (postId) => {
+        navigate(`/posts/${postId}`);
+    };
 
-            {/* 더보기 버튼 */}
-            {showLoadMore && (
-                <Button onClick={handleLoadMore} style={{ marginTop: '20px' }}>
-                    더보기
-                </Button>
-            )}
+    return (
+        <div className="scroll-container">
+            <div className="scroll-container-max-width">
+                <h2>BEST <b>REVIEW</b></h2>
+                {combinedData.slice(0,lastIndex).map((file, idx) => (
+                    <div
+                        key={idx}
+                        className="row align-items-center bg-info-subtle mb-3 p-3"
+                        style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }} // flexbox : 수직 가운데 정렬 적용
+                        onClick={() => handlePostClick(file.postId)}
+                    >
+                        {/* 파일 이름을 이미지 경로로 설정 : 좌측 이미지 */}
+                        {/* 홀수 인덱스는 좌측에 이미지 */}
+                        {idx % 2 === 0 ? (
+                            <>
+                                <div className="col-md-6 text-center">
+                                    <img
+                                        src={`http://localhost:8080/api/posts/download/${file.filenames.split(',').pop()}`}
+                                        alt={file.title}
+                                        className="img-fluid"
+                                    />
+                                </div>
+                                <div className="col-md-6" style={{ flex: 1, textAlign: 'left', paddingLeft: '20px' }}>
+                                    <p><FaUser/> <b>{file.userId}</b>
+                                        ({new Date(file.createdAt).toLocaleString('ko-KR', {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit'
+                                        })})</p>
+                                    <h3>{file.title}</h3>
+                                    <p>{file.content}.</p>
+                                    <h6><FaStar/> {file.averageRating.toFixed(2)}</h6>
+                                </div>
+                            </>
+                        ) : (
+                            // 짝수 인덱스는 우측에 이미지
+                            <>
+                            <div className="col-md-6" style={{ flex: 1, textAlign: 'right', paddingRight: '20px' }}>
+                                    <p><FaUser/> <b>{file.userId}</b>
+                                        ({new Date(file.createdAt).toLocaleString('ko-KR', {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit'
+                                        })})</p>
+                                    <h3>{file.title}</h3>
+                                    <p>{file.content}.</p>
+                                    <h6><FaStar/> {file.averageRating.toFixed(2)}</h6>
+                                </div>
+                                <div className="col-md-6 text-center">
+                                    <img
+                                        src={`http://localhost:8080/api/posts/download/${file.filenames.split(',').pop()}`}
+                                        alt={file.title}
+                                        className="img-fluid"
+                                    />
+                                </div>
+                            </>
+                        )}
+                    </div>
+                ))}
+                {/* 스크롤의 끝에 도달하면 이 요소가 관찰됨 */}
+                <div ref={loader} />
+
+                {/* 더보기 버튼 */}
+                {showLoadMore && (
+                    <Button onClick={handleLoadMore} style={{ marginTop: '20px' }}>
+                        더보기
+                    </Button>
+                )}
+            </div>
         </div>
     )
 }
