@@ -12,6 +12,7 @@ import {useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode";
 import ReformReport from "./component/RfBoard/ReformReport.jsx";
 import ReformReportDetail from "./component/RfBoard/ReformReportDetail.jsx"; // 게시판 컴포넌트
+import ServiceInfo from "./component/RfMain/MainService.jsx"; // 소개 페이지 import
 
 const queryClient = new QueryClient();
 export default function App () {
@@ -43,6 +44,7 @@ export default function App () {
                       <Route path="/login" element={ isLoggedInId ? <Navigate to="/" replace /> : <Login setIsLoggedInId={setIsLoggedInId}/>} />
                       <Route path="/report" element={<ReformReport isLoggedInId={isLoggedInId}/>} /> {/* 신고 처리 페이지 */}
                       <Route path="/report/details/:postId" element={<ReformReportDetail isLoggedInId={isLoggedInId}/>}/>
+                      <Route path="/service" element={<ServiceInfo />} /> {/* 소개 페이지 경로 추가 */}
                   </Routes>
                   {/* footer 메뉴 */}
                   <LayoutFooter/>
