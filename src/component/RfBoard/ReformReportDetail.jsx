@@ -10,6 +10,7 @@ const ReformReportDetail = ({ isLoggedInId }) => {
     const [post, setPost] = useState(null);
     const [reports, setReports] = useState([]);
     const navigate = useNavigate();
+    const [reportStatus, setReportStatus] = useState("처리중");
 
 
     // reportDetails 객체 가져와서 post, report 분리
@@ -65,31 +66,7 @@ const ReformReportDetail = ({ isLoggedInId }) => {
             },
         }
     )
-
-    // 공개-비공개 전환용 할당 메서드
-    const handlePrivateMutation = () => {
-        const formData = new FormData();
-        const newIsPrivate = post.isPrivate === 'Y' ? 'N' : 'Y';
-
-        formData.append("post", new Blob([JSON.stringify({
-            postId: postId,
-            title : post.title,
-            content : post.content,
-            category : post.category,
-            isPrivate : newIsPrivate
-        })], { type: "application/json" })); // 게시글 데이터 추가
-
-        // 기존 파일명은 문자열로 추가
-        if(Array.isArray(post.filenames)){
-            post.filenames.forEach((filename) => {
-                formData.append("existingFiles", filename);
-            });
-        }
-
-        privateMutation.mutate(formData);
-
-    }
-
+    
     // 리포트 삭제 메서드
     const deleteReports = () => {
         fetch(`http://localhost:8080/api/report/${postId}`, {
@@ -159,6 +136,24 @@ const ReformReportDetail = ({ isLoggedInId }) => {
             });
     }
 
+    // 처리 완료 메서드
+    const confirms = () => {
+        if(reportStatus === '처리중'){
+            setReportStatus("완료")
+            alert("처리 완료하였습니다.")
+        } else {
+            setReportStatus("처리중")
+            alert("상태를 되돌렸습니다.")
+        }
+    }
+
+    // 처리 완료 핸들러
+    const handleConfirms = () => {
+        confirms()
+        navigate(0)
+    }
+
+    // 삭제 핸들러
     const handleDeletePost = () => {
         if(confirm("게시글을 삭제하시겠습니까?")){
             deleteReports()
@@ -167,6 +162,29 @@ const ReformReportDetail = ({ isLoggedInId }) => {
         }
     }
 
+    // 공개-비공개 전환 핸들러
+    const handlePrivateMutation = () => {
+        const formData = new FormData();
+        const newIsPrivate = post.isPrivate === 'Y' ? 'N' : 'Y';
+
+        formData.append("post", new Blob([JSON.stringify({
+            postId: postId,
+            title : post.title,
+            content : post.content,
+            category : post.category,
+            isPrivate : newIsPrivate
+        })], { type: "application/json" })); // 게시글 데이터 추가
+
+        // 기존 파일명은 문자열로 추가
+        if(Array.isArray(post.filenames)){
+            post.filenames.forEach((filename) => {
+                formData.append("existingFiles", filename);
+            });
+        }
+
+        privateMutation.mutate(formData);
+    }
+    
     // 데이터가 없을 경우 로딩 표시나 오류 메시지 표시
     if (error) return <div>오류 발생: {error}</div>;
     if (!post) return <div>로딩 중...</div>;
@@ -183,7 +201,7 @@ const ReformReportDetail = ({ isLoggedInId }) => {
                                         <Col><p><strong>제목</strong> : {post.title}</p></Col>
                                         <Col><p><strong>글번호</strong> : {postId}</p></Col>
                                         <Col><p><strong>공개</strong> : {post.isPrivate}</p></Col>
-                                        <Col><p><strong>처리상태</strong>: </p></Col>
+                                        <Col><p><strong>처리상태</strong>: {reportStatus}</p></Col>
                                     </Row>
                                 </CardHeader>
                                 <CardHeader>
@@ -216,7 +234,10 @@ const ReformReportDetail = ({ isLoggedInId }) => {
                         <CardFooter>
                             <Row>
                                 <Col>
-                                    <Button className={"btn-success me-3"}>처리 완료</Button>
+                                    {reportStatus && reportStatus === '처리중' ?
+                                        <Button className={"btn-success me-3"} onClick={handleConfirms}>처리 완료</Button>
+                                    : <Button className={"btn-danger me-3"}>되돌리기</Button>
+                                    }
                                     <Button onClick={() => navigate(-1)} className={"btn-secondary"}>목록으로</Button>
                                 </Col>
                                 <Col className={"text-lg-end"}>
