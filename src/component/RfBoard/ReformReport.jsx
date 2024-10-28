@@ -57,20 +57,12 @@ export default function ReformReport({ isLoggedInId }) {
 
     const sortedItems = items.sort((a, b) => {
         // 처리 상태가 null인 항목을 먼저 표시
-        if (a.reportStatus === null && b.reportStatus !== null) return -1;
-        if (a.reportStatus !== null && b.reportStatus === null) return 1;
+        if (a.reportStatus === '처리 중' && b.reportStatus !== '처리 중') return -1;
+        if (a.reportStatus !== '처리 중' && b.reportStatus === '처리 중') return 1;
 
         // 처리 상태가 같으면 순서 유지 (신고 수는 이미 정렬된 상태)
         return 0;
     });
-
-    const handleStatusUpdate = (postId) => {
-        setItems(prevItems =>
-            prevItems.map(item =>
-                item.postId === postId ? { ...item, reportStatus: 'complete' } : item
-            )
-        );
-    };
 
     return (
         <div className="container">
@@ -89,35 +81,32 @@ export default function ReformReport({ isLoggedInId }) {
                 </thead>
                 <tbody>
                 {sortedItems.length > 0 ? (
-                    sortedItems.map(post => (
-                        <tr key={post.postId}>
-                            <td>{post.reportCount}</td>
-                            <td>{post.category === 'Inquiry' ? '문의' : '의뢰'}</td>
-                            <td>{post.isPrivate === 'Y' ? <FaUnlockAlt style={{color: "darkblue"}}/> :
-                                <FaLock style={{color: "gray"}}/>}</td>
-                            <td>
-                                {post.isPrivate === 'N' && post.userId !== isLoggedInId ? (
-                                    <span style={{color: 'grey'}}>{post.title}</span>
-                                ) : (
-                                    <Link to={`/report/details/${post.postId}`} state={{post}}>
-                                        {post.title}
-                                    </Link>
-                                )}
-                            </td>
-                            <td>{post.userId}</td>
-                            <td>{new Date(post.createdAt).toLocaleDateString()}</td>
-                            <td>
-                                {post.reportStatus === null ? (
-                                    <span>처리 중</span>
-                                ) : (
-                                    <span style={{color: 'green'}}>처리 완료</span>
-                                )}
-                            </td>
-                        </tr>
-                    ))
+                    sortedItems.sort((a,b) => (a.reportStatus === '처리 완료' ? 1 : 0) - (b.reportStatus === '처리 완료' ? 1: 0))
+                        .map(post => (
+                            <tr key={post.postId} className={post.reportStatus === '처리 완료' ? 'table-success' : ''}>
+                                <td>{post.reportCount}</td>
+                                <td>{post.category === 'Inquiry' ? '문의' : '의뢰'}</td>
+                                <td>{post.isPrivate === 'Y' ? <FaUnlockAlt style={{color: "darkblue"}}/> :
+                                    <FaLock style={{color: "gray"}}/>}</td>
+                                <td>
+                                    {post.isPrivate === 'N' && post.userId !== isLoggedInId ? (
+                                        <span style={{color: 'grey'}}>{post.title}</span>
+                                    ) : (
+                                        <Link to={`/report/details/${post.postId}`} state={{post}}>
+                                            {post.title}
+                                        </Link>
+                                    )}
+                                </td>
+                                <td>{post.userId}</td>
+                                <td>{new Date(post.createdAt).toLocaleDateString()}</td>
+                                <td>
+                                    {post.reportStatus}
+                                </td>
+                            </tr>
+                        ))
                 ) : (
                     <tr>
-                        <td colSpan="7" style={{border: '1px solid #ddd', padding: '8px', textAlign: 'center'}}>
+                    <td colSpan="7" style={{border: '1px solid #ddd', padding: '8px', textAlign: 'center'}}>
                             게시글이 없습니다.
                         </td>
                     </tr>
