@@ -89,7 +89,7 @@ export default function ReformCommentList(){
             <hr/>
             <Row>
                 <div className="commentListBox">
-                    {comments ? comments.map((comment) => (
+                    {comments && comments.length > 0 ? comments.map((comment) => (
                         <div key={comment.commentId}>
                             <div className="commentList-group" key={comment.commentId}>
                                 <div className="commentList">
@@ -132,7 +132,11 @@ export default function ReformCommentList(){
                             {/* 마지막 댓글이 아닐 경우에만 구분선 추가 */}
                             {index < comments.length - 1 && <hr/>}
                         </div>
-                    )) : <></>}
+                    )) :
+                        <div>
+                            <p>댓글이 없습니다.</p>
+                        </div>
+                    }
                 </div>
             </Row>
         </>
