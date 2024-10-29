@@ -4,7 +4,7 @@ import '../../css/RfBoard/ReformDetail.css'
 import ReformCommentWrite from "./ReformCommentWrite.jsx";
 import ReformCommentList from "./ReformCommentList.jsx";
 import axios from 'axios'; // HTTP 요청을 기본적으로 비동기로 수행하기 위해 자바스크립트에서 널리 사용되는 라이브러리
-import StarRating from "../StarRating.jsx"; // 별점 컴포넌트 import
+import StarRating from "./StarRating.jsx"; // 별점 컴포넌트 import
 import {useEffect, useRef, useState} from "react";
 import ReportFormModal from "../Modal/ReportFormModal.jsx";
 
@@ -188,7 +188,7 @@ export default function ReformDetail({ isLoggedInId }) {
                                     <h5>첨부 사진(클릭시 다운로드)</h5>
                                     <Row>
                                         {currentPost.filenames.split(',').map((filename, index) => (
-                                            <Col key={index} md={4} className="mb-3">
+                                            <Col key={index} md={2} className="mb-3">
                                                 {isValidImage(filename) && (
                                                     <div>
                                                         <a href={`http://localhost:8080/api/posts/download/${filename}`}

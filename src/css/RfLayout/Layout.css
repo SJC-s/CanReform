@@ -165,3 +165,25 @@ footer .tail-table span {
 }
 
 
+.rotating-proverb {
+    background: linear-gradient(to bottom, skyblue, skyblue, skyblue, white);
+}
+
+.proverb-banner {
+    transition: opacity 1s ease-in-out;
+}
+
+.fade-in {
+    opacity: 1;
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+.proverb-text {
+    color: #2c3e50;
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
+    font-weight: bold;
+    font-size: 1.2em;
+}

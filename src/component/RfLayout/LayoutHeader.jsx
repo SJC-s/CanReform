@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
+import RotatingProverb from "./RotatingProverb.jsx";
 
 export default function LayoutHeader({ isLoggedInId, setIsLoggedInId }) {
 
@@ -72,6 +73,7 @@ export default function LayoutHeader({ isLoggedInId, setIsLoggedInId }) {
                     </DropdownButton>
                 </div>
             </div>
+            <RotatingProverb/>
         </>
     );
 }

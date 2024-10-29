@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import starEmpty from '../assets/star1.png'; // 빈 별
-import starHalf from '../assets/star2.png';  // 반 별
-import starFull from '../assets/star3.png';  // 꽉 찬 별
-import './StarRating.css';
+import starEmpty from '../../assets/star1.png'; // 빈 별
+import starHalf from '../../assets/star2.png';  // 반 별
+import starFull from '../../assets/star3.png';  // 꽉 찬 별
+import '../../css/RfBoard/StarRating.css';
 import axios from "axios";
 
 const StarRating = ({ currentPost, isLoggedInId }) => {
