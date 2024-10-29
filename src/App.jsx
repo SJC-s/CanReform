@@ -17,6 +17,7 @@ import FindUserId from "./component/RfAuthorization/FindUserId.jsx";
 import FindPassword from "./component/RfAuthorization/FindPassword.jsx";
 import ResetPassword from "./component/RfAuthorization/ResetPassword.jsx";
 import ServiceInfo from "./component/RfMain/MainService.jsx";
+import Mypage from "./Mypage.jsx";
 
 const queryClient = new QueryClient();
 export default function App () {
@@ -54,6 +55,7 @@ export default function App () {
                       <Route path="/report" element={<ReformReport isLoggedInId={isLoggedInId}/>} /> {/* 신고 처리 페이지 */}
                       <Route path="/report/details/:postId" element={<ReformReportDetail isLoggedInId={isLoggedInId}/>}/>
                       <Route path="/service" element={<ServiceInfo />} /> {/* 소개 페이지 경로 추가 */}
+                      <Route path="/mypage" element={<Mypage />} /> {/* 마이 페이지 */}
                   </Routes>
                   {/* footer 메뉴 */}
                   <LayoutFooter/>

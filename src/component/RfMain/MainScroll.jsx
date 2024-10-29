@@ -159,7 +159,7 @@ export default function MainScroll() {
                                 </div>
                                 <div className="col-md-6 text-center">
                                     <img
-                                        src={`http://localhost:8080/api/posts/download/${file.filenames.split(',').pop()}`}
+                                        src={`http://localhost:8080/api/posts/download/${file.filenames?.split(',').pop()}`}
                                         alt={file.title}
                                         className="img-fluid"
                                     />
