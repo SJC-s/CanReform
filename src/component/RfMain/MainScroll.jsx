@@ -50,14 +50,15 @@ export default function MainScroll() {
             return acc;
         }, {});
 
-        // posts에 평균 평점을 매핑
+        // posts에 평균 평점을 매핑하고 내림차순 정렬
         const combined = posts.map(post => ({
             ...post,
             averageRating: ratingsMap[post.postId] || 0.0,
-        }));
+        })).sort((a, b) => b.averageRating - a.averageRating);
 
         setCombinedData(combined);
     }, [posts, avgRatings]);
+
 
     // 스크롤할 때마다 이미지를 추가하는 함수
     const getFiles = useCallback(() => {
@@ -139,7 +140,7 @@ export default function MainScroll() {
                                         })})</p>
                                     <h3>{file.title}</h3>
                                     <p>{file.content}.</p>
-                                    <h6><FaStar/> {file.averageRating.toFixed(2)}</h6>
+                                    <h6><FaStar/> {(file.averageRating/10).toFixed(2)}</h6>
                                 </div>
                             </>
                         ) : (
@@ -154,7 +155,7 @@ export default function MainScroll() {
                                         })})</p>
                                     <h3>{file.title}</h3>
                                     <p>{file.content}.</p>
-                                    <h6><FaStar/> {file.averageRating.toFixed(2)}</h6>
+                                    <h6><FaStar/> {(file.averageRating/10).toFixed(2)}</h6>
                                 </div>
                                 <div className="col-md-6 text-center">
                                     <img
