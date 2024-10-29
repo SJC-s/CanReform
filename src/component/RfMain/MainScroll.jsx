@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import '../../css/RfMain/MainScroll.css';
 import {Button} from "react-bootstrap";
 import {FaStar, FaUser} from "react-icons/fa";
-import {useNavigate} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 
 export default function MainScroll() {
     const [posts, setPosts] = useState([]);
@@ -105,8 +105,8 @@ export default function MainScroll() {
     };
 
     // 게시물 클릭 시 해당 게시물 상세 페이지로 이동하는 함수
-    const handlePostClick = (postId) => {
-        navigate(`/posts/${postId}`);
+    const handlePostClick = (post) => {
+        navigate(`/posts/${post.postId}`, { state: { post } });
     };
 
     return (
@@ -116,9 +116,9 @@ export default function MainScroll() {
                 {combinedData.slice(0,lastIndex).map((file, idx) => (
                     <div
                         key={idx}
-                        className="row align-items-center bg-info-subtle mb-3 p-3"
-                        style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }} // flexbox : 수직 가운데 정렬 적용
-                        onClick={() => handlePostClick(file.postId)}
+                        className="row align-items-center bg-info-subtle mb-3 p-3 scroll-content"
+                        style={{ display: 'flex', alignItems: 'center', marginBottom: '20px', cursor:'pointer' }} // flexbox : 수직 가운데 정렬 적용
+                        onClick={() => handlePostClick(file)}
                     >
                         {/* 파일 이름을 이미지 경로로 설정 : 좌측 이미지 */}
                         {/* 홀수 인덱스는 좌측에 이미지 */}
@@ -126,7 +126,7 @@ export default function MainScroll() {
                             <>
                                 <div className="col-md-6 text-center">
                                     <img
-                                        src={`http://localhost:8080/api/posts/download/${file.filenames.split(',').pop()}`}
+                                        src={`http://localhost:8080/api/posts/download/${file.filenames?.split(',').pop()}`}
                                         alt={file.title}
                                         className="img-fluid"
                                     />
