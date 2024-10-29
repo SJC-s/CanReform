@@ -34,7 +34,7 @@ export default function ReformCommentList(){
     const queryClient = useQueryClient()
     const deleteCommentMutation = useMutation(
         (commentId) => {
-            return fetch(`http://localhost:8080/api/comments/${commentId}`,
+            return fetch(`http://localhost:8080/api/comments/${commentId}?userId=${isLoggedInId}`,
                 {method : "DELETE"}).then(response => {
                 if(!response.ok){
                     throw new Error("데이터 fetch 오류 : 댓글 삭제");
@@ -50,7 +50,6 @@ export default function ReformCommentList(){
                 throw new Error("댓글 삭제 실패")
             }
         }
-
     )
 
     // 인증정보 가져오기

@@ -4,16 +4,15 @@ import '../../css/RfBoard/ReformDetail.css'
 import ReformCommentWrite from "./ReformCommentWrite.jsx";
 import ReformCommentList from "./ReformCommentList.jsx";
 import axios from 'axios'; // HTTP 요청을 기본적으로 비동기로 수행하기 위해 자바스크립트에서 널리 사용되는 라이브러리
-import StarRating from "../StarRating.jsx"; // 별점 컴포넌트 import
+import StarRating from "./StarRating.jsx"; // 별점 컴포넌트 import
 import {useEffect, useRef, useState} from "react";
-import ReportFormModal from "../Modal/ReportFormModal.jsx"; // HTTP 요청을 기본적으로 비동기로 수행하기 위해 자바스크립트에서 널리 사용되는 라이브러리
+import ReportFormModal from "../Modal/ReportFormModal.jsx";
 import {checkAdminRole} from "../RfAuthorization/AdminAuth.js";
 
 export default function ReformDetail({ isLoggedInId }) {
     const { post } = useLocation().state || {}; // location.state에서 post를 가져옴
     const navigate = useNavigate();
     const [currentPost, setCurrentPost] = useState(post);
-    const [rating, setRating] = useState(0); // 별점 상태 추가
     const [showModal, setShowModal] = useState(false);
     const [isAdmin, setIsAdmin] = useState(null);
 
@@ -28,17 +27,19 @@ export default function ReformDetail({ isLoggedInId }) {
             // 플래그가 false일 때만 API 호출
             hasFetchedPost.current = true; // 플래그 설정
             // 서버로부터 조회된 게시글 정보 가져오기 (조회수 증가 포함)
-            const fetchPostDetail = async () => {
+            const fetchData = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8080/api/posts/${post.postId}`);
-                    setCurrentPost(response.data); // 서버에서 가져온 데이터로 업데이트
+                    // 게시글 정보와 평점 정보 병렬로 가져오기
+                    const postDetailResponse = await axios.get(`http://localhost:8080/api/posts/${post.postId}`);
+                    setCurrentPost(postDetailResponse.data); // 게시글 정보 업데이트
                 } catch (error) {
                     console.error("게시글 정보를 불러오는 중 오류 발생:", error);
                     alert("게시글 정보를 불러오는 중 오류가 발생했습니다.");
                     navigate('/posts');
                 }
             };
-            fetchPostDetail();
+
+            fetchData();
         }
     }, [post, navigate]);
 
@@ -52,40 +53,6 @@ export default function ReformDetail({ isLoggedInId }) {
             fetchAdminRole();
         }
     }, [isLoggedInId, navigate]);
-
-    const handleRatingChange = async (newRating) => {
-        console.log("Selected Rating:", newRating); // 새로운 별점 출력
-        setRating(newRating); // 상태 업데이트
-        // 여기에서 API 호출 등을 통해 평점을 저장할 수 있습니다.
-
-        // 별점 데이터를 서버로 전송하는 API 요청
-        try {
-            const token = localStorage.getItem('token');
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-
-            // 서버로 전송할 데이터
-            const ratingData = {
-                postId: currentPost.postId,
-                userId: isLoggedInId,
-                rating: newRating,
-            };
-
-            // POST 요청을 통해 별점 데이터를 서버로 전송
-            const response = await axios.post('http://localhost:8080/api/ratings', ratingData, config);
-
-            if (response.status === 200) {
-                console.log("별점 전송 성공:", response.data);
-                alert("별점이 저장되었습니다.");
-            }
-        } catch (error) {
-            console.error("별점 전송 중 오류 발생:", error);
-            alert("별점 저장 중 오류가 발생했습니다.");
-        }
-    };
 
     if (!post) {
         return <p>게시글 정보를 불러올 수 없습니다.</p>;
@@ -102,19 +69,21 @@ export default function ReformDetail({ isLoggedInId }) {
 
     const handleAddReport = async ({ reportData }) => {
         try {
-            // 유저 인증용 JWT토큰 가져오기
-            const token = localStorage.getItem('token');
-            // Axios는 자동으로 Content-Type: application/json 설정
-            const resp = await axios.post(`http://localhost:8080/api/report/addReport/${currentPost.postId}`,
-                reportData,
-                {       // 인증 토큰을 헤더에 포함시켜서 전송
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
+            const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
+            const headers = { 'Authorization': `Bearer ${token}` }; // 인증 헤더 설정
 
-            // 업데이트된 데이터를 다시 가져옴
-            const updateReport = await axios.get(`http://localhost:8080/api/posts/${currentPost.postId}`);
+            // 신고 데이터를 서버에 전송
+            await axios.post(
+                `http://localhost:8080/api/report/addReport/${currentPost.postId}`,
+                reportData,
+                { headers }
+            );
+
+            // 업데이트된 게시글 데이터를 다시 가져와 상태 갱신
+            const updateReport = await axios.get(
+                `http://localhost:8080/api/posts/${currentPost.postId}`,
+                { headers }
+            );
             setCurrentPost(updateReport.data);
 
             return true;
@@ -130,29 +99,26 @@ export default function ReformDetail({ isLoggedInId }) {
             alert("이 게시글을 삭제할 권한이 없습니다.");
             return;
         }
-        if (window.confirm("정말 삭제하시겠습니까?")) {
-            try {
-                // 인증 토큰 가져오기 (예: localStorage에서)
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    alert("인증 정보가 없습니다. 로그인 후 다시 시도하세요.");
-                    return;
-                }
 
-                // 삭제 요청 시 헤더에 인증 토큰 추가
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                };
+        if (!window.confirm("정말 삭제하시겠습니까?")) {
+            return;
+        }
 
-                await axios.delete(`http://localhost:8080/api/posts/${currentPost.postId}`, config);
-                alert("게시글이 삭제되었습니다.");
-                navigate('/posts');
-            } catch (error) {
-                console.error("게시글 삭제 중 오류 발생:", error);
-                alert("게시글 삭제 중 오류가 발생했습니다.");
+        try {
+            const token = localStorage.getItem('token'); // JWT 토큰 가져오기
+            if (!token) {
+                alert("인증 정보가 없습니다. 로그인 후 다시 시도하세요.");
+                return;
             }
+
+            const headers = { Authorization: `Bearer ${token}` }; // 인증 헤더 설정
+
+            await axios.delete(`http://localhost:8080/api/posts/${currentPost.postId}`, { headers });
+            alert("게시글이 삭제되었습니다.");
+            navigate('/posts');
+        } catch (error) {
+            console.error("게시글 삭제 중 오류 발생:", error);
+            alert("게시글 삭제 중 오류가 발생했습니다.");
         }
     };
 
@@ -229,10 +195,7 @@ export default function ReformDetail({ isLoggedInId }) {
                             </Row>
                             {/* 별점 컴포넌트 추가 */}
                             {isLoggedInId && (
-                                <div>
-                                    <StarRating rating={rating} onRatingChange={handleRatingChange} />
-                                    <p id="star">현재 평점: {rating}</p>
-                                </div>
+                                <StarRating currentPost={currentPost} isLoggedInId={isLoggedInId} />
                             )}
                             {/* 파일 링크 */}
                             {currentPost.filenames && currentPost.filenames.length > 0 && (
@@ -240,7 +203,7 @@ export default function ReformDetail({ isLoggedInId }) {
                                     <h5>첨부 사진(클릭시 다운로드)</h5>
                                     <Row>
                                         {currentPost.filenames.split(',').map((filename, index) => (
-                                            <Col key={index} md={4} className="mb-3">
+                                            <Col key={index} md={2} className="mb-3">
                                                 {isValidImage(filename) && (
                                                     <div>
                                                         <a href={`http://localhost:8080/api/posts/download/${filename}`}
@@ -267,8 +230,7 @@ export default function ReformDetail({ isLoggedInId }) {
                                 {isLoggedInId && isLoggedInId === currentPost.userId || isAdmin ? <div className="control-button">
                                     <Button variant="primary" className="mr-2" onClick={handleEdit}>수정</Button>
                                     <Button variant="danger" onClick={handleDelete}>삭제</Button>
-                                </div> : null
-                                }
+                                </div> : null}
                             </div>
                         </Card.Footer>
                     </Card>
