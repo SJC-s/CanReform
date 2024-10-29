@@ -3,6 +3,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {Button, Card, CardBody, CardFooter, CardHeader, Col, Container, Row,} from "react-bootstrap";
 import '/src/css/RfBoard/ReformReportDetail.css'
 import {useMutation, useQueryClient} from "react-query";
+import {checkAdminRole} from "../RfAuthorization/AdminAuth.js";
 
 // useUpdateReportStatus 훅을 최상위에서 정의
 const useUpdateReportStatus = (postId) => {
@@ -42,16 +43,34 @@ const useUpdateReportStatus = (postId) => {
 };
 
 
-const ReformReportDetail = ({ isLoggedInId }) => {
+const ReformReportDetail = ({ isLoggedInId, setIsLoggedInId }) => {
     const {postId} = useParams();
     const [reportStatus, setReportStatus] = useState('');
     const [error, setError] = useState(null);
     const [post, setPost] = useState(null);
     const [reports, setReports] = useState([]);
+    const [isAdmin, setIsAdmin] = useState(null);
     const navigate = useNavigate();
     const {updateReportStatus, isUpdating} = useUpdateReportStatus(postId, reportStatus);
 
+    // 사용자 권한 확인
+    useEffect(() => {
+        if (isLoggedInId) {
+            const fetchAdminRole = async () => {
+                const result = await checkAdminRole(isLoggedInId, navigate);
+                setIsAdmin(result === 1);
+            };
+            fetchAdminRole();
+        }
+    }, [isLoggedInId, navigate]);
 
+    // 권한이 관리자가 아닐 경우 홈으로
+    useEffect(() => {
+        if(isAdmin === false) {
+            alert("권한이 없습니다.")
+            navigate("/");
+        }
+    }, [isAdmin])
 
     // reportDetails 객체 가져와서 post, report 분리
     useEffect(() => {
@@ -184,49 +203,6 @@ const ReformReportDetail = ({ isLoggedInId }) => {
             });
     }
 
-    // 처리 완료 메서드
-
-
-    /*    const confirms = useMutation((data) => {
-
-            const newStatus = reportStatus === '처리 중' ? '처리 완료' : '처리 중';
-            setReportStatus(newStatus);
-
-            const status = newStatus;
-
-            console.log(status)
-            return fetch(`http://localhost:8080/api/report/confirm/${postId}`,
-                {
-                    method : "PUT",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    },
-                    body: status
-                })
-                .then(resp => {
-                    console.log(resp)
-                    if(!resp.ok){
-                        throw new Error("상태 업데이트 실패")
-                    }
-                    return resp;
-                });
-
-            },
-        {
-            onSuccess: (variable) => {
-                if(reportStatus === '처리 완료'){
-                    alert("상태를 성공적으로 되돌렸습니다.")
-                } else {
-                    alert("처리 완료하였습니다.")
-                }
-                navigate(0);
-            },
-                onError: (error) => {
-            console.error("변경 중 오류 발생:", error);
-        },
-        });*/
-
     // 처리 완료 핸들러
     const handleConfirms = () => {
         const newStatus = reportStatus === '처리 중' ? '처리 완료' : '처리 중';
@@ -273,7 +249,7 @@ const ReformReportDetail = ({ isLoggedInId }) => {
 
         return (
             <>
-                <Container>
+                {isAdmin && <Container>
                     <div className={"report-detail text-lg-start"}>
                         <Card className="post-info p-0 me-2">
                             {post ? (
@@ -354,7 +330,7 @@ const ReformReportDetail = ({ isLoggedInId }) => {
                         ) : (<p>신고가 없습니다.</p>)}
 
                     </div>
-                </Container>
+                </Container>}
             </>
         );
     };
