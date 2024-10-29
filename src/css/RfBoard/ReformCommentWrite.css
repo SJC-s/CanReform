@@ -7,17 +7,16 @@
     border-radius : 4px;
     background: #eee;
     margin-top : 10px;
-    width : 1200px;
     height : auto;
     padding : 10px 5px 0 5px;
-    min-width : 1200px;
+    min-width : 100%;
 }
 
 .comment-group {
     display : flex;
     padding : 5px 0 15px 0;
     flex-shrink : 0;    /* 창 크기가 줄어들어도 크기를 유지함 */
-    min-width : 1200px;
+    min-width : 100%;
 }
 
 .input-group textarea {

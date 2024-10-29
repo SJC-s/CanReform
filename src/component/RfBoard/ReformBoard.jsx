@@ -164,7 +164,7 @@ export default function ReformBoard({ isLoggedInId }) {
                     <th style={{width: '10%'}}>작성자</th>
                     <th style={{width: '10%'}}>조회수</th>
                     <th style={{width: '10%'}}>댓글수</th>
-                    <th style={{width: '5%'}}>신고수</th>
+                    <th style={{width: '10%'}}>신고수</th>
                     <th style={{width: '10%'}}>작성일</th>
                 </tr>
                 </thead>
