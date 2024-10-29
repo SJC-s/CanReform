@@ -312,7 +312,6 @@ const ReformReportDetail = ({ isLoggedInId, setIsLoggedInId }) => {
                                 </Row>
                             </CardFooter>
                         </Card>
-
                         {reports && reports.length > 0 ? (
                             <div className="report-detail-list d-grid gap-3">
                                 {reports.map(report => (

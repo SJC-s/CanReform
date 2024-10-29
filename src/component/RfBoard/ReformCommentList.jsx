@@ -3,8 +3,9 @@ import {Button, Row} from "react-bootstrap";
 import '/src/css/RfBoard/ReformCommentList.css'
 import {FaTrash} from "react-icons/fa";
 import {useMutation, useQuery, useQueryClient} from "react-query";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {jwtDecode} from "jwt-decode";
+import {checkAdminRole} from "../RfAuthorization/AdminAuth.js";
 
 
 export default function ReformCommentList(){
@@ -14,7 +15,20 @@ export default function ReformCommentList(){
     const {postId} = useParams();
     const [commentId, setCommentId] = useState(1);
     const [index, setIndex] = useState(0);
+    const [isAdmin, setIsAdmin] = useState(null);
     const textarea = useRef();
+    const navigate = useNavigate();
+
+    // 사용자 권한 확인
+    useEffect(() => {
+        if (isLoggedInId) {
+            const fetchAdminRole = async () => {
+                const result = await checkAdminRole(isLoggedInId, navigate);
+                setIsAdmin(result === 1);
+            };
+            fetchAdminRole();
+        }
+    }, [isLoggedInId, navigate]);
 
     // 댓글 삭제
     const queryClient = useQueryClient()
@@ -118,7 +132,7 @@ export default function ReformCommentList(){
                                         disabled
                                     />
                                 </div>
-                                {comment.userId === isLoggedInId ? <div className="commentDelete">
+                                {comment.userId === isLoggedInId || isAdmin ? <div className="commentDelete">
                                     <Button variant="danger">
                                         <FaTrash onClick={() => {
                                             const confirmed = confirm("댓글을 삭제하시겠습니까?");
