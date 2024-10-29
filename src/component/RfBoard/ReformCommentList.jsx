@@ -3,8 +3,9 @@ import {Button, Row} from "react-bootstrap";
 import '/src/css/RfBoard/ReformCommentList.css'
 import {FaTrash} from "react-icons/fa";
 import {useMutation, useQuery, useQueryClient} from "react-query";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {jwtDecode} from "jwt-decode";
+import {checkAdminRole} from "../RfAuthorization/AdminAuth.js";
 
 
 export default function ReformCommentList(){
@@ -14,13 +15,26 @@ export default function ReformCommentList(){
     const {postId} = useParams();
     const [commentId, setCommentId] = useState(1);
     const [index, setIndex] = useState(0);
+    const [isAdmin, setIsAdmin] = useState(null);
     const textarea = useRef();
+    const navigate = useNavigate();
+
+    // 사용자 권한 확인
+    useEffect(() => {
+        if (isLoggedInId) {
+            const fetchAdminRole = async () => {
+                const result = await checkAdminRole(isLoggedInId, navigate);
+                setIsAdmin(result === 1);
+            };
+            fetchAdminRole();
+        }
+    }, [isLoggedInId, navigate]);
 
     // 댓글 삭제
     const queryClient = useQueryClient()
     const deleteCommentMutation = useMutation(
         (commentId) => {
-            return fetch(`http://localhost:8080/api/comments/${commentId}`,
+            return fetch(`http://localhost:8080/api/comments/${commentId}?userId=${isLoggedInId}`,
                 {method : "DELETE"}).then(response => {
                 if(!response.ok){
                     throw new Error("데이터 fetch 오류 : 댓글 삭제");
@@ -36,7 +50,6 @@ export default function ReformCommentList(){
                 throw new Error("댓글 삭제 실패")
             }
         }
-
     )
 
     // 인증정보 가져오기
@@ -118,7 +131,7 @@ export default function ReformCommentList(){
                                         disabled
                                     />
                                 </div>
-                                {comment.userId === isLoggedInId ? <div className="commentDelete">
+                                {comment.userId === isLoggedInId || isAdmin ? <div className="commentDelete">
                                     <Button variant="danger">
                                         <FaTrash onClick={() => {
                                             const confirmed = confirm("댓글을 삭제하시겠습니까?");

@@ -7,12 +7,14 @@ import axios from 'axios'; // HTTP 요청을 기본적으로 비동기로 수행
 import StarRating from "./StarRating.jsx"; // 별점 컴포넌트 import
 import {useEffect, useRef, useState} from "react";
 import ReportFormModal from "../Modal/ReportFormModal.jsx";
+import {checkAdminRole} from "../RfAuthorization/AdminAuth.js";
 
 export default function ReformDetail({ isLoggedInId }) {
     const { post } = useLocation().state || {}; // location.state에서 post를 가져옴
     const navigate = useNavigate();
     const [currentPost, setCurrentPost] = useState(post);
     const [showModal, setShowModal] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(null);
 
     // useRef로 API 호출 여부를 추적하기 위한 플래그 설정
     const hasFetchedPost = useRef(false);
@@ -31,8 +33,8 @@ export default function ReformDetail({ isLoggedInId }) {
                     const postDetailResponse = await axios.get(`http://localhost:8080/api/posts/${post.postId}`);
                     setCurrentPost(postDetailResponse.data); // 게시글 정보 업데이트
                 } catch (error) {
-                    console.error("데이터를 불러오는 중 오류 발생:", error);
-                    alert("데이터를 불러오는 중 오류가 발생했습니다.");
+                    console.error("게시글 정보를 불러오는 중 오류 발생:", error);
+                    alert("게시글 정보를 불러오는 중 오류가 발생했습니다.");
                     navigate('/posts');
                 }
             };
@@ -40,6 +42,17 @@ export default function ReformDetail({ isLoggedInId }) {
             fetchData();
         }
     }, [post, navigate]);
+
+    // 사용자 권한 확인
+    useEffect(() => {
+        if (isLoggedInId) {
+            const fetchAdminRole = async () => {
+                const result = await checkAdminRole(isLoggedInId, navigate);
+                setIsAdmin(result === 1);
+            };
+            fetchAdminRole();
+        }
+    }, [isLoggedInId, navigate]);
 
     if (!post) {
         return <p>게시글 정보를 불러올 수 없습니다.</p>;
@@ -137,8 +150,10 @@ export default function ReformDetail({ isLoggedInId }) {
                                 <Col>
                                     <h2>{currentPost.title}</h2>
                                 </Col>
+                                {/* 신고 버튼 */}
                                 <Col md={1}>
                                     <Button className="btn-danger" onClick={handleShowModal}>신고</Button>
+                                    {/* 신고 모달 */}
                                     <ReportFormModal
                                         show={showModal}
                                         handleClose={handleCloseModal}
@@ -212,10 +227,10 @@ export default function ReformDetail({ isLoggedInId }) {
                                 <div>
                                     <Button variant="secondary" onClick={() => window.history.back()}>목록으로</Button>
                                 </div>
-                                { currentPost.userId === isLoggedInId && (<div className="control-button">
+                                {isLoggedInId && isLoggedInId === currentPost.userId || isAdmin ? <div className="control-button">
                                     <Button variant="primary" className="mr-2" onClick={handleEdit}>수정</Button>
                                     <Button variant="danger" onClick={handleDelete}>삭제</Button>
-                                </div>)}
+                                </div> : null}
                             </div>
                         </Card.Footer>
                     </Card>

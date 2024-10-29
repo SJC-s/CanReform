@@ -5,16 +5,28 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import RotatingProverb from "./RotatingProverb.jsx";
+import {checkAdminRole} from "../RfAuthorization/AdminAuth.js";
 
 export default function LayoutHeader({ isLoggedInId, setIsLoggedInId }) {
 
     const navigate = useNavigate();
     const location = useLocation();
     const [activeButton, setActiveButton] = useState(''); // 활성화된 버튼 상태 관리
+    const [isAdmin, setIsAdmin] = useState(null); // 관리자 계정 여부
 
     useEffect(() => {
         setActiveButton(location.pathname); // URL에 따라 활성화된 버튼 설정
     }, [location.pathname]);
+
+    useEffect(() => {
+        if (isLoggedInId) {
+            const fetchAdminRole = async () => {
+                const result = await checkAdminRole(isLoggedInId, navigate);
+                setIsAdmin(result === 1);
+            };
+            fetchAdminRole();
+        }
+    }, [isLoggedInId, navigate]);
 
     const handleLogout = () => {
         // 로그아웃 처리
@@ -27,6 +39,16 @@ export default function LayoutHeader({ isLoggedInId, setIsLoggedInId }) {
         setActiveButton(buttonName); // 활성화된 버튼 설정
         navigate(buttonName); // 해당 버튼에 따라 페이지 이동
     };
+
+    const handleGoReport = async () => {
+        if (isAdmin) {
+            navigate('/report');
+        } else {
+            alert("접근 권한이 없습니다.")
+            navigate(0);   // 이전 페이지로 이동
+        }
+    };
+
 
     return (
         <>
@@ -66,7 +88,9 @@ export default function LayoutHeader({ isLoggedInId, setIsLoggedInId }) {
                         ) : (
                             <>
                                 <DropdownItem variant="outline-secondary" as={Link} to="/mypage" className="navbtn btn3">내정보</DropdownItem>
-                                <DropdownItem variant="outline-secondary" as={Link} to="/report" className="navbtn btn4">신고 처리</DropdownItem>
+                                {isLoggedInId && isAdmin ? <DropdownItem variant="outline-secondary" onClick={handleGoReport} className="navbtn btn4">신고 처리</DropdownItem>
+                                    : <></>
+                                }
                                 <DropdownItem variant="outline-secondary" onClick={handleLogout} className="navbtn btn4">로그아웃</DropdownItem>
                             </>
                         )}

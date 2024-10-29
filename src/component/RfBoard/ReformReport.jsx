@@ -1,14 +1,36 @@
 import {useEffect, useState} from 'react';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {FaLock, FaUnlockAlt} from "react-icons/fa";
 import '../../css/RfBoard/ReformBoard.css';
+import {checkAdminRole} from "../RfAuthorization/AdminAuth.js";
 
-export default function ReformReport({ isLoggedInId }) {
+export default function ReformReport({ isLoggedInId, setIsLoggedInId }) {
     const [items, setItems] = useState([]);  // 게시물 리스트
     const [page, setPage] = useState(1);  // 현재 페이지
     const [isLoading, setIsLoading] = useState(false);  // 로딩 상태
     const [hasMore, setHasMore] = useState(true);  // 더 가져올 데이터가 있는지 여부
     const [reportStatus, setReportStatus] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(null);
+    const navigate = useNavigate();
+
+    // 사용자 권한 확인
+    useEffect(() => {
+        if (isLoggedInId) {
+            const fetchAdminRole = async () => {
+                const result = await checkAdminRole(isLoggedInId, navigate);
+                setIsAdmin(result === 1);
+            };
+            fetchAdminRole();
+        }
+    }, [isLoggedInId, navigate]);
+
+    // 권한이 관리자가 아닐 경우 홈으로
+    useEffect(() => {
+        if(isAdmin === false) {
+            alert("권한이 없습니다.")
+            navigate("/");
+        }
+    }, [isAdmin])
 
     // 서버에서 데이터 가져오는 함수
     useEffect(() => {
@@ -67,7 +89,7 @@ export default function ReformReport({ isLoggedInId }) {
     return (
         <div className="container">
             {/* 게시판 테이블 리스트 */}
-            <table className="table table-hover table-light table-bordered">
+            {isLoggedInId && isAdmin &&  <table className="table table-hover table-light table-bordered">
                 <thead>
                 <tr>
                     <th style={{width: '10%'}}>신고수</th>
@@ -112,7 +134,7 @@ export default function ReformReport({ isLoggedInId }) {
                     </tr>
                 )}
                 </tbody>
-            </table>
+            </table>}
 
             {/* 로딩 표시 */}
             {isLoading && <p>로딩 중...</p>}
