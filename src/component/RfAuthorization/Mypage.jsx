@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './css/Mypage.css'; // 스타일을 적용할 CSS 파일
+import '../../css/Mypage.css'; // 스타일을 적용할 CSS 파일
 
 axios.defaults.baseURL = 'http://localhost:8080'; // 백엔드 서버 주소
 

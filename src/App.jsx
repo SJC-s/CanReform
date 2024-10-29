@@ -17,7 +17,7 @@ import FindUserId from "./component/RfAuthorization/FindUserId.jsx";
 import FindPassword from "./component/RfAuthorization/FindPassword.jsx";
 import ResetPassword from "./component/RfAuthorization/ResetPassword.jsx";
 import ServiceInfo from "./component/RfMain/MainService.jsx";
-import Mypage from "./Mypage.jsx";
+import Mypage from "./component/RfAuthorization/Mypage.jsx";
 
 const queryClient = new QueryClient();
 export default function App () {
