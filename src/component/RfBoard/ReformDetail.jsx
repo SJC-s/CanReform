@@ -53,14 +53,6 @@ export default function ReformDetail({ isLoggedInId }) {
         }
     }, [isLoggedInId, navigate]);
 
-    // 권한이 관리자가 아닐 경우 홈으로
-    useEffect(() => {
-        if(isAdmin === false) {
-            alert("권한이 없습니다.")
-            navigate("/");
-        }
-    }, [isAdmin])
-
     const handleRatingChange = async (newRating) => {
         console.log("Selected Rating:", newRating); // 새로운 별점 출력
         setRating(newRating); // 상태 업데이트
