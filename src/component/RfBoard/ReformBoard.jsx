@@ -4,6 +4,7 @@ import { Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { FaLock, FaUnlockAlt } from "react-icons/fa";
 import '../../css/RfBoard/ReformBoard.css';
+import ReformAnnouncement from "./ReformAnnouncement.jsx";
 
 const MAX_PAGES_DISPLAY = 10; // 최대 페이지네이션 버튼 수
 
@@ -169,6 +170,7 @@ export default function ReformBoard({ isLoggedInId }) {
                 </tr>
                 </thead>
                 <tbody>
+                <ReformAnnouncement/>
                 {filteredPosts.length > 0 ? (  // 배열의 길이를 확인
                     filteredPosts.map(post => (
                         <tr key={post.postId}>

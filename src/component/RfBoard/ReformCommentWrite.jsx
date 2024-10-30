@@ -52,6 +52,7 @@ export default function ReformCommentWrite() {
                     method : "POST",
                     headers : {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
                     },
                     body : JSON.stringify(comment),
                 }).then(response => {

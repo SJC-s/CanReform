@@ -1,0 +1,8 @@
+.table-info td:nth-child(1), .link {
+    font-weight : bold;
+}
+
+.link {
+    text-decoration : none;
+    color : black;
+}
