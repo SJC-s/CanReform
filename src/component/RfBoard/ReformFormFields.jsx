@@ -1,8 +1,29 @@
-import {Button, CloseButton, Col, Form, Row} from "react-bootstrap";
-import {FaX, FaXmark} from "react-icons/fa6";
+import {Button, Col, Form, Row} from "react-bootstrap";
+import {FaXmark} from "react-icons/fa6";
+import {useEffect, useState} from "react";
+import {checkAdminRole} from "../RfAuthorization/AdminAuth.js";
+import {useNavigate} from "react-router-dom";
 
 function ReformFormFields({ title, setTitle, category, setCategory, isPrivate, setIsPrivate, content,
-                              setContent, allowedExtensions, handleFileChange, filePreviews, setFilePreviews, filenames, setFilenames }) {
+                              setContent, allowedExtensions, handleFileChange, filePreviews, setFilePreviews, filenames, setFilenames, isLoggedInId, isAnnouncement }) {
+
+    const [isAdmin, setIsAdmin] = useState(null);
+    const navigate = useNavigate();
+
+    console.log("ID Check Result1:", isLoggedInId);
+    console.log("Admin Role Check Result1:", isAdmin);
+    // 사용자 권한 확인
+    useEffect(() => {
+        if (isLoggedInId) {
+            const fetchAdminRole = async () => {
+                const result = await checkAdminRole(isLoggedInId, navigate);
+                console.log("Admin Role Check Result2:", result);
+                setIsAdmin(result === 1);
+            };
+            fetchAdminRole();
+        }
+    }, [isLoggedInId, navigate]);
+
 
     // 이미지 삭제 함수
     const handleImageDelete = (filenameToDelete) => {
@@ -34,18 +55,24 @@ function ReformFormFields({ title, setTitle, category, setCategory, isPrivate, s
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                 >
-                    <option value="Inquiry">문의</option>
-                    <option value="request">의뢰</option>
+
+                    {isAnnouncement ? <option value="ANNOUNCEMENT">공지</option>
+                        :
+                        <>
+                            <option value="Inquiry">문의</option>
+                            <option value="request">의뢰</option>
+                            {isAdmin ? <option value="ANNOUNCEMENT">공지</option> : null}
+                        </>}
                 </Form.Control>
             </Form.Group>
 
             <Form.Group controlId="postPrivate" className="mt-3">
-                <Form.Check
+                {!isAdmin && <Form.Check
                     type="checkbox"
                     label="공개 여부"
                     checked={isPrivate === "Y"}
                     onChange={(e) => setIsPrivate(e.target.checked ? "Y" : "N")}
-                />
+                />}
             </Form.Group>
 
             <Form.Group controlId="postContent" className="mt-3">

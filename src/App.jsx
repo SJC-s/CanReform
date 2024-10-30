@@ -18,10 +18,15 @@ import FindPassword from "./component/RfAuthorization/FindPassword.jsx";
 import ResetPassword from "./component/RfAuthorization/ResetPassword.jsx";
 import ServiceInfo from "./component/RfMain/MainService.jsx";
 import Mypage from "./component/RfAuthorization/Mypage.jsx";
+import ReformAnnouncement from "./component/RfBoard/ReformAnnouncement.jsx";
+import ReformAnnouncementDetail from "./component/RfBoard/ReformAnnouncementDetail.jsx";
+import {checkAdminRole} from "./component/RfAuthorization/AdminAuth.js";
+import ReformEdit from "./component/RfBoard/ReformEdit.jsx";
 
 const queryClient = new QueryClient();
 export default function App () {
     const [isLoggedInId, setIsLoggedInId] = useState(''); // id가 있으면 로그인으로 가정
+    const [isAdmin, setIsAdmin] = useState(null);
     const googleApiKey = import.meta.env.VITE_Google_Client_ID
 
         useEffect(() => {
@@ -35,6 +40,16 @@ export default function App () {
 
     }, []);
 
+    // 권한 확인
+    useEffect(() => {
+        if (isLoggedInId) {
+            const fetchAdminRole = async () => {
+                const result = await checkAdminRole(isLoggedInId);
+                setIsAdmin(result === 1);
+            };
+            fetchAdminRole();
+        }
+    }, [isLoggedInId]);
 
     return (
         <GoogleOAuthProvider clientId={googleApiKey}>
@@ -56,6 +71,9 @@ export default function App () {
                       <Route path="/report/details/:postId" element={<ReformReportDetail isLoggedInId={isLoggedInId}/>}/>
                       <Route path="/service" element={<ServiceInfo />} /> {/* 소개 페이지 경로 추가 */}
                       <Route path="/mypage" element={<Mypage />} /> {/* 마이 페이지 */}
+                      <Route path="/announcement" element={<ReformAnnouncement isLoggedInId={isLoggedInId}/>} />
+                      <Route path="/announcement/:announcementId/*" element={<ReformAnnouncementDetail isLoggedInId={isLoggedInId}/>} />
+                      <Route path="/announcement/edit/:announcementId" element={<ReformEdit isLoggedInId={isLoggedInId}/>} />
                   </Routes>
                   {/* footer 메뉴 */}
                   <LayoutFooter/>

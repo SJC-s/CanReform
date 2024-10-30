@@ -29,7 +29,7 @@ const ReformAnnouncement = () => {
                             <td>{announcement.category && announcement.category === "ANNOUNCEMENT" ? "공지" : null}</td>
                             <td>{null}</td>
                             <td>
-                                <Link className={"link"} to={`/announcements/${announcement.announcementId}`} state={{announcement}}>
+                                <Link className={"link"} to={`/announcement/${announcement.announcementId}`} state={{announcement}}>
                                         {announcement.title}
                                 </Link>
                             </td>
