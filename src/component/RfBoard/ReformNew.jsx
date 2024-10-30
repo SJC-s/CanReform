@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ReformFormFields from "./ReformFormFields.jsx";
 import { allowedExtensions, filterValidFiles } from "../utils/fileUtils";
 
-export default function ReformNew() {
+export default function ReformNew({isLoggedInId}) {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [category, setCategory] = useState("Inquiry");
@@ -31,6 +31,11 @@ export default function ReformNew() {
 
         const token = localStorage.getItem('token');  // JWT 토큰을 로컬 스토리지에서 가져옴
 
+        // 카테고리에 따라 URL 설정
+        const endpoint = category === "ANNOUNCEMENT"
+            ? "http://localhost:8080/api/announcement" // 공지 사항 관련 URL
+            : "http://localhost:8080/api/posts"; // 일반 게시글 관련 URL
+
         const formData = new FormData();
         formData.append("post", new Blob([JSON.stringify({ title, content, category, isPrivate })], { type: "application/json" })); // 게시글 데이터 추가
 
@@ -38,7 +43,7 @@ export default function ReformNew() {
             formData.append("files", file); // 파일 추가
         });
 
-        await fetch("http://localhost:8080/api/posts", {
+        await fetch(endpoint, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -82,6 +87,7 @@ export default function ReformNew() {
                                     handleFileChange={handleFileChange}
                                     filePreviews={filePreviews}
                                     setFilePreviews={setFilePreviews}
+                                    isLoggedInId={isLoggedInId}
                                 />
                                 <div className="mt-4">
                                     <Button variant="primary" type="submit">

@@ -124,7 +124,7 @@ export default function ReformDetail({ isLoggedInId }) {
 
     // 게시글 수정 페이지로 이동
     const handleEdit = () => {
-        if (currentPost.userId !== isLoggedInId) {
+        if (currentPost.userId !== isLoggedInId && !isAdmin) {
             alert("이 게시글을 수정할 권한이 없습니다.");
             return;
         }

@@ -4,6 +4,8 @@ import { Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { FaLock, FaUnlockAlt } from "react-icons/fa";
 import '../../css/RfBoard/ReformBoard.css';
+import ReformAnnouncement from "./ReformAnnouncement.jsx";
+import ReformSlideBanner from "./ReformSlideBanner.jsx";
 
 const MAX_PAGES_DISPLAY = 10; // 최대 페이지네이션 버튼 수
 
@@ -114,11 +116,8 @@ export default function ReformBoard({ isLoggedInId }) {
     return (
         <div className="container">
             {/* 배너 광고 */}
-            <div className="bannerSpace">
-                <div className="bannerAds">
-                    <img src={`/upload/imgBanner/imgBanner02.jpg`} alt="banner" className="imgBanner"/>
-                </div>
-            </div>
+            <ReformSlideBanner/>
+            <hr/>
             {/* 검색 창 및 탭 메뉴 - 가로로 나란히 배치 */}
             <div className="header-row">
                 {/* 탭 메뉴 */}
@@ -169,6 +168,7 @@ export default function ReformBoard({ isLoggedInId }) {
                 </tr>
                 </thead>
                 <tbody>
+                <ReformAnnouncement/>
                 {filteredPosts.length > 0 ? (  // 배열의 길이를 확인
                     filteredPosts.map(post => (
                         <tr key={post.postId}>

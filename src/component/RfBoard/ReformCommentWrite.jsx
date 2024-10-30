@@ -4,11 +4,14 @@ import {FaUndo} from "react-icons/fa";
 import {useCallback, useEffect, useRef, useState} from "react";
 import {useMutation, useQueryClient} from "react-query";
 import {useParams} from "react-router-dom";
-import {jwtDecode} from "jwt-decode"; // 게시판 컴포넌트
+import {jwtDecode} from "jwt-decode";
 
 export default function ReformCommentWrite() {
 
-    const {postId} = useParams();
+    const { postId, announcementId } = useParams();
+    const [comments, setComments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [userId, setUserId] = useState("");
     const [commentText, setCommentText] = useState("");
     const textarea = useRef();
@@ -43,48 +46,83 @@ export default function ReformCommentWrite() {
         handleTextAreaSize(); // 댓글창 크기 초기화
     }
 
-    // 댓글 쓰기
-    const queryClient = useQueryClient()
+    // 댓글 작성 mutation
+    const queryClient = useQueryClient();
     const writeCommentMutation = useMutation(
         (comment) => {
-            return fetch(`http://localhost:8080/api/comments`,
-                {
-                    method : "POST",
-                    headers : {
-                        'Content-Type': 'application/json',
-                    },
-                    body : JSON.stringify(comment),
-                }).then(response => {
-                if(!response.ok){
+            const endpoint = `http://localhost:8080/api/comments`;
+            const params = postId ? `/postComments?postId=${postId}` : `/announcementComments?announcementId=${announcementId}`; // ID를 쿼리 파라미터로 추가
+            return fetch(`${endpoint}${params}`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(comment),
+            }).then(response => {
+                if (!response.ok) {
                     throw new Error("데이터 fetch 오류 : 댓글 쓰기");
                 }
                 return response.json();
             });
-        },{
-            onSuccess : () => {
-                queryClient.invalidateQueries(["comments", postId]);
-                resetTextBox();
+        },
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(["comments", postId || announcementId]); // ID에 따라 쿼리 무효화
+                resetTextBox(); // 댓글 작성 후 텍스트 박스 초기화
             },
             onError: (error) => {
-                console.error(error)
-                throw new Error("댓글 쓰기 실패")
+                console.error(error);
+                throw new Error("댓글 쓰기 실패");
             }
         }
+    );
 
-    )
+    useEffect(() => {
+        const fetchComments = async () => {
+            setLoading(true);
+            try {
+                let response;
+                if (postId) {
+                    response = await fetch(`http://localhost:8080/api/comments/postComments/${postId}`);
+                } else if (announcementId) {
+                    response = await fetch(`http://localhost:8080/api/comments/announcementComments/${announcementId}`);
+                } else {
+                    throw new Error("No ID provided");
+                }
 
-    const handleSubmit = (e) => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch comments");
+                }
+
+                const data = await response.json();
+                setComments(data);
+            } catch (error) {
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchComments();
+    }, [postId, announcementId]);
+
+    // 댓글 작성 처리
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const comment = {
-            postId : postId,
-            userId : userId,
-            content : commentText
-        }
-        console.log("postId : " + postId);
-        console.log("userId : " + userId);
-        console.log("comment : " + commentText);
-        writeCommentMutation.mutate(comment);
-    }
+
+        if (!commentText) return alert("댓글을 작성해주세요.");
+
+        const commentData = {
+            content : commentText,
+            userId : isLoggedInId,
+            postId, // postId가 있으면 여기에 추가
+            announcementId // announcementId가 있으면 여기에 추가
+        };
+
+        writeCommentMutation.mutate(commentData);
+        setCommentText(""); // 작성 후 입력창 비우기
+    };
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
@@ -92,6 +130,8 @@ export default function ReformCommentWrite() {
             handleSubmit(e); // 댓글 제출
         }
     };
+
+
 
     return (
         <>
@@ -144,7 +184,6 @@ export default function ReformCommentWrite() {
                                 onChange={(e) => {
                                     setCommentText(e.target.value)
                                 }}
-                                placeholder="댓글을 입력해주세요."
                                 disabled
                             />
                         </div>

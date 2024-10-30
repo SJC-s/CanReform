@@ -5,45 +5,32 @@ import {useMutation} from "react-query";
 import ReformFormFields from "./ReformFormFields.jsx";
 import {allowedExtensions, filterValidFiles} from "../utils/fileUtils"; // 유틸리티 함수 가져오기
 
-export default function ReformEdit({isLoggedInId}) {
+export default function ReformAnnouncementEdit() {
     const { state } = useLocation();
-    const { post } = state || {};
     const { announcement } = state || {};
 
-    const [title, setTitle] = useState(post ? post.title : "");
-    const [content, setContent] = useState(post ? post.content : "");
-    const [category, setCategory] = useState(post ? post.category : "Inquiry");
-    const [isPrivate, setIsPrivate] = useState(post ? post.isPrivate : "Y");
-    const [existingFilenames, setExistingFilenames] = useState(post && post.filenames ? post.filenames.split(",") : []); // 기존 파일은 배열로 변환
+    const [title, setTitle] = useState(announcement ? announcement.title : "");
+    const [content, setContent] = useState(announcement ? announcement.content : "");
+    const [category, setCategory] = useState(announcement ? announcement.category : "Inquiry");
+    const [isPrivate, setIsPrivate] = useState(announcement ? announcement.isPrivate : "Y");
+    const [existingFilenames, setExistingFilenames] = useState(announcement && announcement.filenames ? announcement.filenames.split(",") : []); // 기존 파일은 배열로 변환
     const [newFiles, setNewFiles] = useState([]); // 새로 추가된 파일 객체 저장
     const [filePreviews, setFilePreviews] = useState([]); // 미리보기 URL 저장
-    const [isAnnouncement, setIsAnnouncement] = useState(null);
 
     const navigate = useNavigate();
 
-    // 수정할 페이지를 가지고 왔는 지 확인
     useEffect(() => {
-        if (post) {
-            // 게시글 수정 시 post가 없으면 목록으로 이동
-            if (!post) {
-                navigate("/posts");
-            }
-        } else if (announcement) {
-            // 공지 수정 시 announcement가 없으면 목록으로 이동
-            if (!announcement) {
-                navigate("/posts");
-            } else {
-                setIsAnnouncement(true);
-            }
+        if (!announcement) {
+            navigate("/posts"); // 게시글이 없으면 목록으로 이동
         }
-    }, [post, announcement, navigate]);
+    }, [announcement, navigate]);
 
     useEffect(() => {
         // 기존 파일 리스트를 filePreviews에 반영
         if (existingFilenames && existingFilenames.length > 0) {
             const existingPreviews = existingFilenames
                 .filter((filename) => filename) // 빈 파일명 제거
-                .map((filename) => `http://localhost:8080/api/posts/download/${filename}`);
+                .map((filename) => `http://localhost:8080/api/announcements/download/${filename}`);
 
             setFilePreviews((prevPreviews) => {
                 // 기존 파일 미리보기와 새로 추가된 파일 미리보기 중복 제거
@@ -68,7 +55,7 @@ export default function ReformEdit({isLoggedInId}) {
     const mutation = useMutation(async (formData) => {
         const token = localStorage.getItem('token');  // JWT 토큰을 로컬 스토리지에서 가져옴
 
-        const response = await fetch(`http://localhost:8080/api/posts/${post.postId}`, {
+        const response = await fetch(`http://localhost:8080/api/announcements/${announcement.announcementId}`, {
             method: "PUT",
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -94,7 +81,7 @@ export default function ReformEdit({isLoggedInId}) {
         e.preventDefault();
 
         const formData = new FormData();
-        formData.append("post", new Blob([JSON.stringify({ postId: post.postId, title, content, category, isPrivate })], { type: "application/json" })); // 게시글 데이터 추가
+        formData.append("announcement", new Blob([JSON.stringify({ announcementId: announcement.announcementId, title, content, category, isPrivate })], { type: "application/json" })); // 게시글 데이터 추가
 
         // 기존 파일명은 문자열로 추가
         existingFilenames.forEach((filename) => {
@@ -104,7 +91,7 @@ export default function ReformEdit({isLoggedInId}) {
         // 새로 추가된 파일 객체는 파일로 추가
         newFiles.forEach((file) => {
             formData.append("files", file);
-        }); 
+        });
 
         mutation.mutate(formData);
     };
@@ -134,8 +121,6 @@ export default function ReformEdit({isLoggedInId}) {
                                     setFilePreviews={setFilePreviews}
                                     filenames={existingFilenames}
                                     setFilenames={setExistingFilenames}
-                                    isLoggedInId={isLoggedInId}
-                                    isAnnouncement={isAnnouncement}
                                 />
                                 <div className="mt-4">
                                     <Button variant="primary" type="submit">

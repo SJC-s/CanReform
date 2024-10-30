@@ -24,7 +24,6 @@ export const checkAdminRole = async (isLoggedInId, navigate) => {
 
         // JSON 형태로 응답 데이터 가져오기
         const data = await response.json();
-        console.log(data)
         // 권한이 ADMIN이 아니면 0 반환
         if (data.role !== 'ADMIN') {
             return 0;

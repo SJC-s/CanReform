@@ -7,17 +7,42 @@ import {useNavigate, useParams} from "react-router-dom";
 import {jwtDecode} from "jwt-decode";
 import {checkAdminRole} from "../RfAuthorization/AdminAuth.js";
 
+// 댓글 가져오는 함수
+export async function fetchComments(postId, announcementId) {
+    let response;
+    if (postId) {
+        response = await fetch(`http://localhost:8080/api/comments/postComments/${postId}`);
+    } else if (announcementId) {
+        response = await fetch(`http://localhost:8080/api/comments/announcementComments/${announcementId}`);
+    } else {
+        throw new Error("No ID provided");
+    }
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch comments");
+    }
+
+    return response.json(); // 가져온 댓글 데이터를 반환
+}
+
 
 export default function ReformCommentList(){
 
     const [userId, setUserId] = useState("");
     const [isLoggedInId, setIsLoggedInId] = useState(''); // id가 있으면 로그인으로 가정
-    const {postId} = useParams();
+    const { postId, announcementId } = useParams();
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [commentId, setCommentId] = useState(1);
     const [index, setIndex] = useState(0);
     const [isAdmin, setIsAdmin] = useState(null);
     const textarea = useRef();
     const navigate = useNavigate();
+
+    const { data: comments, status } = useQuery(
+        ["comments", postId || announcementId], // 쿼리 키 설정
+        () => fetchComments(postId, announcementId) // 댓글을 가져오는 함수
+    );
 
     // 사용자 권한 확인
     useEffect(() => {
@@ -31,26 +56,27 @@ export default function ReformCommentList(){
     }, [isLoggedInId, navigate]);
 
     // 댓글 삭제
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
     const deleteCommentMutation = useMutation(
         (commentId) => {
-            return fetch(`http://localhost:8080/api/comments/${commentId}?userId=${isLoggedInId}`,
-                {method : "DELETE"}).then(response => {
-                if(!response.ok){
+
+            return fetch(`http://localhost:8080/api/comments/${commentId}?userId=${isLoggedInId}`, {
+                method: "DELETE"
+            }).then(response => {
+                if (!response.ok) {
                     throw new Error("데이터 fetch 오류 : 댓글 삭제");
                 }
-            })
-
-        },{
-            onSuccess : () => {
-                queryClient.invalidateQueries(["comments", postId]);
+            });
+        }, {
+            onSuccess: () => {
+                queryClient.invalidateQueries(["comments", postId || announcementId]);
             },
             onError: (error) => {
-                console.error(error)
-                throw new Error("댓글 삭제 실패")
+                console.error(error);
+                throw new Error("댓글 삭제 실패");
             }
         }
-    )
+    );
 
     // 인증정보 가져오기
     useEffect(() => {
@@ -70,21 +96,6 @@ export default function ReformCommentList(){
             textarea.style.height = `${textarea.scrollHeight}px`; // 새 높이 설정
         }
     };
-
-
-    // 댓글 불러오기
-    const {data:comments = [], status, error} = useQuery(
-        ["comments", postId],
-        () => {
-            return fetch(`http://localhost:8080/api/comments/${postId}`)
-                .then(response => {
-                    if(!response.ok){
-                        throw new Error("데이터 fetch 오류 : 댓글 조회")
-                    }
-                    return response.json()
-                })
-        }
-    )
 
     if (status === "error") {
         return <p>{error}</p>
