@@ -11,9 +11,15 @@
     max-width: 1280px;
 }
 
+.scroll-content {
+    background-image: linear-gradient(to right, #888888 0%, #DBF3FB 2%, #DBF3FB 98%, #888888);
+    background-color: #DBF3FB;
+}
+
 .img-fluid {
     width: 500px;
     max-width: 100%;
     height: auto;
 }
+
 
