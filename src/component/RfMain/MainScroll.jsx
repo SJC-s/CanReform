@@ -139,7 +139,7 @@ export default function MainScroll() {
                                             day: '2-digit'
                                         })})</p>
                                     <h3>{file.title}</h3>
-                                    <p>{file.content}.</p>
+                                    <pre>{file.content}</pre>
                                     <h6><FaStar/> {(file.averageRating/10).toFixed(2)}</h6>
                                 </div>
                             </>
@@ -154,7 +154,7 @@ export default function MainScroll() {
                                             day: '2-digit'
                                         })})</p>
                                     <h3>{file.title}</h3>
-                                    <p>{file.content}.</p>
+                                    <pre>{file.content}</pre>
                                     <h6><FaStar/> {(file.averageRating/10).toFixed(2)}</h6>
                                 </div>
                                 <div className="col-md-6 text-center">
