@@ -189,7 +189,7 @@ export default function ReformDetail({ isLoggedInId }) {
                             <Row>
                                 <Col>
                                     <p><strong>설명</strong></p>
-                                    <p>{currentPost.content}</p>
+                                    <pre>{currentPost.content}</pre>
                                     <hr/>
                                 </Col>
                             </Row>

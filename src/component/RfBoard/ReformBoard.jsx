@@ -192,7 +192,7 @@ export default function ReformBoard({ isLoggedInId }) {
                     ))
                 ) : (
                     <tr>
-                        <td colSpan="7" style={{border: '1px solid #ddd', padding: '8px', textAlign: 'center'}}>
+                        <td colSpan="8" style={{border: '1px solid #ddd', padding: '8px', textAlign: 'center'}}>
                             게시글이 없습니다.
                         </td>
                     </tr>
