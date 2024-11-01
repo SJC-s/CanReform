@@ -67,7 +67,7 @@ function ReformFormFields({ title, setTitle, category, setCategory, isPrivate, s
             </Form.Group>
 
             <Form.Group controlId="postPrivate" className="mt-3">
-                {!isAdmin && <Form.Check
+                {isAnnouncement && <Form.Check
                     type="checkbox"
                     label="공개 여부"
                     checked={isPrivate === "Y"}
