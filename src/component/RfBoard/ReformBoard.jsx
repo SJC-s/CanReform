@@ -235,8 +235,8 @@ export default function ReformBoard({ isLoggedInId }) {
                             {pageNumber}
                         </button>
                     ))}
-                    <button onClick={() => setCurrentPage(Math.min(currentPage + (MAX_PAGES_DISPLAY/2), posts.totalPages))}>{'>'}</button>
-                    <button onClick={() => setCurrentPage(posts.totalPages)}>{'>>'}</button>
+                    <button onClick={() => setCurrentPage(Math.min(currentPage + (MAX_PAGES_DISPLAY/2), posts.page.totalPages))}>{'>'}</button>
+                    <button onClick={() => setCurrentPage(posts.page.totalPages)}>{'>>'}</button>
                 </div>
             )}
         </div>
