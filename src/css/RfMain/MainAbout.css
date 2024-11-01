@@ -5,7 +5,7 @@
     margin-left : 50px;
 }
 
-ul {
+.main-about-ul {
     display: flex; /* flexbox를 사용하여 항목을 정렬 */
     flex-direction: column; /* 수직 방향으로 정렬 */
     align-items: flex-start; /* 왼쪽 정렬 */
@@ -13,16 +13,15 @@ ul {
     margin: 0; /* 기본 마진 제거 */
 }
 
-hr {
+.main-about-hr {
     padding : 20px;
 }
 
-img {
+.main-about-img {
     display: flex;
-
     width : 30%;
 }
 
-h1, h5, h2 {
+.main-about-h {
     display: flex;
 }
