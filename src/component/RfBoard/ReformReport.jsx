@@ -117,7 +117,9 @@ export default function ReformReport({ isLoggedInId, setIsLoggedInId }) {
                                     <FaLock style={{color: "gray"}}/>}</td>
                                 <td>
                                     {post.isPrivate === 'N' && post.userId !== isLoggedInId ? (
-                                        <span style={{color: 'grey'}}>{post.title}</span>
+                                            <Link to={`/report/details/${post.postId}`} state={{post}}>
+                                                <span style={{color: 'grey'}}>{post.title}</span>
+                                            </Link>
                                     ) : (
                                         <Link to={`/report/details/${post.postId}`} state={{post}}>
                                             {post.title}

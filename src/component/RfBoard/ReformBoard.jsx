@@ -6,6 +6,7 @@ import { FaLock, FaUnlockAlt } from "react-icons/fa";
 import '../../css/RfBoard/ReformBoard.css';
 import ReformAnnouncement from "./ReformAnnouncement.jsx";
 import ReformSlideBanner from "./ReformSlideBanner.jsx";
+import {checkAdminRole} from "../RfAuthorization/AdminAuth.js";
 
 const MAX_PAGES_DISPLAY = 10; // 최대 페이지네이션 버튼 수
 
@@ -18,10 +19,23 @@ export default function ReformBoard({ isLoggedInId }) {
     const [currentPage, setCurrentPage] = useState(1);          // 현재 페이지 상태
     const [searchClassValue, setSearchClassValue] = useState('');   // 검색 범위 설정(현재 상태 설정)
     const [searchClass, setSearchClass] = useState('');   // 검색 범위 설정(전송)
+    const [isAdmin, setIsAdmin] = useState(null);
 
     const postsPerPage = 5;                                   // 한 페이지에 보여줄 게시글 수
 
     const navigate = useNavigate();
+
+    // 사용자 권한 확인
+    useEffect(() => {
+        if (isLoggedInId) {
+            const fetchAdminRole = async () => {
+                const result = await checkAdminRole(isLoggedInId, navigate);
+                console.log(result)
+                setIsAdmin(result === 1);
+            };
+            fetchAdminRole();
+        }
+    }, [isLoggedInId, navigate]);
 
     const url = 'http://localhost:8080/api/posts'
     // 백엔드에서 데이터를 가져오는 함수
@@ -175,7 +189,7 @@ export default function ReformBoard({ isLoggedInId }) {
                             <td>{post.category === 'Inquiry' ? '문의' : '의뢰'}</td>
                             <td>{post.isPrivate === 'Y' ? <FaUnlockAlt style={{color:"darkblue"}}/>: <FaLock style={{color:"gray"}}/>}</td>
                             <td>
-                                {post.isPrivate === 'N' && post.userId !== isLoggedInId ? (
+                                {post.isPrivate === 'N' && post.userId !== isLoggedInId && !isAdmin ? (
                                     <span style={{ color: 'grey' }}>{post.title}</span> // 비활성화된 제목 (비공개 글이면서 작성자가 본인이 아닌 경우)
                                 ) : (
                                     <Link to={`/posts/${post.postId}`} state={{post}}>
