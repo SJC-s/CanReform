@@ -67,7 +67,7 @@ export default function App () {
                       <Route path="/findUserId" element={ isLoggedInId ? <Navigate to="/" replace /> : <FindUserId />} />
                       <Route path="/findPassword" element={ isLoggedInId ? <Navigate to="/" replace /> : <FindPassword />} />
                       <Route path="/resetPassword" element={ isLoggedInId ? <Navigate to="/" replace /> : <ResetPassword />} />
-                      <Route path="/report" element={<ReformReport isLoggedInId={isLoggedInId}/>} /> {/* 신고 처리 페이지 */}
+                      <Route path="/report/*" element={<ReformReport isLoggedInId={isLoggedInId}/>} /> {/* 신고 처리 페이지 */}
                       <Route path="/report/details/:postId" element={<ReformReportDetail isLoggedInId={isLoggedInId}/>}/>
                       <Route path="/service" element={<ServiceInfo />} /> {/* 소개 페이지 경로 추가 */}
                       <Route path="/mypage" element={<Mypage />} /> {/* 마이 페이지 */}

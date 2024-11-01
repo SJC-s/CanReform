@@ -38,7 +38,12 @@ export default function ReformReport({ isLoggedInId, setIsLoggedInId }) {
             if (isLoading) return;  // 이미 로딩 중이면 중복 호출 방지
             setIsLoading(true);
             try {
-                const response = await fetch(`http://localhost:8080/api/report?reportCount=0&page=${page}`); // API 호출
+                const response = await fetch(`http://localhost:8080/api/report?reportCount=0&page=${page}`, {
+                    method: 'GET', // HTTP 메서드 설정
+                    headers: {
+                        'Content-Type': 'application/json', // 요청 본문의 데이터 형식
+                        'Authorization': `Bearer ${localStorage.getItem('token')}` // JWT 토큰 추가
+                    }}); // API 호출
                 if (!response.ok) {
                     throw new Error('네트워크 응답이 정상적이지 않습니다');
                 }
