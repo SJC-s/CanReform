@@ -6,6 +6,16 @@
     justify-content: center;
 }
 
+@font-face {
+    font-family : "MaruBuri-Regular";
+    font-weight : normal;
+    src : url("/src/fonts/MaruBuri-Regular.otf");
+}
+
+body{
+    font-family: "MaruBuri-Regular", serif;
+}
+
 .card {
     padding: 2em;
 }
