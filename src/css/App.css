@@ -7,13 +7,19 @@
 }
 
 @font-face {
-    font-family : "MaruBuri-Regular";
+    font-family : "NanumSquareB";
     font-weight : normal;
-    src : url("/src/fonts/MaruBuri-Regular.otf");
+    src : url("/src/fonts/NanumSquareB.otf");
+}
+
+@font-face {
+    font-family : "NanumBarunpenB";
+    font-weight : normal;
+    src : url("/src/fonts/NanumBarunpenB.otf");
 }
 
 body{
-    font-family: "MaruBuri-Regular", serif;
+    font-family: "NanumSquareB", serif;
 }
 
 .card {

@@ -109,7 +109,7 @@ function ReformFormFields({ title, setTitle, category, setCategory, isPrivate, s
                                                 key={index}
                                                 src={preview}
                                                 alt="미리보기"
-                                                style={{maxWidth: "200px", marginRight: "10px", borderRadius: "4px"}}
+                                                style={{width:"100%", marginRight: "10px", borderRadius: "4px"}}
                                             />
                                             <Button
                                                 variant="secondary"
