@@ -6,6 +6,12 @@
     --tr-X: 110px;
 }
 
+@font-face {
+    font-family : "NanumGothic";
+    font-weight : normal;
+    src : url("/src/fonts/NanumGothic.otf");
+}
+
 .container {
     padding-top : 80px;
     padding-bottom : 80px;
@@ -139,6 +145,7 @@ footer {
     justify-content: center;
     display : flex;
     background-color : skyblue;
+    font-family: "NanumGothic", serif;
 }
 
 .tail {
