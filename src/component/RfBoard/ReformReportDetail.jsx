@@ -76,7 +76,12 @@ const ReformReportDetail = ({ isLoggedInId, setIsLoggedInId }) => {
     useEffect(() => {
         const fetchReportDetails = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/report/details/${postId}`);
+                const response = await fetch(`http://localhost:8080/api/report/details/${postId}`, {
+                    method: 'GET', // HTTP 메서드 설정
+                    headers: {
+                        'Content-Type': 'application/json', // 요청 본문의 데이터 형식
+                        'Authorization': `Bearer ${localStorage.getItem('token')}` // JWT 토큰 추가
+                    }}); // API 호출
                 if (!response.ok) throw new Error('데이터를 불러오는 데 실패했습니다.');
                 const data = await response.json();
 
