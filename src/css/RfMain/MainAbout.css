@@ -1,0 +1,28 @@
+.main-about-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin-left : 50px;
+}
+
+ul {
+    display: flex; /* flexbox를 사용하여 항목을 정렬 */
+    flex-direction: column; /* 수직 방향으로 정렬 */
+    align-items: flex-start; /* 왼쪽 정렬 */
+    padding: 0; /* 기본 패딩 제거 */
+    margin: 0; /* 기본 마진 제거 */
+}
+
+hr {
+    padding : 20px;
+}
+
+img {
+    display: flex;
+
+    width : 30%;
+}
+
+h1, h5, h2 {
+    display: flex;
+}

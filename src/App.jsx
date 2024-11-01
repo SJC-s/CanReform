@@ -22,6 +22,7 @@ import ReformAnnouncement from "./component/RfBoard/ReformAnnouncement.jsx";
 import ReformAnnouncementDetail from "./component/RfBoard/ReformAnnouncementDetail.jsx";
 import {checkAdminRole} from "./component/RfAuthorization/AdminAuth.js";
 import ReformEdit from "./component/RfBoard/ReformEdit.jsx";
+import MainAbout from "./component/RfMain/MainAbout.jsx";
 
 const queryClient = new QueryClient();
 export default function App () {
@@ -74,6 +75,7 @@ export default function App () {
                       <Route path="/announcement" element={<ReformAnnouncement isLoggedInId={isLoggedInId}/>} />
                       <Route path="/announcement/:announcementId/*" element={<ReformAnnouncementDetail isLoggedInId={isLoggedInId}/>} />
                       <Route path="/announcement/edit/:announcementId" element={<ReformEdit isLoggedInId={isLoggedInId}/>} />
+                      <Route path="/about" element={<MainAbout/>}/>
                   </Routes>
                   {/* footer 메뉴 */}
                   <LayoutFooter/>
